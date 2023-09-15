@@ -67,7 +67,7 @@ begin
     )
     port map (
         clock  => clock,
-        reset  => reset,
+        reset  => zera,
         gera   => gera,
         para   => '0',
         pulso  => trigger,
@@ -81,7 +81,7 @@ begin
     )
     port map (
         clock   => clock,
-        reset   => reset,
+        reset   => zera,
         pulso   => pulso,
         digito0 => s_distancia(3 downto 0),
         digito1 => s_distancia(7 downto 4),

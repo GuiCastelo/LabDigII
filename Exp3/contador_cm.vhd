@@ -74,5 +74,6 @@ begin
         fim     => fim
     );
 
-    -- Adicionar implementação da lógica de pronto, quando o pulso voltar para 0
+    -- Lógica de pronto, quando o pulso voltar para 0
+    pronto <= not(pulso);
 end architecture;
