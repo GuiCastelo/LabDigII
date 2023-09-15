@@ -49,18 +49,18 @@ architecture structural of contador_cm is
 
     signal s_conta: std_logic;
 begin
-    CONTADOR_M: contador_m
+    CONT_M: contador_m
     generic map (
         M => R,
         N => N
-    );
+    )
     port map (
         clock => clock,
         zera  => "not"(pulso),
         conta => pulso,
-        Q     => open
+        Q     => open,
         fim   => s_conta,
-        meio  open
+        meio  => open
     );
 
     CONTADOR_BCD: contador_bcd_3digitos
