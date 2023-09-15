@@ -46,6 +46,20 @@ architecture structural of interface_hcsr04_fd is
         );
     end component;
 
+    component registrador_n is
+        generic (
+            constant N: integer := 8 
+        );
+        port (
+            clock  : in  std_logic;
+            clear  : in  std_logic;
+            enable : in  std_logic;
+            D      : in  std_logic_vector (N-1 downto 0);
+            Q      : out std_logic_vector (N-1 downto 0) 
+        );
+    end component;
+
+    signal s_distancia: std_logic_vector(11 downto 0);
 begin
     PULSE_GENERATOR: gerador_pulso
     generic map (
@@ -69,11 +83,23 @@ begin
         clock   => clock,
         reset   => reset,
         pulso   => pulso,
-        digito0 => distancia(3 downto 0),
-        digito1 => distancia(7 downto 4),
-        digito2 => distancia(11 downto 8),
+        digito0 => s_distancia(3 downto 0),
+        digito1 => s_distancia(7 downto 4),
+        digito2 => s_distancia(11 downto 8),
         fim     => open,
         pronto  => fim_medida
+    );
+
+    REG: registrador_n
+    generic map (
+        N => 12
+    )
+    port map (
+        clock  => clock,
+        clear  => zera,
+        enable => registra,
+        D      => s_distancia,
+        Q      => distancia
     );
 
 end architecture;
