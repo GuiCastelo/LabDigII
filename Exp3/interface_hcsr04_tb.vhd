@@ -63,7 +63,8 @@ architecture tb of interface_hcsr04_tb is
         (1, 5882),  -- 5882us (100cm)
         (2, 5899),  -- 5899us (100,29cm) truncar para 100cm
         (3, 4353),  -- 4353us (74cm)
-        (4, 4399)   -- 4399us (74,79cm)  arredondar para 75cm
+        (4, 4399),  -- 4399us (74,79cm)  arredondar para 75cm
+        (5, 300)    -- 300us (5,10cm) arrendodar para 5cm
         -- inserir aqui outros casos de teste (inserir "," na linha anterior)
       );
 
