@@ -59,8 +59,8 @@ begin
         zera  => "not"(pulso),
         conta => pulso,
         Q     => open,
-        fim   => s_conta,
-        meio  => open
+        fim   => open,
+        meio  => s_conta
     );
 
     CONTADOR_BCD: contador_bcd_3digitos

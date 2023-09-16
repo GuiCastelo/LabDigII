@@ -9,3 +9,6 @@ work
 *.wlf
 *.rpt
 transcript
+*.mpf
+*.qar
+*.qpf
