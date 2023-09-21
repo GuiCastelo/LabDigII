@@ -33,7 +33,7 @@ entity tx_serial_7O1 is
         db_tick         : out std_logic;
         db_partida      : out std_logic;
         db_saida_serial : out std_logic;
-        db_estado       : out std_logic_vector(6 downto 0)
+        db_estado       : out std_logic_vector(3 downto 0)
     );
 end entity;
 
@@ -82,24 +82,9 @@ architecture tx_serial_7O1_arch of tx_serial_7O1 is
         fim   : out std_logic;
         meio  : out std_logic
     );
-    end component;
-    
-    component edge_detector 
-    port (  
-        clock     : in  std_logic;
-        signal_in : in  std_logic;
-        output    : out std_logic
-    );
-    end component;
-
-    component hexa7seg
-        port (
-            hexa : in  std_logic_vector(3 downto 0);
-            sseg : out std_logic_vector(6 downto 0)
-        );
     end component;  
 
-    signal s_reset, s_partida, s_partida_ed : std_logic;
+    signal s_reset, s_partida: std_logic;
     signal s_zera, s_conta, s_carrega, s_desloca, s_tick, s_fim : std_logic;
     signal s_saida_serial : std_logic;
     signal s_estado : std_logic_vector(3 downto 0);
@@ -115,7 +100,7 @@ begin
            port map (
                clock     => clock, 
                reset     => s_reset, 
-               partida   => s_partida_ed, 
+               partida   => s_partida, 
                tick      => s_tick, 
                fim       => s_fim,
                zera      => s_zera, 
@@ -157,14 +142,6 @@ begin
                  fim   => s_tick, 
                  meio  => open
              );
- 
-    -- detetor de borda para tratar pulsos largos
-    U4_ED: edge_detector 
-           port map (
-               clock     => clock,
-               signal_in => s_partida,
-               output    => s_partida_ed
-           );
     
     -- saida
     saida_serial <= s_saida_serial;
@@ -174,11 +151,6 @@ begin
     db_tick    <= s_tick;
     db_partida <= partida;
     db_saida_serial <= s_saida_serial;
-
-    HEX0: hexa7seg
-          port map (
-              hexa => s_estado,
-              sseg => db_estado
-          );
+    db_estado <= s_estado;
 
 end architecture;
