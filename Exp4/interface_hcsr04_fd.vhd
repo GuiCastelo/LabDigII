@@ -4,6 +4,7 @@ use IEEE.std_logic_1164.all;
 entity interface_hcsr04_fd is
     port (
         clock      : in   std_logic;
+        reset      : in   std_logic;
         zera       : in   std_logic;
         gera       : in   std_logic;
         registra   : in   std_logic;
@@ -60,7 +61,10 @@ architecture structural of interface_hcsr04_fd is
     end component;
 
     signal s_distancia: std_logic_vector(11 downto 0);
+    signal s_clear: std_logic;
 begin
+    s_clear <= zera or reset;
+
     PULSE_GENERATOR: gerador_pulso
     generic map (
         largura => 500 -- 10_000 / 20
@@ -96,7 +100,7 @@ begin
     )
     port map (
         clock  => clock,
-        clear  => zera,
+        clear  => s_clear,
         enable => registra,
         D      => s_distancia,
         Q      => distancia

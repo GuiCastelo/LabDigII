@@ -18,6 +18,7 @@ architecture interface_arch of interface_hcsr04 is
     component interface_hcsr04_fd is
         port (
             clock      : in   std_logic;
+            reset      : in   std_logic;
             zera       : in   std_logic;
             gera       : in   std_logic;
             registra   : in   std_logic;
@@ -48,6 +49,7 @@ begin
     FD: interface_hcsr04_fd
         port map (
             clock      => clock,
+            reset      => reset,
             zera       => s_zera,
             gera       => s_gera,
             registra   => s_registra,
