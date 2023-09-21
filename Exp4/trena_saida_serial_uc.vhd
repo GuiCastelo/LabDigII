@@ -8,6 +8,9 @@ entity trena_saida_serial_uc is
         mensurar       : in  std_logic;
         fim_medida     : in  std_logic;
         fim_transmissao: in  std_logic;
+				medir					 : out std_logic;
+				transmitir     : out std_logic;
+				sel_digito     : out std_logic_vector(1 downto 0);
         pronto         : out std_logic;
         db_estado      : out std_logic_vector(3 downto 0)
     );
@@ -83,25 +86,34 @@ begin
 
   -- logica de saida (Moore)
   with Eatual select
-      carrega <= '1' when preparacao, '0' when others;
+    pronto <= '1' when final, '0' when others;
+		
+	with Eatual select
+		medir <= '1' when faz_medida, '0' when others;
 
-  with Eatual select
-      zera <= '1' when preparacao, '0' when others;
+	with Eatual select
+		transmitir <= '1' when transmite_centena or transmite_dezena or transmite_unidade or transmite_fim, 
+									'0' when others;
 
-  with Eatual select
-      desloca <= '1' when transmissao, '0' when others;
-
-  with Eatual select
-      conta <= '1' when transmissao, '0' when others;
-
-  with Eatual select
-      pronto <= '1' when final, '0' when others;
+	with Eatual select
+		sel_digito <= '00' when transmite_centena or espera_centena,
+									'01' when transmite_dezena or espera_dezena,
+									'10' when transmite_unidade or espera_unidade,
+									'11' when transmite_fim or espera_fim,
+									'00' when others;
 
   with Eatual select
       db_estado <= "0000" when inicial,
-                   "0001" when preparacao, 
-                   "0010" when espera, 
-                   "0100" when transmissao, 
+                   "0001" when faz_medida, 
+                   "0010" when aguarda_medida, 
+                   "0011" when transmiste_centena,
+									 "0100" when espera_centena, 
+									 "0101" when transmiste_dezena, 
+									 "0110" when espera_dezena, 
+									 "0111" when transmiste_unidade, 
+									 "1000" when espera_unidade, 
+									 "1001" when transmiste_fim, 
+									 "1010" when espera_fim, 
                    "1111" when final,    -- Final
                    "1110" when others;   -- Erro
 
