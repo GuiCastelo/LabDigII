@@ -69,7 +69,7 @@ architecture structural of trena_saida_serial is
     end component edge_detector;
 
     signal s_medir, s_transmitir, s_fim_medida, s_fim_transmissao, s_mensurar_ed: std_logic;
-    signal s_echo, s_trigger, s_saida_serial: std_logic;
+    signal s_trigger, s_saida_serial: std_logic;
     signal s_sel_digito: std_logic_vector(1 downto 0);
     signal s_estado: std_logic_vector(3 downto 0);
     signal s_medida: std_logic_vector(11 downto 0);
@@ -85,7 +85,7 @@ begin
         port map ( 
             clock           => clock,
             reset           => reset,
-            echo            => s_echo,
+            echo            => echo,
             medir		    => s_medir,
             transmitir      => s_transmitir,
             sel_digito      => s_sel_digito,
@@ -138,7 +138,7 @@ begin
     saida_serial <= s_saida_serial;
 
     --debug
-    db_echo <= s_echo;
+    db_echo <= echo;
     db_trigger <= s_trigger;
     db_saida_serial <= s_saida_serial;
     db_mensurar <= mensurar;

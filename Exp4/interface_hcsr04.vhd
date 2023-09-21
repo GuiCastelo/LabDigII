@@ -29,45 +29,45 @@ architecture interface_arch of interface_hcsr04 is
     end component;
 
     component interface_hcsr04_uc is 
-    port ( 
-        clock      : in  std_logic;
-        reset      : in  std_logic;
-        medir      : in  std_logic;
-        echo       : in  std_logic;
-        fim_medida : in  std_logic;
-        zera       : out std_logic;
-        gera       : out std_logic;
-        registra   : out std_logic;
-        pronto     : out std_logic;
-        db_estado  : out std_logic_vector(3 downto 0) 
-    );
+        port ( 
+            clock      : in  std_logic;
+            reset      : in  std_logic;
+            medir      : in  std_logic;
+            echo       : in  std_logic;
+            fim_medida : in  std_logic;
+            zera       : out std_logic;
+            gera       : out std_logic;
+            registra   : out std_logic;
+            pronto     : out std_logic;
+            db_estado  : out std_logic_vector(3 downto 0) 
+        );
     end component;
 
     signal s_zera, s_gera, s_registra, s_fim_medida: std_logic;
 begin
     FD: interface_hcsr04_fd
-    port map (
-        clock      => clock,
-        zera       => s_zera,
-        gera       => s_gera,
-        registra   => s_registra,
-        pulso      => echo,
-        distancia  => medida,
-        trigger    => trigger,
-        fim_medida => s_fim_medida
-    );
+        port map (
+            clock      => clock,
+            zera       => s_zera,
+            gera       => s_gera,
+            registra   => s_registra,
+            pulso      => echo,
+            distancia  => medida,
+            trigger    => trigger,
+            fim_medida => s_fim_medida
+        );
 
     UC: interface_hcsr04_uc
-    port map (
-        clock      => clock,
-        reset      => reset,
-        medir      => medir,
-        echo       => echo,
-        fim_medida => s_fim_medida,
-        zera       => s_zera,
-        gera       => s_gera,
-        registra   => s_registra,
-        pronto     => pronto,
-        db_estado  => db_estado
-    );
+        port map (
+            clock      => clock,
+            reset      => reset,
+            medir      => medir,
+            echo       => echo,
+            fim_medida => s_fim_medida,
+            zera       => s_zera,
+            gera       => s_gera,
+            registra   => s_registra,
+            pronto     => pronto,
+            db_estado  => db_estado
+        );
 end architecture;
