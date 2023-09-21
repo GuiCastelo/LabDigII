@@ -74,8 +74,9 @@ architecture tb of trena_saida_serial_tb is
   constant casos_teste : casos_teste_array :=
       (
         (1, 5882),  -- 5882us (100cm)
-        (2, 4399)   -- 4399us (74,79cm)  arredondar para 75cm
-        -- inserir aqui outros casos de teste (inserir "," na linha anterior)
+        (2, 4399),  -- 4399us (74,79cm)  arredondar para 75cm
+        (3, 1194),  -- 1194us (20,29cm) arredondar para 20cm
+        (4, 576)    -- 576us (9,79cm) arredondar para 10cm
       );
 
   signal larguraPulso: time := 1 ns;
