@@ -13,7 +13,7 @@ entity trena_saida_serial_fd is
         fim_transmissao: out std_logic;
         trigger        : out std_logic;
         saida_serial   : out std_logic;
-        db_saida_serial: out std_logic;
+        medida         : out std_logic_vector(11 downto 0)
     );
 end entity;
 
@@ -64,6 +64,18 @@ architecture structura of trena_saida_serial_fd is
     signal s_medida: std_logic_vector(11 downto 0);
     signal s_dado_ascii: std_logic_vector(6 downto 0);
 begin
+    SENSOR: interface_hcsr04
+        port map (
+            clock => clock,
+            reset => reset,
+            medir => medir,
+            echo => echo,
+            trigger => trigger,
+            medida => s_medida, -- 3 digitos BCD
+            pronto => fim_medida,
+            db_estado => open -- estado da UC
+        );
+    
     MUX: mux_4x1_n
         generic map (
             BITS => 7
@@ -75,18 +87,6 @@ begin
             D0      => "011" & s_medida(11 downto 8),
             SEL     => sel_digito,
             MUX_OUT => s_dado_ascii
-        );
-
-    SENSOR: interface_hcsr04
-        port map (
-            clock => clock,
-            reset => reset,
-            medir => medir,
-            echo => echo,
-            trigger => trigger,
-            medida => s_medida, -- 3 digitos BCD
-            pronto => fim_medida,
-            db_estado => open -- estado da UC
         );
     
     TRANSMISSOR: tx_serial_7O1
@@ -100,8 +100,11 @@ begin
             db_clock        => open,
             db_tick         => open,
             db_partida      => open,
-            db_saida_serial => db_saida_serial,
+            db_saida_serial => open,
             db_estado       => open
         );
+    
+    --output
+    medida <= s_medida;
 
 end architecture;
