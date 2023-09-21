@@ -92,7 +92,8 @@ begin
             fim_medida      => s_fim_medida,
             fim_transmissao => s_fim_transmissao,
             trigger         => s_trigger,
-            saida_serial    => s_saida_serial
+            saida_serial    => s_saida_serial,
+            medida          => s_medida
     );
 
     UC: trena_saida_serial_uc
