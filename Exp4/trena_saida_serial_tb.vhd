@@ -28,17 +28,21 @@ architecture tb of trena_saida_serial_tb is
   -- Componente a ser testado (Device Under Test -- DUT)
   component trena_saida_serial is
     port (
-        clock         : in  std_logic;
-        reset         : in  std_logic;
-        mensurar      : in  std_logic;
-        echo          : in  std_logic;
-        trigger       : out std_logic;
-        saida_serial  : out std_logic;
-        medida0       : out std_logic_vector (6 downto 0);
-        medida1       : out std_logic_vector (6 downto 0);
-        medida2       : out std_logic_vector (6 downto 0);
-        pronto        : out std_logic;
-        db_estado     : out std_logic_vector (6 downto 0)
+        clock          : in  std_logic;
+        reset          : in  std_logic;
+        mensurar       : in  std_logic;
+        echo           : in  std_logic;
+        trigger        : out std_logic;
+        saida_serial   : out std_logic;
+        medida0        : out std_logic_vector (6 downto 0);
+        medida1        : out std_logic_vector (6 downto 0);
+        medida2        : out std_logic_vector (6 downto 0);
+        pronto         : out std_logic;
+        db_mensurar    : out std_logic;
+        db_echo        : out std_logic;
+        db_trigger     : out std_logic;
+        db_saida_serial: out std_logic;
+        db_estado      : out std_logic_vector (6 downto 0)
     );
   end component;
   
