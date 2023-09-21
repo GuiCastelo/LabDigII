@@ -37,7 +37,7 @@ begin
   end process;
 
   -- logica de proximo estado
-  process (mensurar, fim, Eatual) 
+  process (mensurar, fim_medida, fim_transmissao, Eatual) 
   begin
 
     case Eatual is
@@ -92,27 +92,34 @@ begin
 		medir <= '1' when faz_medida, '0' when others;
 
 	with Eatual select
-		transmitir <= '1' when transmite_centena or transmite_dezena or transmite_unidade or transmite_fim, 
+		transmitir <= '1' when transmite_centena, 
+                  '1' when transmite_dezena,
+                  '1' when transmite_unidade,
+                  '1' when transmite_fim, 
 									'0' when others;
 
 	with Eatual select
-		sel_digito <= '00' when transmite_centena or espera_centena,
-									'01' when transmite_dezena or espera_dezena,
-									'10' when transmite_unidade or espera_unidade,
-									'11' when transmite_fim or espera_fim,
-									'00' when others;
+		sel_digito <= "00" when transmite_centena,
+                  "00" when espera_centena,
+									"01" when transmite_dezena,
+                  "01" when espera_dezena,
+									"10" when transmite_unidade,
+                  "10" when espera_unidade,
+									"11" when transmite_fim,
+                  "11" when espera_fim,
+									"00" when others;
 
   with Eatual select
       db_estado <= "0000" when inicial,
                    "0001" when faz_medida, 
                    "0010" when aguarda_medida, 
-                   "0011" when transmiste_centena,
+                   "0011" when transmite_centena,
 									 "0100" when espera_centena, 
-									 "0101" when transmiste_dezena, 
+									 "0101" when transmite_dezena, 
 									 "0110" when espera_dezena, 
-									 "0111" when transmiste_unidade, 
+									 "0111" when transmite_unidade, 
 									 "1000" when espera_unidade, 
-									 "1001" when transmiste_fim, 
+									 "1001" when transmite_fim, 
 									 "1010" when espera_fim, 
                    "1111" when final,    -- Final
                    "1110" when others;   -- Erro

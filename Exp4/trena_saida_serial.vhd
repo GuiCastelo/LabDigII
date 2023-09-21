@@ -26,7 +26,7 @@ architecture structural of trena_saida_serial is
         port ( 
             clock          : in  std_logic;
             reset          : in  std_logic;
-            echo           : in  std_logic
+            echo           : in  std_logic;
             medir		   : in  std_logic;
             transmitir     : in  std_logic;
             sel_digito     : in  std_logic_vector(1 downto 0);
@@ -134,7 +134,6 @@ begin
         );
 
     --output
-    echo <= s_echo;
     trigger <= s_trigger;
     saida_serial <= s_saida_serial;
 

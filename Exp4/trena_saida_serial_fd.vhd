@@ -5,7 +5,7 @@ entity trena_saida_serial_fd is
     port ( 
         clock          : in  std_logic;
         reset          : in  std_logic;
-        echo           : in  std_logic
+        echo           : in  std_logic;
         medir		   : in  std_logic;
         transmitir     : in  std_logic;
         sel_digito     : in  std_logic_vector(1 downto 0);
@@ -62,8 +62,12 @@ architecture structura of trena_saida_serial_fd is
     end component interface_hcsr04;
 
     signal s_medida: std_logic_vector(11 downto 0);
-    signal s_dado_ascii: std_logic_vector(6 downto 0);
+    signal s_dado_ascii, s_digito0_ascii, s_digito1_ascii, s_digito2_ascii: std_logic_vector(6 downto 0);
 begin
+    s_digito0_ascii <= "011" & s_medida(3 downto 0);
+    s_digito1_ascii <= "011" & s_medida(7 downto 4);
+    s_digito2_ascii <= "011" & s_medida(11 downto 8);
+
     SENSOR: interface_hcsr04
         port map (
             clock => clock,
@@ -82,9 +86,9 @@ begin
         )
         port map ( 
             D3      => "0100011",
-            D2      => "011" & s_medida(3 downto 0),
-            D1      => "011" & s_medida(7 downto 4),
-            D0      => "011" & s_medida(11 downto 8),
+            D2      => s_digito0_ascii,
+            D1      => s_digito1_ascii,
+            D0      => s_digito2_ascii,
             SEL     => sel_digito,
             MUX_OUT => s_dado_ascii
         );
