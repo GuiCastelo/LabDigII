@@ -13,6 +13,7 @@ entity trena_saida_serial is
         medida1        : out std_logic_vector (6 downto 0);
         medida2        : out std_logic_vector (6 downto 0);
         pronto         : out std_logic;
+        db_mensurar    : out std_logic;
         db_echo        : out std_logic;
         db_trigger     : out std_logic;
         db_saida_serial: out std_logic;
@@ -59,12 +60,27 @@ architecture structural of trena_saida_serial is
         );
     end component hexa7seg;
 
-    signal s_medir, s_transmitir, s_fim_medida, s_fim_transmissao: std_logic;
+    component edge_detector is
+        port (  
+            clock     : in  std_logic;
+            signal_in : in  std_logic;
+            output    : out std_logic
+        );
+    end component edge_detector;
+
+    signal s_medir, s_transmitir, s_fim_medida, s_fim_transmissao, s_mensurar_ed: std_logic;
     signal s_echo, s_trigger, s_saida_serial: std_logic;
     signal s_sel_digito: std_logic_vector(1 downto 0);
     signal s_estado: std_logic_vector(3 downto 0);
     signal s_medida: std_logic_vector(11 downto 0);
 begin
+    EDGE_DETEC: edge_detector
+        port map (  
+            clock     => clock,
+            signal_in => mensurar,
+            output    => s_mensurar_ed
+    );
+
     FD: trena_saida_serial_fd
         port map ( 
             clock           => clock,
@@ -83,7 +99,7 @@ begin
         port map ( 
             clock           => clock,
             reset           => reset,
-            mensurar        => mensurar,
+            mensurar        => s_mensurar_ed,
             fim_medida      => s_fim_medida,
             fim_transmissao => s_fim_transmissao,
             medir			=> s_medir,
@@ -126,5 +142,6 @@ begin
     db_echo <= s_echo;
     db_trigger <= s_trigger;
     db_saida_serial <= s_saida_serial;
+    db_mensurar <= mensurar;
 
 end architecture;
