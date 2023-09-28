@@ -9,6 +9,7 @@ entity sonar_uc is
         ligar             : in  std_logic;
         fim_medida        : in  std_logic;
         fim_2seg          : in  std_logic;
+        fim_transmissao   : in  std_logic;
         medir             : out std_logic;
         conta             : out std_logic;
         zera              : out std_logic;
@@ -102,7 +103,7 @@ begin
         when transmite_distancia_fim => Eprox <= espera_distancia_fim;
 
         when espera_distancia_fim => if fim_transmissao='1' then Eprox <= final;
-                           else                        Eprox <= espera_distancia_distancia_fim;
+                           else                        Eprox <= espera_distancia_fim;
                            end if;
 
         when final =>        Eprox <= inicial;

@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 
 entity sonar_fd is
     port (
@@ -18,6 +19,7 @@ entity sonar_fd is
         posicao           : out std_logic_vector(3 downto 0);
         saida_serial      : out std_logic;
         fim_medida        : out std_logic;
+        fim_transmissao   : out std_logic;
         fim_2seg          : out std_logic
     );
 end entity;
@@ -41,12 +43,15 @@ architecture structure of sonar_fd is
         );
     end component mux_8x1_n;
 
-    component controle_servo is
+    component controle_servo_3 is
         port (
             clock : in std_logic;
             reset : in std_logic;
             posicao : in std_logic_vector(2 downto 0);
-            controle : out std_logic
+            pwm : out std_logic;
+            db_reset : out std_logic;
+            db_pwm : out std_logic;
+            db_posicao : out std_logic_vector(2 downto 0)
         );
     end component;
 
@@ -194,12 +199,15 @@ begin
             meio  => open
         );
 
-    SERVO: controle_servo
+    SERVO: controle_servo_3
         port map (
             clock => clock,
             reset => '0',
             posicao => s_posicao,
-            controle => pwm
+            pwm => pwm,
+            db_reset => open,
+            db_pwm  => open,
+            db_posicao => open
         );
     
     TRANSMISSOR: tx_serial_7O1

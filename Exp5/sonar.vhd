@@ -66,7 +66,8 @@ architecture sonar_arch of sonar is
     end component hexa7seg;
 
     signal s_medir, s_conta, s_zera, s_transmitir, s_fim_medida, s_fim_2seg: std_logic;
-    signal s_sel_digito, s_posicao, s_db_estado: std_logic_vector(3 downto 0);
+    signal s_posicao, s_db_estado: std_logic_vector(3 downto 0);
+    signal s_sel_digito: std_logic_vector(2 downto 0);
     signal s_medida: std_logic_vector(11 downto 0);
 
 begin
@@ -79,7 +80,7 @@ begin
                 echo            => echo,
                 conta           => s_conta,
                 zera            => s_zera,
-                transmitir      => s_transmitr,
+                transmitir      => s_transmitir,
                 sel_digito      => s_sel_digito,
                 trigger         => trigger,
                 pwm             => pwm,
