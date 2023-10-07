@@ -11,6 +11,7 @@ entity sonar_fd is
         echo              : in  std_logic;
         conta_posicao     : in  std_logic;
         conta_timer       : in  std_logic;
+        conta_transmissao : in  std_logic;
         zera              : in  std_logic;
         transmitir        : in  std_logic;
         sel_digito        : in  std_logic_vector(2 downto 0); 
@@ -21,6 +22,7 @@ entity sonar_fd is
         saida_serial      : out std_logic;
         fim_medida        : out std_logic;
         fim_transmissao   : out std_logic;
+        fim_transmissoes  : out std_logic;
         fim_2seg          : out std_logic
     );
 end entity;
@@ -198,6 +200,21 @@ begin
             conta => conta_timer,
             Q     => open,
             fim   => fim_2seg,
+            meio  => open
+        );
+
+    CONTA_TRANSMISSAO:  contador_m
+        generic map (
+            -- M => 100_000_000, 2 seg
+            M => 8, -- 200us para simulacao
+            N => 6
+        )
+        port map (
+            clock => clock,
+            zera  => zera,
+            conta => conta_transmissao,
+            Q     => open,
+            fim   => fim_transmissoes,
             meio  => open
         );
 
