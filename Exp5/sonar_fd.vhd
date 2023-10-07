@@ -9,7 +9,8 @@ entity sonar_fd is
         reset             : in  std_logic;
         medir             : in  std_logic;
         echo              : in  std_logic;
-        conta             : in  std_logic;
+        conta_posicao     : in  std_logic;
+        conta_timer       : in  std_logic;
         zera              : in  std_logic;
         transmitir        : in  std_logic;
         sel_digito        : in  std_logic_vector(2 downto 0); 
@@ -178,7 +179,7 @@ begin
             clock   => clock,
             zera_as => '0',
             zera_s  => '0',
-            conta   => conta,
+            conta   => conta_posicao,
             Q       => s_posicao,
             inicio  => open,
             fim     => open,
@@ -194,7 +195,7 @@ begin
         port map (
             clock => clock,
             zera  => zera,
-            conta => '1',
+            conta => conta_timer,
             Q     => open,
             fim   => fim_2seg,
             meio  => open

@@ -11,7 +11,8 @@ entity sonar_uc is
         fim_2seg          : in  std_logic;
         fim_transmissao   : in  std_logic;
         medir             : out std_logic;
-        conta             : out std_logic;
+        conta_posicao     : out std_logic;
+        conta_timer       : out std_logic;
         zera              : out std_logic;
         transmitir        : out std_logic;
         sel_digito        : out std_logic_vector(2 downto 0);
@@ -22,7 +23,7 @@ end entity;
 
 architecture sonar_uc_arch of sonar_uc is
 
-    type tipo_estado is (inicial, faz_medida, aguarda_medida, transmite_angulo_centena, 
+    type tipo_estado is (inicial, espera_2seg, faz_medida, aguarda_medida, transmite_angulo_centena, 
                         espera_angulo_centena, transmite_angulo_dezena, espera_angulo_dezena, transmite_angulo_unidade, espera_angulo_unidade, 
                         transmite_angulo_fim, espera_angulo_fim, transmite_distancia_centena, 
                         espera_distancia_centena, transmite_distancia_dezena, espera_distancia_dezena, transmite_distancia_unidade, espera_distancia_unidade, 
@@ -48,8 +49,12 @@ begin
 
     case Eatual is
 
-        when inicial =>     if ligar='1' then Eprox <= faz_medida;
+        when inicial =>     if ligar='1' then Eprox <= espera_2seg;
                             else              Eprox <= inicial;
+                            end if;
+        
+        when espera_2seg => if fim_2seg='1' then Eprox <= faz_medida;
+                            else              Eprox <= espera_2seg;
                             end if;
 
         when faz_medida =>   Eprox <= aguarda_medida;
@@ -133,8 +138,12 @@ begin
 						'0' when others;
 
     with Eatual select
-    conta <=    '1' when final, 
-                '0' when others;
+    conta_posicao <=    '1' when final, 
+                       '0' when others;
+    
+    with Eatual select
+    conta_timer <=    '1' when espera_2seg, 
+                     '0' when others;
 
     with Eatual select
     zera <=     '1' when inicial,  

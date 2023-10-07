@@ -27,7 +27,8 @@ architecture sonar_arch of sonar is
             reset             : in  std_logic;
             medir             : in  std_logic;
             echo              : in  std_logic;
-            conta             : in  std_logic;
+            conta_posicao     : in  std_logic;
+            conta_timer       : in  std_logic;
             zera              : in  std_logic;
             transmitir        : in  std_logic;
             sel_digito        : in  std_logic_vector(2 downto 0); 
@@ -51,7 +52,8 @@ architecture sonar_arch of sonar is
             fim_2seg          : in  std_logic;
             fim_transmissao   : in  std_logic;
             medir             : out std_logic;
-            conta             : out std_logic;
+            conta_posicao     : out std_logic;
+            conta_timer       : out std_logic;
             zera              : out std_logic;
             transmitir        : out std_logic;
             sel_digito        : out std_logic_vector(2 downto 0);
@@ -67,7 +69,7 @@ architecture sonar_arch of sonar is
         );
     end component hexa7seg;
 
-    signal s_medir, s_conta, s_zera, s_transmitir, s_fim_medida, s_fim_2seg, s_fim_transmissao: std_logic;
+    signal s_medir, s_conta_timer, s_conta_posicao, s_zera, s_transmitir, s_fim_medida, s_fim_2seg, s_fim_transmissao: std_logic;
     signal s_posicao, s_db_estado: std_logic_vector(3 downto 0);
     signal s_sel_digito: std_logic_vector(2 downto 0);
     signal s_medida: std_logic_vector(11 downto 0);
@@ -80,7 +82,8 @@ begin
                 reset           => reset,
                 medir           => s_medir,
                 echo            => echo,
-                conta           => s_conta,
+                conta_posicao   => s_conta_posicao,
+                conta_timer     => s_conta_timer,
                 zera            => s_zera,
                 transmitir      => s_transmitir,
                 sel_digito      => s_sel_digito,
@@ -104,7 +107,8 @@ begin
                 fim_2seg          => s_fim_2seg,
                 fim_transmissao   => s_fim_transmissao,
                 medir             => s_medir,
-                conta             => s_conta,
+                conta_posicao   => s_conta_posicao,
+                conta_timer     => s_conta_timer,
                 zera              => s_zera,
                 transmitir        => s_transmitir,
                 sel_digito        => s_sel_digito,
