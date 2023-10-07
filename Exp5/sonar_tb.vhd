@@ -27,15 +27,19 @@ architecture tb of sonar_tb is
   -- Componente a ser testado (Device Under Test -- DUT)
   component sonar
     port (
-        clock              : in  std_logic;
-        reset              : in  std_logic;
-        ligar              : in  std_logic;
-        echo               : in  std_logic;
-        trigger            : out std_logic;
-        pwm                : out std_logic;
-        saida_serial       : out std_logic;
-        fim_posicao        : out std_logic;
-        db_estado          : out std_logic_vector(6 downto 0)
+      clock             : in  std_logic;
+      reset             : in  std_logic;
+      ligar             : in  std_logic;
+      echo              : in  std_logic;
+      trigger           : out std_logic;
+      pwm               : out std_logic;
+      saida_serial      : out std_logic;
+      fim_posicao       : out std_logic;
+      hexa0             : out std_logic_vector(6 downto 0);
+      hexa1             : out std_logic_vector(6 downto 0);
+      hexa2             : out std_logic_vector(6 downto 0);
+      hexa3             : out std_logic_vector(6 downto 0);
+      hexa4             : out std_logic_vector(6 downto 0)
     );
   end component;
   
@@ -49,7 +53,6 @@ architecture tb of sonar_tb is
   signal pwm_out          : std_logic := '0';
   signal saida_serial_out : std_logic := '1';
   signal fim_posicao_out  : std_logic := '0';
-  signal db_estado_out    : std_logic_vector (6 downto 0) := "0000000";
 
 
   -- Configurações do clock
@@ -67,14 +70,13 @@ architecture tb of sonar_tb is
   constant posicoes_teste : posicoes_teste_array :=
       ( 
         ( 1,  294),   --   5cm ( 294us)
-        ( 2,  353)    --   6cm ( 353us)
-        -- ( 2,  353),  --   6cm ( 353us)
-        -- ( 3, 5882),  -- 100cm (5882us)
-        -- ( 4, 5882),  -- 100cm (5882us)
-        -- ( 5,  882),  --  15cm ( 882us)
-        -- ( 6,  882),  --  15cm ( 882us)
-        -- ( 7, 5882),  -- 100cm (5882us)
-        -- ( 8,  588)   --  10cm ( 588us)
+        ( 2,  353),    --   6cm ( 353us)
+        ( 3, 5882),  -- 100cm (5882us)
+        ( 4, 5882),  -- 100cm (5882us)
+        ( 5,  882),  --  15cm ( 882us)
+        ( 6,  882),  --  15cm ( 882us)
+        ( 7, 5882),  -- 100cm (5882us)
+        ( 8,  588)   --  10cm ( 588us)
         -- inserir aqui outros posicoes de teste (inserir "," na linha anterior)
       );
 
@@ -97,8 +99,12 @@ begin
            pwm          => pwm_out,
            saida_serial => saida_serial_out,
            fim_posicao  => fim_posicao_out,
-           db_estado    => db_estado_out
-       );
+           hexa0        => open,
+           hexa1        => open,
+           hexa2        => open,
+           hexa3        => open,
+           hexa4        => open
+        );
 
   -- geracao dos sinais de entrada (estimulos)
   stimulus: process is

@@ -187,7 +187,8 @@ begin
 
     TIMER:  contador_m
         generic map (
-            M => 100000000,
+            -- M => 100_000_000, 2 seg
+            M => 10_000, -- 200us para simulacao
             N => 6
         )
         port map (

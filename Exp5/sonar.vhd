@@ -37,6 +37,7 @@ architecture sonar_arch of sonar is
             posicao           : out std_logic_vector(3 downto 0);
             saida_serial      : out std_logic;
             fim_medida        : out std_logic;
+            fim_transmissao   : out std_logic;
             fim_2seg          : out std_logic
         );
     end component;
@@ -48,6 +49,7 @@ architecture sonar_arch of sonar is
             ligar             : in  std_logic;
             fim_medida        : in  std_logic;
             fim_2seg          : in  std_logic;
+            fim_transmissao   : in  std_logic;
             medir             : out std_logic;
             conta             : out std_logic;
             zera              : out std_logic;
@@ -65,7 +67,7 @@ architecture sonar_arch of sonar is
         );
     end component hexa7seg;
 
-    signal s_medir, s_conta, s_zera, s_transmitir, s_fim_medida, s_fim_2seg: std_logic;
+    signal s_medir, s_conta, s_zera, s_transmitir, s_fim_medida, s_fim_2seg, s_fim_transmissao: std_logic;
     signal s_posicao, s_db_estado: std_logic_vector(3 downto 0);
     signal s_sel_digito: std_logic_vector(2 downto 0);
     signal s_medida: std_logic_vector(11 downto 0);
@@ -88,6 +90,7 @@ begin
                 posicao         => s_posicao,
                 saida_serial    => saida_serial,
                 fim_medida      => s_fim_medida,
+                fim_transmissao => s_fim_transmissao,
                 fim_2seg        => s_fim_2seg
             );
 
@@ -99,6 +102,7 @@ begin
                 ligar             => ligar,
                 fim_medida        => s_fim_medida,
                 fim_2seg          => s_fim_2seg,
+                fim_transmissao   => s_fim_transmissao,
                 medir             => s_medir,
                 conta             => s_conta,
                 zera              => s_zera,
