@@ -11,7 +11,6 @@ entity sonar_fd is
         echo              : in  std_logic;
         conta_posicao     : in  std_logic;
         conta_timer       : in  std_logic;
-        conta_transmissao : in  std_logic;
         zera              : in  std_logic;
         transmitir        : in  std_logic;
         trigger           : out std_logic;

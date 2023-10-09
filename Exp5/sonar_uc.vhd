@@ -13,7 +13,6 @@ entity sonar_uc is
         medir             : out std_logic;
         conta_posicao     : out std_logic;
         conta_timer       : out std_logic;
-        conta_transmissao : out std_logic;
         zera              : out std_logic;
         transmitir        : out std_logic;
         fim_posicao       : out std_logic;
@@ -76,23 +75,23 @@ begin
     fim_posicao <= '1' when final, '0' when others;
 		
 	with Eatual select
-		medir <= '1' when faz_medida, '0' when others;
+			medir <= '1' when faz_medida, '0' when others;
 
 	with Eatual select
-		transmitir <=   '1' when espera_transmissao, 
-						'0' when others;
+			transmitir <=   '1' when espera_transmissao, 
+											'0' when others;
 
-    with Eatual select
-        conta_posicao <=    '1' when final, 
-                            '0' when others;
-    
-    with Eatual select
-        conta_timer <=    '1' when espera_2seg, 
-                          '0' when others;
+	with Eatual select
+			conta_posicao <=    '1' when final, 
+													'0' when others;
 
-    with Eatual select
-        zera <=     '1' when inicial,  
-                    '0' when others;
+	with Eatual select
+			conta_timer <=    '1' when espera_2seg, 
+												'0' when others;
+
+	with Eatual select
+			zera <=     '1' when inicial,  
+									'0' when others;
 
   with Eatual select
        db_estado <= "0000" when inicial,
