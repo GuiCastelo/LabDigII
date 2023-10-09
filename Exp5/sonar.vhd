@@ -31,7 +31,6 @@ architecture sonar_arch of sonar is
             conta_timer       : in  std_logic;
             zera              : in  std_logic;
             transmitir        : in  std_logic;
-            sel_digito        : in  std_logic_vector(2 downto 0); 
             trigger           : out std_logic;
             pwm               : out std_logic;
             medida            : out std_logic_vector(11 downto 0);
@@ -56,7 +55,6 @@ architecture sonar_arch of sonar is
             conta_timer       : out std_logic;
             zera              : out std_logic;
             transmitir        : out std_logic;
-            sel_digito        : out std_logic_vector(2 downto 0);
             fim_posicao       : out std_logic;
             db_estado         : out std_logic_vector(3 downto 0)
         );
@@ -71,7 +69,6 @@ architecture sonar_arch of sonar is
 
     signal s_medir, s_conta_timer, s_conta_posicao, s_zera, s_transmitir, s_fim_medida, s_fim_2seg, s_fim_transmissao: std_logic;
     signal s_posicao, s_db_estado: std_logic_vector(3 downto 0);
-    signal s_sel_digito: std_logic_vector(2 downto 0);
     signal s_medida: std_logic_vector(11 downto 0);
 
 begin
@@ -86,7 +83,6 @@ begin
                 conta_timer     => s_conta_timer,
                 zera            => s_zera,
                 transmitir      => s_transmitir,
-                sel_digito      => s_sel_digito,
                 trigger         => trigger,
                 pwm             => pwm,
                 medida          => s_medida,
@@ -111,7 +107,6 @@ begin
                 conta_timer     => s_conta_timer,
                 zera              => s_zera,
                 transmitir        => s_transmitir,
-                sel_digito        => s_sel_digito,
                 fim_posicao       => fim_posicao,
                 db_estado         => s_db_estado
             );
