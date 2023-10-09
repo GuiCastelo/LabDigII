@@ -85,7 +85,7 @@ begin
                 conta_timer     => s_conta_timer,
                 zera            => s_zera,
                 transmitir      => s_transmitir,
-                trigger         => trigger,
+                trigger         => s_trigger,
                 pwm             => pwm,
                 medida          => s_medida,
                 posicao         => s_posicao,

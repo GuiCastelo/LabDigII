@@ -152,15 +152,15 @@ begin
         generic map (
             BITS => 7
         )
-        port map ( 
-            D0      => s_distancia2_ascii,
-            D1      => s_distancia1_ascii,
-            D2      => s_distancia0_ascii,
-            D3      => "0100011",
-            D4      => s_angulo2_ascii,
-            D5      => s_angulo1_ascii,
-            D6      => s_angulo0_ascii,
-            D7      => "0101100",
+        port map (
+            D0      => s_angulo2_ascii,
+            D1      => s_angulo1_ascii,
+            D2      => s_angulo0_ascii,
+            D3      => "0101100",
+            D4      => s_distancia2_ascii,
+            D5      => s_distancia1_ascii,
+            D6      => s_distancia0_ascii,
+            D7      => "0100011",
             SEL     => s_sel,
             MUX_OUT => s_dado_ascii
         );
@@ -215,7 +215,7 @@ begin
     TRANSMISSOR: tx_serial_7O1
         port map (
             clock           => clock,
-            reset           => reset,
+            reset           => zera,
             partida         => transmitir,
             dados_ascii     => s_dado_ascii,
             saida_serial    => saida_serial,
@@ -229,7 +229,7 @@ begin
 
     CONTA_TRANSMISSAO:  contador_m
         generic map (
-            M => 8,
+            M => 9,
             N => 3
         )
         port map (

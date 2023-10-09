@@ -39,7 +39,7 @@ begin
   end process;
 
   -- logica de proximo estado
-  process (ligar, fim_medida, fim_2seg, Eatual) 
+  process (ligar, fim_medida, fim_2seg, fim_transmissao, Eatual) 
   begin
 
     case Eatual is
@@ -90,7 +90,8 @@ begin
 												'0' when others;
 
 	with Eatual select
-			zera <=     '1' when inicial,  
+			zera <=     '1' when inicial,
+									'1' when final,
 									'0' when others;
 
   with Eatual select
