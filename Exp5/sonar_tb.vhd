@@ -71,11 +71,11 @@ architecture tb of sonar_tb is
       ( 
         ( 1,  294),   --   5cm ( 294us)
         ( 2,  353),    --   6cm ( 353us)
-        ( 3, 5882),  -- 100cm (5882us)
-        ( 4, 5882),  -- 100cm (5882us)
+        ( 3, 1470),  -- 25cm (1470us)
+        ( 4, 1470),  -- 25cm (1470us)
         ( 5,  882),  --  15cm ( 882us)
         ( 6,  882),  --  15cm ( 882us)
-        ( 7, 5882),  -- 100cm (5882us)
+        ( 7, 1470),  -- 25cm (1470us)
         ( 8,  588)   --  10cm ( 588us)
         -- inserir aqui outros posicoes de teste (inserir "," na linha anterior)
       );
