@@ -12,6 +12,8 @@ entity sonar is
         pwm               : out std_logic;
         saida_serial      : out std_logic;
         fim_posicao       : out std_logic;
+        db_trigger        : out std_logic;
+        db_echo           : out std_logic;
         hexa0             : out std_logic_vector(6 downto 0);
         hexa1             : out std_logic_vector(6 downto 0);
         hexa2             : out std_logic_vector(6 downto 0);
@@ -67,7 +69,7 @@ architecture sonar_arch of sonar is
         );
     end component hexa7seg;
 
-    signal s_medir, s_conta_timer, s_conta_posicao, s_zera, s_transmitir, s_fim_medida, s_fim_2seg, s_fim_transmissao: std_logic;
+    signal s_medir, s_conta_timer, s_conta_posicao, s_zera, s_transmitir, s_fim_medida, s_fim_2seg, s_fim_transmissao, s_trigger: std_logic;
     signal s_posicao, s_db_estado: std_logic_vector(3 downto 0);
     signal s_medida: std_logic_vector(11 downto 0);
 
@@ -103,8 +105,8 @@ begin
                 fim_2seg          => s_fim_2seg,
                 fim_transmissao   => s_fim_transmissao,
                 medir             => s_medir,
-                conta_posicao   => s_conta_posicao,
-                conta_timer     => s_conta_timer,
+                conta_posicao     => s_conta_posicao,
+                conta_timer       => s_conta_timer,
                 zera              => s_zera,
                 transmitir        => s_transmitir,
                 fim_posicao       => fim_posicao,
@@ -141,6 +143,11 @@ begin
                 hexa => s_db_estado,
                 sseg => hexa4
             );
+    --output
+    trigger <= s_trigger;
+    --debug
+    db_trigger <= s_trigger;
+    db_echo <= echo;
 
 
 end architecture;
