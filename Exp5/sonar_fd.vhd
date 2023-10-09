@@ -13,7 +13,6 @@ entity sonar_fd is
         conta_timer       : in  std_logic;
         zera              : in  std_logic;
         transmitir        : in  std_logic;
-        sel_digito        : in  std_logic_vector(2 downto 0); 
         trigger           : out std_logic;
         pwm               : out std_logic;
         medida            : out std_logic_vector(11 downto 0);
@@ -126,8 +125,9 @@ architecture structure of sonar_fd is
     signal s_medida: std_logic_vector(11 downto 0);
     signal s_dado_ascii, s_distancia0_ascii, s_distancia1_ascii, s_distancia2_ascii: std_logic_vector(6 downto 0);
     signal s_angulo0_ascii, s_angulo1_ascii, s_angulo2_ascii: std_logic_vector(6 downto 0);
-    signal s_posicao: std_logic_vector(2 downto 0);
+    signal s_posicao, s_sel: std_logic_vector(2 downto 0);
     signal s_saida_angulos: std_logic_vector(23 downto 0);
+    signal s_pronto_tx: std_logic;
 begin
     s_distancia0_ascii <= "011" & s_medida(3 downto 0);
     s_distancia1_ascii <= "011" & s_medida(7 downto 4);
@@ -152,16 +152,16 @@ begin
         generic map (
             BITS => 7
         )
-        port map ( 
-            D0      => s_distancia2_ascii,
-            D1      => s_distancia1_ascii,
-            D2      => s_distancia0_ascii,
-            D3      => "0100011",
-            D4      => s_angulo2_ascii,
-            D5      => s_angulo1_ascii,
-            D6      => s_angulo0_ascii,
-            D7      => "0101100",
-            SEL     => sel_digito,
+        port map (
+            D0      => s_angulo2_ascii,
+            D1      => s_angulo1_ascii,
+            D2      => s_angulo0_ascii,
+            D3      => "0101100",
+            D4      => s_distancia2_ascii,
+            D5      => s_distancia1_ascii,
+            D6      => s_distancia0_ascii,
+            D7      => "0100011",
+            SEL     => s_sel,
             MUX_OUT => s_dado_ascii
         );
 
@@ -215,16 +215,30 @@ begin
     TRANSMISSOR: tx_serial_7O1
         port map (
             clock           => clock,
-            reset           => reset,
+            reset           => zera,
             partida         => transmitir,
             dados_ascii     => s_dado_ascii,
             saida_serial    => saida_serial,
-            pronto          => fim_transmissao,
+            pronto          => s_pronto_tx,
             db_clock        => open,
             db_tick         => open,
             db_partida      => open,
             db_saida_serial => open,
             db_estado       => open
+        );
+
+    CONTA_TRANSMISSAO:  contador_m
+        generic map (
+            M => 9,
+            N => 3
+        )
+        port map (
+            clock => clock,
+            zera  => zera,
+            conta => s_pronto_tx,
+            Q     => s_sel,
+            fim   => fim_transmissao,
+            meio  => open
         );
     
     --output
