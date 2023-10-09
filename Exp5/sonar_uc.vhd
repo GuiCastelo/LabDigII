@@ -97,7 +97,8 @@ begin
   with Eatual select
        db_estado <= "0000" when inicial,
                     "0001" when faz_medida, 
-                    "0010" when aguarda_medida, 
+                    "0010" when aguarda_medida,
+										"0011" when espera_2seg,
                     "0100" when espera_transmissao,
                     "1111" when final,    -- Final
                     "1110" when others;   -- Erro
