@@ -1,0 +1,168 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity sonar is
+    port (
+        clock             : in  std_logic;
+        reset             : in  std_logic;
+        ligar             : in  std_logic;
+        echo              : in  std_logic;
+		entrada_serial    : in  std_logic;
+        trigger           : out std_logic;
+        pwm               : out std_logic;
+        saida_serial      : out std_logic;
+        fim_posicao       : out std_logic;
+        db_trigger        : out std_logic;
+        db_echo           : out std_logic;
+		db_pwm			  : out std_logic;
+        hexa0             : out std_logic_vector(6 downto 0);
+        hexa1             : out std_logic_vector(6 downto 0);
+        hexa2             : out std_logic_vector(6 downto 0);
+        hexa3             : out std_logic_vector(6 downto 0);
+        hexa4             : out std_logic_vector(6 downto 0)
+    );
+end entity;
+
+architecture sonar_arch of sonar is
+    component sonar_fd is 
+		 port (
+			  clock             : in  std_logic;
+			  reset             : in  std_logic;
+			  entrada_serial    : in  std_logic;
+			  medir             : in  std_logic;
+			  echo              : in  std_logic;
+			  conta_posicao     : in  std_logic;
+			  conta_timer       : in  std_logic;
+			  zera              : in  std_logic;
+			  transmitir        : in  std_logic;
+			  trigger           : out std_logic;
+			  pwm               : out std_logic;
+			  medida            : out std_logic_vector(11 downto 0);
+			  posicao           : out std_logic_vector(3 downto 0);
+			  saida_serial      : out std_logic;
+			  fim_medida        : out std_logic;
+			  fim_transmissao   : out std_logic;
+			  fim_2seg          : out std_logic;
+			  modo              : out std_logic_vector(1 downto 0);
+			  pronto_rx			  : out std_logic
+		 );
+    end component;
+
+    component sonar_uc is 
+		 port (
+			  clock             : in  std_logic;
+			  reset             : in  std_logic;
+			  ligar             : in  std_logic;
+			  fim_medida        : in  std_logic;
+			  fim_2seg          : in  std_logic;
+			  fim_transmissao   : in  std_logic;
+			  pronto_rx			  : in  std_logic;
+			  modo              : in  std_logic_vector(1 downto 0);
+			  medir             : out std_logic;
+			  conta_posicao     : out std_logic;
+			  conta_timer       : out std_logic;
+			  zera              : out std_logic;
+			  transmitir        : out std_logic;
+			  fim_posicao       : out std_logic;
+			  db_estado         : out std_logic_vector(3 downto 0)
+		 );
+    end component;
+
+    component hexa7seg is
+        port (
+            hexa : in  std_logic_vector(3 downto 0);
+            sseg : out std_logic_vector(6 downto 0)
+        );
+    end component hexa7seg;
+
+    signal s_medir, s_pronto_rx, s_conta_timer, s_conta_posicao, s_zera, s_transmitir, s_fim_medida, s_fim_2seg, s_fim_transmissao, s_trigger, s_pwm: std_logic;
+    signal s_posicao, s_db_estado: std_logic_vector(3 downto 0);
+    signal s_medida: std_logic_vector(11 downto 0);
+	 signal s_modo: std_logic_vector(1 downto 0);
+
+begin
+
+        FD: sonar_fd 
+            port map (
+                clock           => clock,
+                reset           => reset,
+				entrada_serial  => entrada_serial,
+                medir           => s_medir,
+                echo            => echo,
+                conta_posicao   => s_conta_posicao,
+                conta_timer     => s_conta_timer,
+                zera            => s_zera,
+                transmitir      => s_transmitir,
+                trigger         => s_trigger,
+                pwm             => s_pwm,
+                medida          => s_medida,
+                posicao         => s_posicao,
+                saida_serial    => saida_serial,
+                fim_medida      => s_fim_medida,
+                fim_transmissao => s_fim_transmissao,
+                fim_2seg        => s_fim_2seg,
+				modo            => s_modo,
+			    pronto_rx		=> s_pronto_rx
+            );
+
+
+        UC: sonar_uc
+            port map (
+                clock             => clock,
+                reset             => reset,
+                ligar             => ligar,
+                fim_medida        => s_fim_medida,
+                fim_2seg          => s_fim_2seg,
+                fim_transmissao   => s_fim_transmissao,
+			    pronto_rx		  => s_pronto_rx,
+			    modo              => s_modo,
+                medir             => s_medir,
+                conta_posicao     => s_conta_posicao,
+                conta_timer       => s_conta_timer,
+                zera              => s_zera,
+                transmitir        => s_transmitir,
+                fim_posicao       => fim_posicao,
+                db_estado         => s_db_estado
+            );
+
+
+        HEX0: hexa7seg
+            port map (
+                hexa => s_medida(3 downto 0),
+                sseg => hexa0
+            );
+
+        HEX1: hexa7seg
+            port map (
+                hexa => s_medida(7 downto 4),
+                sseg => hexa1
+            );
+
+        HEX2: hexa7seg
+            port map (
+                hexa => s_medida(11 downto 8),
+                sseg => hexa2
+            );
+
+        HEX3: hexa7seg
+            port map (
+                hexa => s_posicao,
+                sseg => hexa3
+            );
+
+        HEX4: hexa7seg
+            port map (
+                hexa => s_db_estado,
+                sseg => hexa4
+            );
+    --output
+    trigger <= s_trigger;
+	pwm <= s_pwm;
+    --debug
+    db_trigger <= s_trigger;
+    db_echo <= echo;
+	db_pwm <= s_pwm;
+
+
+end architecture;
