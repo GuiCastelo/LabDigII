@@ -21,7 +21,7 @@ entity trincheira is
         db_horizontal2    : out std_logic;
         db_vertical1      : out std_logic;
         db_vertical2      : out std_logic;
-        db_estado         : out std_logic_vector(6 downto 0);
+        db_estado         : out std_logic_vector(6 downto 0)
     );
 end entity;
 
@@ -47,7 +47,7 @@ architecture structural of trincheira is
 			db_horizontal1    : out std_logic;
 			db_horizontal2    : out std_logic;
 			db_vertical1      : out std_logic;
-			db_vertical2      : out std_logic;
+			db_vertical2      : out std_logic
 		);
 	end component;
 
@@ -88,7 +88,7 @@ begin
 		);
     
 	FD: trincheira_fd 
-		port (
+		port map (
 			clock             => clock,
 			reset             => reset,
 			atira             => s_atira,

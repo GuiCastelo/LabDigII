@@ -46,7 +46,7 @@ architecture comportamental of contador_updown_m is
     signal IQ  : integer range 0 to M-1;
 begin
   
-    process (clock,zera_as,zera_s,conta,IQ)
+    process (clock, zera_as, zera_s, conta_up, conta_down, IQ)
     begin
         if zera_as='1' then IQ <= 0;   
         elsif rising_edge(clock) then

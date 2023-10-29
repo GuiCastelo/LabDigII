@@ -25,7 +25,7 @@ architecture tb of trincheira_tb is
         db_horizontal2    : out std_logic;
         db_vertical1      : out std_logic;
         db_vertical2      : out std_logic;
-        db_estado         : out std_logic_vector(6 downto 0);
+        db_estado         : out std_logic_vector(6 downto 0)
     );
   end component;
   
@@ -96,19 +96,6 @@ begin
 
     ---- casos de teste
     -- posicao=00
-    posicao_in <= "00"; -- largura de pulso de 0V
-    wait for 200 ms;
-
-    -- posicao=01
-    posicao_in <= "01"; -- largura de pulso de 1ms
-    wait for 200 ms;
-
-    -- posicao=10
-    posicao_in <= "10"; -- largura de pulso de 1,5ms
-    wait for 200 ms;
-
-    -- posicao=11
-    posicao_in <= "11"; -- largura de pulso de 2ms
     wait for 200 ms;
 
     ---- final dos casos de teste  da simulacao

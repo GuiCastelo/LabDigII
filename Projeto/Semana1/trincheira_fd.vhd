@@ -9,8 +9,8 @@ entity trincheira_fd is
         reset             : in  std_logic;
         atira             : in  std_logic;
         troca             : in  std_logic;
-		detona			  : in  std_logic;
-		cursores		  : in  std_logic_vector(3 downto 0);
+				detona			  		: in  std_logic;
+				cursores		  		: in  std_logic_vector(3 downto 0);
         atira1            : out std_logic;
         atira2            : out std_logic;
         horizontal1       : out std_logic;
@@ -24,7 +24,7 @@ entity trincheira_fd is
         db_horizontal1    : out std_logic;
         db_horizontal2    : out std_logic;
         db_vertical1      : out std_logic;
-        db_vertical2      : out std_logic;
+        db_vertical2      : out std_logic
     );
 end entity;
 
@@ -107,13 +107,19 @@ architecture structural of trincheira_fd is
 
 	signal s_vez, s_seletor_atira1, s_seletor_atira2, s_conta_direita, s_conta_esquerda, s_conta_cima, s_conta_baixo: std_logic;
 	signal s_conta_up_horizontal1, s_conta_down_horizontal1, s_conta_up_horizontal2, s_conta_down_horizontal2: std_logic;  
-	signal s_conta_up_vertical1, s_conta_down_vertical1, s_conta_up_vertical2, s_conta_down_vertical2: std_logic; 
+	signal s_conta_up_vertical1, s_conta_down_vertical1, s_conta_up_vertical2, s_conta_down_vertical2: std_logic;
+	signal s_esquerda, s_direita, s_baixo, s_cima: std_logic;
 	signal s_vez_intermediario: std_logic_vector(0 downto 0);
 	signal s_atira1, s_atira2, s_horizontal1, s_horizontal2, s_vertical1, s_vertical2: std_logic_vector(2 downto 0);
 begin
+	s_esquerda <= cursores(0);
+	s_direita <= cursores(1);
+	s_baixo <= cursores(2);
+	s_cima <= cursores(3);
+
 	REG_VEZ: registrador_n
 		generic map (
-			constant N: integer := 8 
+			N => 1 
 		)
 		port map (
 			clock  => clock,
@@ -132,10 +138,10 @@ begin
 	
 	CONTA_ATIRA: contador_m
 		generic map (
-			constant M => 5_000_000, -- 100ms 
-			constant N => 6
-		);
-		port (
+			M => 5_000_000, -- 100ms 
+			N => 6
+		)
+		port map (
 			clock => clock,
 			zera  => "not"(atira),
 			conta => atira,
@@ -147,8 +153,8 @@ begin
 	s_seletor_atira1 <= not(s_vez) and atira;
 	MUX_ATIRA1: mux2_n
 		generic map (
-			constant N => 3
-		);
+			N => 3
+		)
 		port map (
 			A => "000",
 			B => "111",
@@ -159,8 +165,8 @@ begin
 	s_seletor_atira2 <= s_vez and atira;
 	MUX_ATIRA2: mux2_n
 		generic map (
-			constant N => 3
-		);
+			N => 3
+		)
 		port map (
 			A => "000",
 			B => "111",
@@ -192,13 +198,13 @@ begin
 
 	CONTA_ESQUERDA: contador_m
 		generic map (
-			constant M => 10_000_000, -- 200ms 
-			constant N => 6
-		);
-		port (
+			M => 10_000_000, -- 200ms 
+			N => 6
+		)
+		port map (
 			clock => clock,
-			zera  => "not"(cursor(0)),
-			conta => cursor(0),
+			zera  => "not"(s_esquerda),
+			conta => s_esquerda,
 			Q     => open,
 			fim   => s_conta_esquerda,
 			meio  => open
@@ -208,13 +214,13 @@ begin
 
 	CONTA_DIREITA: contador_m
 		generic map (
-			constant M => 10_000_000, -- 200ms 
-			constant N => 6
-		);
-		port (
+			M => 10_000_000, -- 200ms 
+			N => 6
+		)
+		port map (
 			clock => clock,
-			zera  => "not"(cursor(1)),
-			conta => cursor(1),
+			zera  => "not"(s_direita),
+			conta => s_direita,
 			Q     => open,
 			fim   => s_conta_direita,
 			meio  => open
@@ -224,13 +230,13 @@ begin
 	
 	CONTA_BAIXO: contador_m
 		generic map (
-			constant M => 10_000_000, -- 200ms 
-			constant N => 6
-		);
-		port (
+			M => 10_000_000, -- 200ms 
+			N => 6
+		)
+		port map (
 			clock => clock,
-			zera  => "not"(cursor(2)),
-			conta => cursor(2),
+			zera  => "not"(s_baixo),
+			conta => s_baixo,
 			Q     => open,
 			fim   => s_conta_baixo,
 			meio  => open
@@ -240,13 +246,13 @@ begin
 
 	CONTA_CIMA: contador_m
 		generic map (
-			constant M => 10_000_000, -- 200ms 
-			constant N => 6
-		);
-		port (
+			M => 10_000_000, -- 200ms 
+			N => 6
+		)
+		port map (
 			clock => clock,
-			zera  => "not"(cursor(3)),
-			conta => cursor(3),
+			zera  => "not"(s_cima),
+			conta => s_cima,
 			Q     => open,
 			fim   => s_conta_cima,
 			meio  => open
@@ -257,8 +263,8 @@ begin
 	POSICAO_HORIZONTAL1: contador_updown_m
 		generic map (
 			M => 8
-		);
-		port (
+		)
+		port map (
 			clock       => clock,
 			zera_as     => reset,
 			zera_s      => '0',
@@ -272,9 +278,9 @@ begin
 
 	POSICAO_HORIZONTAL2: contador_updown_m
 	   	generic map (
-		   M => 8
-	   	);
-	   	port (
+		  	M => 8
+	   	)
+	   	port map (
 		   clock       => clock,
 		   zera_as     => reset,
 		   zera_s      => '0',
@@ -289,8 +295,8 @@ begin
 	POSICAO_VERTICAL1: contador_updown_m
 		generic map (
 			M => 8
-		);
-		port (
+		)
+		port map (
 			clock       => clock,
 			zera_as     => reset,
 			zera_s      => '0',
@@ -305,13 +311,13 @@ begin
 	POSICAO_VERTICAL2: contador_updown_m
 		generic map (
 			M => 8
-		);
-		port (
+		)
+		port map (
 			clock       => clock,
 			zera_as     => reset,
 			zera_s      => '0',
 			conta_up    => s_conta_up_vertical2,
-			conta_down  => s_conta_down_verical2,
+			conta_down  => s_conta_down_vertical2,
 			Q           => s_vertical2,
 			inicio      => open,
 			fim         => open,
