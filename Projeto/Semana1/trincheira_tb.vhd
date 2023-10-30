@@ -95,8 +95,43 @@ begin
 	ligar_in <= '1';
 
     ---- casos de teste
-    -- posicao=00
-    wait for 200 ms;
+    -- jogador 1 jogando
+    -- cursor para direita por 300us
+    cursores_in <= "0010";
+    wait for 300 us;
+    cursores_in <= "0000";
+    wait for 5*clockPeriod;
+
+    -- cursor para esquerda por 500us
+    cursores_in <= "0001";
+    wait for 500 us;
+    cursores_in <= "0000";
+    wait for 5*clockPeriod;
+    
+    -- jogador 1 faz jogada
+    detona_in <= '1';
+    wait for 20*clockPeriod;
+    detona_in <= '0';
+    wait for 100 us;
+
+    -- jogador 2 jogando
+    -- cursor para cima por 300us
+    cursores_in <= "1000";
+    wait for 300 us;
+    cursores_in <= "0000";
+    wait for 5*clockPeriod;
+
+    -- cursor para baixo por 500us
+    cursores_in <= "0100";
+    wait for 500 us;
+    cursores_in <= "0000";
+    wait for 5*clockPeriod;
+    
+    -- jogador 2 faz jogada
+    detona_in <= '1';
+    wait for 20*clockPeriod;
+    detona_in <= '0';
+    wait for 100 us;
 
     ---- final dos casos de teste  da simulacao
     assert false report "Fim da simulacao" severity note;

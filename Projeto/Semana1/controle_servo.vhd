@@ -45,15 +45,25 @@ architecture structural of controle_servo is
 begin
 CIRC_PWM: circuito_pwm
        generic map (
-          conf_periodo => 1000000,
-          largura_000  => 35000,
-          largura_001  => 45700, 
-          largura_010  => 56450,  
-          largura_011  => 67150,
-          largura_100  => 77850,
-          largura_101  => 88550, 
-          largura_110  => 99300,
-          largura_111  => 110000
+          -- conf_periodo => 1_000_000,
+          -- largura_000  => 35_000,
+          -- largura_001  => 45_700, 
+          -- largura_010  => 56_450,  
+          -- largura_011  => 67_150,
+          -- largura_100  => 77_850,
+          -- largura_101  => 88_550, 
+          -- largura_110  => 99_300,
+          -- largura_111  => 110_000
+          -- CONFIGURAÇÃO PARA SIMULAÇÃO APENAS
+          conf_periodo => 1_000,
+          largura_000  => 35,
+          largura_001  => 46, 
+          largura_010  => 56,  
+          largura_011  => 67,
+          largura_100  => 78,
+          largura_101  => 89, 
+          largura_110  => 99,
+          largura_111  => 110
        )
        port map( 
            clock   => clock,

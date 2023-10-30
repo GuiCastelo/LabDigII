@@ -128,6 +128,7 @@ begin
 			D      => "not"(s_vez_intermediario),
 			Q      => s_vez_intermediario
 		);
+		s_vez <= s_vez_intermediario(0);
 	
 	DETEC_JOGADA: edge_detector
 		port map (  
@@ -138,7 +139,8 @@ begin
 	
 	CONTA_ATIRA: contador_m
 		generic map (
-			M => 5_000_000, -- 100ms 
+			--M => 5_000_000, -- 100ms 
+			M => 5_000, -- 100us para simulação
 			N => 6
 		)
 		port map (
@@ -190,7 +192,7 @@ begin
 			clock => clock,
 			reset => reset,
 			posicao => s_atira2,
-			pwm => atira1,
+			pwm => atira2,
 			db_reset => open,
 			db_pwm => db_atira2,
 			db_posicao => open
@@ -198,7 +200,8 @@ begin
 
 	CONTA_ESQUERDA: contador_m
 		generic map (
-			M => 10_000_000, -- 200ms 
+			--M => 10_000_000, -- 200ms 
+			M => 10_000, -- 200us para simulação
 			N => 6
 		)
 		port map (
@@ -214,7 +217,8 @@ begin
 
 	CONTA_DIREITA: contador_m
 		generic map (
-			M => 10_000_000, -- 200ms 
+			--M => 10_000_000, -- 200ms 
+			M => 10_000, -- 200us para simulação
 			N => 6
 		)
 		port map (
@@ -230,7 +234,8 @@ begin
 	
 	CONTA_BAIXO: contador_m
 		generic map (
-			M => 10_000_000, -- 200ms 
+			--M => 10_000_000, -- 200ms 
+			M => 10_000, -- 200us para simulação
 			N => 6
 		)
 		port map (
@@ -246,7 +251,8 @@ begin
 
 	CONTA_CIMA: contador_m
 		generic map (
-			M => 10_000_000, -- 200ms 
+			--M => 10_000_000, -- 200ms 
+			M => 10_000, -- 200us para simulação
 			N => 6
 		)
 		port map (
