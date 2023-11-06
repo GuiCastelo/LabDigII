@@ -14,9 +14,9 @@ entity trincheira_fd is
 				medir							: in  std_logic;
 				limpa_sensor			: in  std_logic;
 				echo11						: in  std_logic;
-				echo12						: in  std_logic;
-				echo13						: in  std_logic;
 				echo21						: in  std_logic;
+				echo31						: in  std_logic;
+				echo12						: in  std_logic;
 				echo22						: in  std_logic;
 				echo32						: in  std_logic;
         atira1            : out std_logic;
@@ -26,9 +26,9 @@ entity trincheira_fd is
         vertical1         : out std_logic;
         vertical2         : out std_logic;
 				trigger11				  : out std_logic;
-				trigger12				  : out std_logic;
-				trigger13				  : out std_logic;
 				trigger21				  : out std_logic;
+				trigger31				  : out std_logic;
+				trigger12				  : out std_logic;
 				trigger22				  : out std_logic;
 				trigger32				  : out std_logic;
 				fim_medidas6      : out std_logic;

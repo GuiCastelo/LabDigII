@@ -10,9 +10,9 @@ entity trincheira is
         detona            : in  std_logic;
 		posiciona         : in  std_logic;
 		echo11						: in  std_logic;
-		echo12						: in  std_logic;
-		echo13						: in  std_logic;
 		echo21						: in  std_logic;
+		echo31						: in  std_logic;
+		echo12						: in  std_logic;
 		echo22						: in  std_logic;
 		echo32						: in  std_logic;
         cursores          : in  std_logic_vector(3 downto 0);
@@ -25,9 +25,9 @@ entity trincheira is
         vertical2         : out std_logic;
 		vez				  : out std_logic;
 		trigger11				  : out std_logic;
-		trigger12				  : out std_logic;
-		trigger13				  : out std_logic;
 		trigger21				  : out std_logic;
+		trigger31				  : out std_logic;
+		trigger12				  : out std_logic;
 		trigger22				  : out std_logic;
 		trigger32				  : out std_logic;
 		fim               : out std_logic;
@@ -54,9 +54,9 @@ architecture structural of trincheira is
 			medir							: in  std_logic;
 			limpa_sensor			: in  std_logic;
 			echo11						: in  std_logic;
-			echo12						: in  std_logic;
-			echo13						: in  std_logic;
 			echo21						: in  std_logic;
+			echo31						: in  std_logic;
+			echo12						: in  std_logic;
 			echo22						: in  std_logic;
 			echo32						: in  std_logic;
 			atira1            : out std_logic;
@@ -66,9 +66,9 @@ architecture structural of trincheira is
 			vertical1         : out std_logic;
 			vertical2         : out std_logic;
 			trigger11				  : out std_logic;
-			trigger12				  : out std_logic;
-			trigger13				  : out std_logic;
 			trigger21				  : out std_logic;
+			trigger31				  : out std_logic;
+			trigger12				  : out std_logic;
 			trigger22				  : out std_logic;
 			trigger32				  : out std_logic;
 			fim_medidas6      : out std_logic;
@@ -113,7 +113,7 @@ architecture structural of trincheira is
       );
     end component;
 
-	signal s_posiciona, s_valido, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca s_limpa_sensor: std_logic;
+	signal s_posiciona, s_valido, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
 	signal s_db_estado: std_logic_vector(3 downto 0);
 begin
 
@@ -147,9 +147,9 @@ begin
 			medir							=> s_medir,
 			limpa_sensor			=> s_limpa_sensor,
 			echo11						=> echo11,
-			echo12						=> echo21,
-			echo13						=> echo31,
-			echo21						=> echo12,
+			echo21						=> echo21,
+			echo31						=> echo31,
+			echo12						=> echo12,
 			echo22						=> echo22,
 			echo32						=> echo32,
 			atira1            => atira1,
@@ -158,10 +158,10 @@ begin
 			horizontal2       => horizontal2,
 			vertical1         => vertical1,
 			vertical2         => vertical2,
-			trigger11		      => trigger11
-			trigger12				  => trigger12,
-			trigger13				  => trigger13,
+			trigger11		      => trigger11,
 			trigger21				  => trigger21,
+			trigger31				  => trigger31,
+			trigger12				  => trigger12,
 			trigger22				  => trigger22,
 			trigger32				  => trigger32,
 			fim_medidas6      => s_fim_medidas6,

@@ -25,7 +25,7 @@ end entity;
 architecture trincheira_uc_arch of trincheira_uc is
 
     type tipo_estado is (inicial, esperaPosiciona, medePosiciona, 
-    aguardaFimPosiciona, validaPosicoes, esperaAcao, fazJogada, medeJogada, 
+    aguardaFimPosiciona, validaPosiciona, esperaAcao, fazJogada, medeJogada, 
     aguardaJogada, checaFim, trocaVez, final);
     signal Eatual: tipo_estado;  -- estado atual
     signal Eprox:  tipo_estado;  -- proximo estado
