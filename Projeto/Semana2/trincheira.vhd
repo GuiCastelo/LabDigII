@@ -113,7 +113,7 @@ architecture structural of trincheira is
       );
     end component;
 
-	signal s_posiciona, s_valido, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
+	signal s_valido, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
 	signal s_db_estado: std_logic_vector(3 downto 0);
 begin
 
@@ -122,7 +122,7 @@ begin
 			clock             => clock,
 			reset             => reset,
 			ligar             => ligar,
-			posiciona         => s_posiciona,
+			posiciona         => posiciona,
 			fim_medidas6      => s_fim_medidas6,
 			valido            => s_valido,
 			acertou_tudo      => s_acertou_tudo,

@@ -63,7 +63,7 @@ begin
         else              Eprox <= aguardaFimPosiciona;
         end if;
 
-        when validaPosiciona =>     if valido='1' then Eprox <= esperaPosiciona;
+        when validaPosiciona =>     if valido='0' then Eprox <= esperaPosiciona;
         else              Eprox <= esperaAcao;
         end if;
 
@@ -110,8 +110,9 @@ begin
                 '0' when others;
 
   with Eatual select
-      limpa_sensor <=  '1' when validaPosiciona, 
-                       '1' when checaFim,
+      limpa_sensor <=  '1' when esperaAcao, 
+                       '1' when esperaPosiciona,
+                       '1' when inicial,
                        '0' when others;
 
   with Eatual select

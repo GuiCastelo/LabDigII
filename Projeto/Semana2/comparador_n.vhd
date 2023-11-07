@@ -16,21 +16,11 @@ entity comparador_n is
 end entity comparador_n;
 
 architecture comportamental of comparador_n is
-  signal intA, intB: integer;
 begin
-    intA <= to_integer(unsigned(A));
-    intB <= to_integer(unsigned(B));
-    process(A, B)
-        begin
-            Bmaior <= '0';
-            igual <= '0';
-            Bmenor <= '0';
-            if (intA=intB) then 
-              igual <= '0';
-            elsif (intB>intA) then
-              Bmaior <= '1';
-            else
-              Bmenor <= '1';
-            end if;
-        end process;
+  Bmaior <= '1' when unsigned(B) > unsigned(A) else
+            '0';
+  Bmenor <= '1' when unsigned(B) < unsigned(A) else
+  '0';
+  igual <= '1' when unsigned(B) = unsigned(A) else
+  '0';
 end architecture comportamental;

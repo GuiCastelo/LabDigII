@@ -192,8 +192,8 @@ begin
 	
 	CONTA_ATIRA: contador_m
 		generic map (
-			M => 50_000_000, -- 1s 
-			--M => 50_000, -- 1ms para simulação
+			--M => 50_000_000, -- 1s 
+			M => 50_000, -- 1ms para simulação
 			N => 30
 		)
 		port map (
@@ -444,7 +444,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => reset,
+			clear  => limpa_sensor,
 			enable => s_pronto11,
 			D      => s_medida11,
 			Q      => s_compara11
@@ -455,10 +455,10 @@ begin
     )
     port map (
         A      => "000000100000",
-        B      => s_compara21,
-        Bmaior => s_maior21,
+        B      => s_compara11,
+        Bmaior => s_maior11,
         igual  => open,
-        Bmenor => s_menor21
+        Bmenor => s_menor11
     );
 	
 	SENSOR_SOLDADO2JOG1: interface_hcsr04
@@ -478,7 +478,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => reset,
+			clear  => limpa_sensor,
 			enable => s_pronto21,
 			D      => s_medida21,
 			Q      => s_compara21
@@ -512,7 +512,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => reset,
+			clear  => limpa_sensor,
 			enable => s_pronto31,
 			D      => s_medida31,
 			Q      => s_compara31
@@ -546,7 +546,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => reset,
+			clear  => limpa_sensor,
 			enable => s_pronto12,
 			D      => s_medida12,
 			Q      => s_compara12
@@ -580,7 +580,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => reset,
+			clear  => limpa_sensor,
 			enable => s_pronto22,
 			D      => s_medida22,
 			Q      => s_compara22
@@ -614,7 +614,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => reset,
+			clear  => limpa_sensor,
 			enable => s_pronto32,
 			D      => s_medida32,
 			Q      => s_compara32
@@ -634,7 +634,7 @@ begin
 	s_conta_medida <= s_pronto11 or s_pronto21 or s_pronto31 or s_pronto12 or s_pronto22 or s_pronto32;
 	CONTA_MEDIDA: contador_m
 		generic map (
-			M => 6,
+			M => 7,
 			N => 3
 		)
 		port map (
@@ -646,7 +646,7 @@ begin
 			meio  => open
 		);
 	-- Output
-	valido <= s_menor11 or s_menor21 or s_menor31 or s_menor12 or s_menor22 or s_menor32;
+	valido <= s_menor11 and s_menor21 and s_menor31 and s_menor12 and s_menor22 and s_menor32;
 	acertou_tudo <= (s_maior11 and s_maior21 and s_maior31) or (s_maior12 and s_maior22 and s_maior32);
 	vez <= s_vez;
 
