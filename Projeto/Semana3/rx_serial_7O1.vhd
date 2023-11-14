@@ -6,9 +6,9 @@ entity rx_serial_7O1 is
     port (
         clock             : in std_logic;
         reset             : in std_logic;
+        reset_s           : in std_logic;
         dado_serial       : in std_logic;
-        dado_recebido0    : out std_logic_vector(6 downto 0);
-        dado_recebido1    : out std_logic_vector(6 downto 0);
+        dado_recebido    : out std_logic_vector(6 downto 0);
         paridade_recebida : out std_logic;
         pronto_rx         : out std_logic;
         db_estado         : out std_logic_vector(6 downto 0);
@@ -23,6 +23,7 @@ architecture rx_serial_7O1_arch of rx_serial_7O1 is
     port ( 
         clock         : in  std_logic;
         reset         : in  std_logic;
+        reset_s       : in  std_logic;
         dado_serial   : in  std_logic;
         tick          : in  std_logic;
         fim           : in  std_logic;
@@ -47,7 +48,7 @@ architecture rx_serial_7O1_arch of rx_serial_7O1 is
         desloca           : in  std_logic;
         limpa             : in  std_logic;
         registra          : in  std_logic;
-        dado_serial      : in  std_logic;
+        dado_serial       : in  std_logic;
         dado_saida        : out std_logic_vector(6 downto 0);
         paridade_recebida : out std_logic;
         fim               : out std_logic
@@ -87,21 +88,19 @@ architecture rx_serial_7O1_arch of rx_serial_7O1 is
     signal s_reset: std_logic;
     signal s_zera, s_conta, s_carrega, s_desloca, s_tick, s_fim, s_limpa, s_registra: std_logic;
     signal s_saida_serial : std_logic;
-    signal s_estado, s_dado_recebido1 : std_logic_vector(3 downto 0);
-    signal s_dado_saida: std_logic_vector(6 downto 0);
+    signal s_estado: std_logic_vector(3 downto 0);
 
 begin
 
     -- sinais reset e partida mapeados na GPIO (ativos em alto)
     s_reset   <= reset;
 
-    s_dado_recebido1 <= '0' & s_dado_saida(6 downto 4);
-
     -- unidade de controle
     U1_UC: rx_serial_uc 
            port map (
                clock       => clock, 
-               reset       => s_reset, 
+               reset       => s_reset,
+               reset_s     => reset_s, 
                dado_serial => dado_serial, 
                tick        => s_tick, 
                fim         => s_fim,
@@ -127,7 +126,7 @@ begin
                limpa             => s_limpa,
                registra          => s_registra,
                dado_serial       => dado_serial, 
-               dado_saida        => s_dado_saida, 
+               dado_saida        => dado_recebido, 
                paridade_recebida => paridade_recebida,
                fim               => s_fim
            );
@@ -153,23 +152,4 @@ begin
     -- debug
     db_clock   <= clock;
     db_tick    <= s_tick;
-
-    HEX5: hexa7seg
-          port map (
-              hexa => s_estado,
-              sseg => db_estado
-          );
-
-    HEX1: hexa7seg
-          port map (
-              hexa => s_dado_recebido1,
-              sseg => dado_recebido1
-          );
-
-    HEX0: hexa7seg
-          port map (
-              hexa => s_dado_saida(3 downto 0),
-              sseg => dado_recebido0
-          );
-
 end architecture;

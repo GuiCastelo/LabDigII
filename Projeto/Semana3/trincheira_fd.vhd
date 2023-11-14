@@ -9,16 +9,17 @@ entity trincheira_fd is
         reset             : in  std_logic;
         atira             : in  std_logic;
         troca             : in  std_logic;
-		    detona			  	  : in  std_logic;
-		    cursores		  	  : in  std_logic_vector(3 downto 0);
 				medir							: in  std_logic;
 				limpa_sensor			: in  std_logic;
+        limpa_jogada      : in  std_logic;
 				echo11						: in  std_logic;
 				echo21						: in  std_logic;
 				echo31						: in  std_logic;
 				echo12						: in  std_logic;
 				echo22						: in  std_logic;
 				echo32						: in  std_logic;
+				entrada_serial    : in  std_logic;
+				saida_serial   		: out std_logic;
         atira1            : out std_logic;
         atira2            : out std_logic;
         horizontal1       : out std_logic;
@@ -33,10 +34,12 @@ entity trincheira_fd is
 				trigger32				  : out std_logic;
 				fim_medidas6      : out std_logic;
 				acertou_tudo      : out std_logic;
+				posiciona         : out std_logic;
 				valido 						: out std_logic;
 		    vez					      : out std_logic;
         fim_atira         : out std_logic;
         faz_jogada        : out std_logic;
+				pronto_tx					: out std_logic;
         db_atira1         : out std_logic;
         db_atira2         : out std_logic;
         db_horizontal1    : out std_logic;
@@ -148,6 +151,37 @@ architecture structural of trincheira_fd is
 			meio        : out std_logic 
 	   );
 	end component;
+	
+	component rx_serial_7O1 is
+		port (
+			clock             : in std_logic;
+			reset             : in std_logic;
+			reset_s           : in std_logic;
+			dado_serial       : in std_logic;
+			dado_recebido    : out std_logic_vector(6 downto 0);
+			paridade_recebida : out std_logic;
+			pronto_rx         : out std_logic;
+			db_estado         : out std_logic_vector(6 downto 0);
+			db_tick           : out std_logic;
+			db_clock          : out std_logic
+		);
+	end component;
+
+	component tx_serial_7O1 is
+    port (
+        clock           : in  std_logic;
+        reset           : in  std_logic;
+        partida         : in  std_logic;
+        dados_ascii     : in  std_logic_vector(6 downto 0);
+        saida_serial    : out std_logic;
+        pronto          : out std_logic;
+        db_clock        : out std_logic;
+        db_tick         : out std_logic;
+        db_partida      : out std_logic;
+        db_saida_serial : out std_logic;
+        db_estado       : out std_logic_vector(6 downto 0)
+    );
+	end component;
 
 	-- Sinais para controle dos servomotores e sinal do registrador da vez
 	signal s_vez_intermediario: std_logic_vector(0 downto 0);
@@ -183,13 +217,6 @@ begin
 		);
 		s_vez <= s_vez_intermediario(0);
 	
-	DETEC_JOGADA: edge_detector
-		port map (  
-			clock     => clock,
-			signal_in => detona,
-			output    => faz_jogada
-		);
-	
 	CONTA_ATIRA: contador_m
 		generic map (
 			--M => 50_000_000, -- 1s 
@@ -198,7 +225,7 @@ begin
 		)
 		port map (
 			clock => clock,
-			zera  => "not"(atira),
+			zera  => limpa_jogada,
 			conta => atira,
 			Q     => open,
 			fim   => fim_atira,
@@ -250,74 +277,6 @@ begin
 			db_pwm => db_atira2,
 			db_posicao => open
 		);
-
-	CONTA_ESQUERDA: contador_m
-		generic map (
-			M => 5_000_000, -- 100ms 
-			--M => 5_000, -- 100us para simulação
-			N => 30
-		)
-		port map (
-			clock => clock,
-			zera  => "not"(s_esquerda),
-			conta => s_esquerda,
-			Q     => open,
-			fim   => s_conta_esquerda,
-			meio  => open
-		);
-	s_conta_down_horizontal1 <= s_conta_esquerda and not(s_vez);
-	s_conta_down_horizontal2 <= s_conta_esquerda and s_vez;
-
-	CONTA_DIREITA: contador_m
-		generic map (
-			M => 5_000_000, -- 100ms 
-			--M => 5_000, -- 100us para simulação
-			N => 30
-		)
-		port map (
-			clock => clock,
-			zera  => "not"(s_direita),
-			conta => s_direita,
-			Q     => open,
-			fim   => s_conta_direita,
-			meio  => open
-		);
-	s_conta_up_horizontal1 <= s_conta_direita and not(s_vez);
-	s_conta_up_horizontal2 <= s_conta_direita and s_vez;
-	
-	CONTA_BAIXO: contador_m
-		generic map (
-			M => 5_000_000, -- 100ms 
-			--M => 5_000, -- 100us para simulação
-			N => 30
-		)
-		port map (
-			clock => clock,
-			zera  => "not"(s_baixo),
-			conta => s_baixo,
-			Q     => open,
-			fim   => s_conta_baixo,
-			meio  => open
-		);
-	s_conta_down_vertical1 <= s_conta_baixo and not(s_vez);
-	s_conta_down_vertical2 <= s_conta_baixo and s_vez;
-
-	CONTA_CIMA: contador_m
-		generic map (
-			M => 5_000_000, -- 100ms 
-			--M => 5_000, -- 100us para simulação
-			N => 30
-		)
-		port map (
-			clock => clock,
-			zera  => "not"(s_cima),
-			conta => s_cima,
-			Q     => open,
-			fim   => s_conta_cima,
-			meio  => open
-		);
-	s_conta_up_vertical1 <= s_conta_cima and not(s_vez);
-	s_conta_up_vertical2 <= s_conta_cima and s_vez;
 	
 	POSICAO_HORIZONTAL1: contador_updown_m
 		generic map (
@@ -645,6 +604,120 @@ begin
 			fim   => fim_medidas6,
 			meio  => open
 		);
+
+	RECEPTOR_SERIAL: rx_serial_7O1
+		port map (
+			clock             => clock,
+			reset             => reset,
+			reset_s           => s_pronto_rx,
+			dado_serial       => entrada_serial,
+			dado_recebido     => s_dado_recebido,
+			paridade_recebida => open,
+			pronto_rx         => s_pronto_rx.
+			db_estado         => open,
+			db_tick           => open,
+			db_clock          => open
+		);
+
+	TRANSMISSOR_SERIAL: tx_serial_7O1
+    port map (
+        clock           => clock,
+        reset           => reset,
+        partida         => '0',
+        dados_ascii     => "0000000",
+        saida_serial    => saida_serial,
+        pronto          => pronto_tx,
+        db_clock        => open,
+        db_tick         => open,
+        db_partida      => open,
+        db_saida_serial => open,
+        db_estado       => open
+    );
+
+	COMP_FAZJOGADA: comparador_n
+		generic map (
+				N => 7
+		)
+		port map (
+				A      => s_dado_recebido,
+				B      => "0100000", -- 20 -> barra de espaco
+				Bmaior => open,
+				igual  => faz_jogada,
+				Bmenor => open
+	);
+		
+	COMP_POSICIONA: comparador_n
+		generic map (
+				N => 7
+		)
+		port map (
+				A      => s_dado_recebido,
+				B      => "1110000", -- 70 -> p
+				Bmaior => open,
+				igual  => posiciona,
+				Bmenor => open
+		);
+
+	COMP_DIREITA: comparador_n
+    generic map (
+        N => 7
+    )
+    port map (
+        A      => s_dado_recebido,
+        B      => "1100100", -- 64 -> d
+        Bmaior => open,
+        igual  => s_direita,
+        Bmenor => open
+    );
+
+	s_conta_up_horizontal1 <= s_conta_direita and not(s_vez);
+	s_conta_up_horizontal2 <= s_conta_direita and s_vez;
+
+	COMP_ESQUERDA: comparador_n
+    generic map (
+        N => 7
+    )
+    port map (
+        A      => s_dado_recebido,
+        B      => "1100001", -- 61 -> a
+        Bmaior => open,
+        igual  => s_esquerda,
+        Bmenor => open
+    );
+
+	s_conta_down_horizontal1 <= s_conta_esquerda and not(s_vez);
+	s_conta_down_horizontal2 <= s_conta_esquerda and s_vez;
+
+	COMP_CIMA: comparador_n
+    generic map (
+        N => 7
+    )
+    port map (
+        A      => s_dado_recebido,
+        B      => "1110111", -- 77 -> w
+        Bmaior => open,
+        igual  => s_cima,
+        Bmenor => open
+    );
+
+	s_conta_up_vertical1 <= s_cima and not(s_vez);
+	s_conta_up_vertical2 <= s_cima and s_vez;
+
+	COMP_BAIXO: comparador_n
+    generic map (
+        N => 7
+    )
+    port map (
+        A      => s_dado_recebido,
+        B      => "1110011", -- 73 -> s
+        Bmaior => open,
+        igual  => s_baixo,
+        Bmenor => open
+    );
+
+	s_conta_down_vertical1 <= s_conta_baixo and not(s_vez);
+	s_conta_down_vertical2 <= s_conta_baixo and s_vez;
+
 	-- Output
 	valido <= s_menor11 and s_menor21 and s_menor31 and s_menor12 and s_menor22 and s_menor32;
 	acertou_tudo <= (s_maior11 and s_maior21 and s_maior31) or (s_maior12 and s_maior22 and s_maior32);

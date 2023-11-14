@@ -13,6 +13,8 @@ entity trincheira_uc is
         acertou_tudo      : in  std_logic;
         faz_jogada        : in  std_logic;
         fim_atira         : in  std_logic;
+        pronto_tx         : in  std_logic;
+        limpa_jogada      : out std_logic;
         medir             : out std_logic;
         atira             : out std_logic;
         troca             : out std_logic;
@@ -114,6 +116,10 @@ begin
                        '1' when esperaPosiciona,
                        '1' when inicial,
                        '0' when others;
+
+  with Eatual select
+      limpa_jogada <=  '0' when fazJogada,
+                       '1' when others;
 
   with Eatual select
 	  fim <= '1' when final, '0' when others;
