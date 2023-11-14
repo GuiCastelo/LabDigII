@@ -30,14 +30,15 @@ entity trincheira is
 		trigger22		  : out std_logic;
 		trigger32		  : out std_logic;
 		fim               : out std_logic;
-        db_atira1         : out std_logic;
-        db_atira2         : out std_logic;
-        db_horizontal1    : out std_logic;
-        db_horizontal2    : out std_logic;
-        db_vertical1      : out std_logic;
-        db_vertical2      : out std_logic;
 		db_fim_atira	  : out std_logic;
-        db_estado         : out std_logic_vector(6 downto 0)
+        db_estado         : out std_logic_vector(6 downto 0);
+				db_conta_medida   : out std_logic_vector(6 downto 0);
+				db_maior11		  : out std_logic;
+				db_maior21		  : out std_logic;
+				db_maior31		  : out std_logic;
+				db_maior12		  : out std_logic;
+				db_maior22		  : out std_logic;
+				db_maior32		  : out std_logic
     );
 end entity;
 
@@ -48,43 +49,44 @@ architecture structural of trincheira is
 			reset             : in  std_logic;
 			atira             : in  std_logic;
 			troca             : in  std_logic;
-			medir			  : in  std_logic;
-			limpa_sensor	  : in  std_logic;
+			medir							: in  std_logic;
+			limpa_sensor			: in  std_logic;
 			limpa_jogada      : in  std_logic;
-			echo11			  : in  std_logic;
-			echo21			  : in  std_logic;
-			echo31			  : in  std_logic;
-			echo12			  : in  std_logic;
-			echo22			  : in  std_logic;
-			echo32			  : in  std_logic;
+			echo11						: in  std_logic;
+			echo21						: in  std_logic;
+			echo31						: in  std_logic;
+			echo12						: in  std_logic;
+			echo22						: in  std_logic;
+			echo32						: in  std_logic;
 			entrada_serial    : in  std_logic;
-			saida_serial   	  : out std_logic;
+			saida_serial   		: out std_logic;
 			atira1            : out std_logic;
 			atira2            : out std_logic;
 			horizontal1       : out std_logic;
 			horizontal2       : out std_logic;
 			vertical1         : out std_logic;
 			vertical2         : out std_logic;
-			trigger11		  : out std_logic;
-			trigger21		  : out std_logic;
-			trigger31		  : out std_logic;
-			trigger12		  : out std_logic;
-			trigger22		  : out std_logic;
-			trigger32		  : out std_logic;
+			trigger11				  : out std_logic;
+			trigger21				  : out std_logic;
+			trigger31				  : out std_logic;
+			trigger12				  : out std_logic;
+			trigger22				  : out std_logic;
+			trigger32				  : out std_logic;
 			fim_medidas6      : out std_logic;
 			acertou_tudo      : out std_logic;
 			posiciona         : out std_logic;
-			valido 			  : out std_logic;
-			vez				  : out std_logic;
+			valido 						: out std_logic;
+			vez					      : out std_logic;
 			fim_atira         : out std_logic;
 			faz_jogada        : out std_logic;
-			pronto_tx		  : out std_logic;
-			db_atira1         : out std_logic;
-			db_atira2         : out std_logic;
-			db_horizontal1    : out std_logic;
-			db_horizontal2    : out std_logic;
-			db_vertical1      : out std_logic;
-			db_vertical2      : out std_logic
+			pronto_tx					: out std_logic;
+			db_conta_medida   : out std_logic_vector(3 downto 0);
+			db_maior11		  : out std_logic;
+			db_maior21		  : out std_logic;
+			db_maior31		  : out std_logic;
+			db_maior12		  : out std_logic;
+			db_maior22		  : out std_logic;
+			db_maior32		  : out std_logic
 		);
 	end component;
 
@@ -118,7 +120,7 @@ architecture structural of trincheira is
     end component;
 
 	signal s_valido, s_limpa_jogada, s_posiciona, s_pronto_tx, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
-	signal s_db_estado: std_logic_vector(3 downto 0);
+	signal s_db_estado, s_db_conta_medida: std_logic_vector(3 downto 0);
 begin
 
 	UC: trincheira_uc
@@ -179,18 +181,25 @@ begin
 			fim_atira         => s_fim_atira,
 			faz_jogada        => s_faz_jogada,
 			pronto_tx         => s_pronto_tx,
-			db_atira1         => db_atira1,
-			db_atira2         => db_atira2,
-			db_horizontal1    => db_horizontal1,
-			db_horizontal2    => db_horizontal2,
-			db_vertical1      => db_vertical1,
-			db_vertical2      => db_vertical2
+			db_conta_medida   => s_db_conta_medida,
+			db_maior11		   => db_maior11,
+			db_maior21		   => db_maior21,
+			db_maior31		   => db_maior31,
+			db_maior12		   => db_maior12,
+			db_maior22		   => db_maior22,
+			db_maior32		   => db_maior32
 		);
 
 	HEX0: hexa7seg
 		port map (
 			hexa => s_db_estado,
 			sseg => db_estado
+		);
+
+	HEX1: hexa7seg
+		port map (
+			hexa => s_db_conta_medida,
+			sseg => db_conta_medida
 		);
 	
 	db_fim_atira <= s_fim_atira;

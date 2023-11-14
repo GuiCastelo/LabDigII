@@ -40,12 +40,13 @@ entity trincheira_fd is
         fim_atira         : out std_logic;
         faz_jogada        : out std_logic;
 				pronto_tx					: out std_logic;
-        db_atira1         : out std_logic;
-        db_atira2         : out std_logic;
-        db_horizontal1    : out std_logic;
-        db_horizontal2    : out std_logic;
-        db_vertical1      : out std_logic;
-        db_vertical2      : out std_logic
+				db_conta_medida   : out std_logic_vector(3 downto 0);
+				db_maior11		  : out std_logic;
+				db_maior21		  : out std_logic;
+				db_maior31		  : out std_logic;
+				db_maior12		  : out std_logic;
+				db_maior22		  : out std_logic;
+				db_maior32		  : out std_logic
     );
 end entity;
 
@@ -259,7 +260,7 @@ begin
 			posicao => s_atira1,
 			pwm => atira1,
 			db_reset => open,
-			db_pwm => db_atira1,
+			db_pwm => open,
 			db_posicao => open
 		);
 	
@@ -270,7 +271,7 @@ begin
 			posicao => s_atira2,
 			pwm => atira2,
 			db_reset => open,
-			db_pwm => db_atira2,
+			db_pwm => open,
 			db_posicao => open
 		);
 	
@@ -345,7 +346,7 @@ begin
 			posicao => s_horizontal1,
 			pwm => horizontal1,
 			db_reset => open,
-			db_pwm => db_horizontal1,
+			db_pwm => open,
 			db_posicao => open
 		);
 
@@ -356,7 +357,7 @@ begin
 			posicao => s_vertical1,
 			pwm => vertical1,
 			db_reset => open,
-			db_pwm => db_vertical1,
+			db_pwm => open,
 			db_posicao => open
 		);
 
@@ -367,7 +368,7 @@ begin
 			posicao => s_horizontal2,
 			pwm => horizontal2,
 			db_reset => open,
-			db_pwm => db_horizontal2,
+			db_pwm => open,
 			db_posicao => open
 		);
 
@@ -378,7 +379,7 @@ begin
 			posicao => s_vertical2,
 			pwm => vertical2,
 			db_reset => open,
-			db_pwm => db_vertical2,
+			db_pwm => open,
 			db_posicao => open
 		);
 	
@@ -589,14 +590,15 @@ begin
 	s_conta_medida <= s_pronto11 or s_pronto21 or s_pronto31 or s_pronto12 or s_pronto22 or s_pronto32;
 	CONTA_MEDIDA: contador_m
 		generic map (
-			M => 7,
-			N => 3
+			M => 6,
+			--M => 7, para simulacao
+			N => 4
 		)
 		port map (
 			clock => clock,
 			zera  => limpa_sensor,
 			conta => s_conta_medida,
-			Q     => open,
+			Q     => db_conta_medida,
 			fim   => fim_medidas6,
 			meio  => open
 		);
@@ -714,6 +716,13 @@ begin
 	s_conta_down_vertical1 <= s_baixo and not(s_vez);
 	s_conta_down_vertical2 <= s_baixo and s_vez;
 
+	-- Debug
+	db_maior11 <= s_maior11;
+	db_maior21 <= s_maior21;
+	db_maior31 <= s_maior31;
+	db_maior12 <= s_maior12;
+	db_maior22 <= s_maior22;
+	db_maior32 <= s_maior32;
 	-- Output
 	valido <= s_menor11 and s_menor21 and s_menor31 and s_menor12 and s_menor22 and s_menor32;
 	acertou_tudo <= (s_maior11 and s_maior21 and s_maior31) or (s_maior12 and s_maior22 and s_maior32);
