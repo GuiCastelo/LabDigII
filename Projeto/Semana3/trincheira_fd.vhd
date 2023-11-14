@@ -185,12 +185,10 @@ architecture structural of trincheira_fd is
 
 	-- Sinais para controle dos servomotores e sinal do registrador da vez
 	signal s_vez_intermediario: std_logic_vector(0 downto 0);
-	signal s_vez, s_seletor_atira1, s_seletor_atira2, s_conta_direita, s_conta_esquerda, s_conta_cima, s_conta_baixo: std_logic;
+	signal s_vez, s_seletor_atira1, s_seletor_atira2, s_direita, s_esquerda, s_cima, s_baixo: std_logic;
 	signal s_conta_up_horizontal1, s_conta_down_horizontal1, s_conta_up_horizontal2, s_conta_down_horizontal2: std_logic;  
 	signal s_conta_up_vertical1, s_conta_down_vertical1, s_conta_up_vertical2, s_conta_down_vertical2: std_logic;
 	signal s_atira1, s_atira2, s_horizontal1, s_horizontal2, s_vertical1, s_vertical2: std_logic_vector(2 downto 0);
-	-- Cursores
-	signal s_esquerda, s_direita, s_baixo, s_cima: std_logic;
 	-- Sinais da medicao de distancia
 	signal s_conta_medida: std_logic;
 	signal s_pronto11, s_pronto21, s_pronto31, s_pronto12, s_pronto22, s_pronto32: std_logic;
@@ -198,12 +196,10 @@ architecture structural of trincheira_fd is
 	signal s_compara11, s_compara21, s_compara31, s_compara12, s_compara22, s_compara32: std_logic_vector(11 downto 0);
 	signal s_maior11, s_maior21, s_maior31, s_maior12, s_maior22, s_maior32: std_logic;
 	signal s_menor11, s_menor21, s_menor31, s_menor12, s_menor22, s_menor32: std_logic;
+	-- Sinais de comunicacao serial
+	signal s_pronto_rx: std_logic;
+	signal s_dado_recebido: std_logic_vector(6 downto 0);
 begin
-	s_esquerda <= not(cursores(0));
-	s_direita <= not(cursores(1));
-	s_baixo <= not(cursores(2));
-	s_cima <= not(cursores(3));
-
 	REG_VEZ: registrador_n
 		generic map (
 			N => 1 
@@ -613,7 +609,7 @@ begin
 			dado_serial       => entrada_serial,
 			dado_recebido     => s_dado_recebido,
 			paridade_recebida => open,
-			pronto_rx         => s_pronto_rx.
+			pronto_rx         => s_pronto_rx,
 			db_estado         => open,
 			db_tick           => open,
 			db_clock          => open
@@ -670,8 +666,8 @@ begin
         Bmenor => open
     );
 
-	s_conta_up_horizontal1 <= s_conta_direita and not(s_vez);
-	s_conta_up_horizontal2 <= s_conta_direita and s_vez;
+	s_conta_up_horizontal1 <= s_direita and not(s_vez);
+	s_conta_up_horizontal2 <= s_direita and s_vez;
 
 	COMP_ESQUERDA: comparador_n
     generic map (
@@ -685,8 +681,8 @@ begin
         Bmenor => open
     );
 
-	s_conta_down_horizontal1 <= s_conta_esquerda and not(s_vez);
-	s_conta_down_horizontal2 <= s_conta_esquerda and s_vez;
+	s_conta_down_horizontal1 <= s_esquerda and not(s_vez);
+	s_conta_down_horizontal2 <= s_esquerda and s_vez;
 
 	COMP_CIMA: comparador_n
     generic map (
@@ -715,8 +711,8 @@ begin
         Bmenor => open
     );
 
-	s_conta_down_vertical1 <= s_conta_baixo and not(s_vez);
-	s_conta_down_vertical2 <= s_conta_baixo and s_vez;
+	s_conta_down_vertical1 <= s_baixo and not(s_vez);
+	s_conta_down_vertical2 <= s_baixo and s_vez;
 
 	-- Output
 	valido <= s_menor11 and s_menor21 and s_menor31 and s_menor12 and s_menor22 and s_menor32;
