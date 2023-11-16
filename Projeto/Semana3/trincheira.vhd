@@ -53,6 +53,7 @@ architecture structural of trincheira is
 			atira             : in  std_logic;
 			troca             : in  std_logic;
 			medir							: in  std_logic;
+			transmite         : in  std_logic;
 			limpa_sensor			: in  std_logic;
 			limpa_jogada      : in  std_logic;
 			echo11						: in  std_logic;
@@ -76,22 +77,22 @@ architecture structural of trincheira is
 			trigger22				  : out std_logic;
 			trigger32				  : out std_logic;
 			fim_medidas6      : out std_logic;
+			fim_transmissao   : out std_logic;
 			acertou_tudo      : out std_logic;
 			posiciona         : out std_logic;
 			valido 						: out std_logic;
 			vez					      : out std_logic;
 			fim_atira         : out std_logic;
 			faz_jogada        : out std_logic;
-			pronto_tx					: out std_logic;
-			db_conta_medida   : out std_logic_vector(3 downto 0);		
-			db_dado1          : out std_logic_vector(3 downto 0);
-			db_dado2          : out std_logic_vector(3 downto 0);
-			db_maior11		    : out std_logic;
-			db_maior21		    : out std_logic;
-			db_maior31		    : out std_logic;
-			db_maior12		    : out std_logic;
-			db_maior22		    : out std_logic;
-			db_maior32		    : out std_logic
+			db_conta_medida   : out std_logic_vector(3 downto 0);
+			db_dado1   				: out std_logic_vector(3 downto 0);
+			db_dado2   				: out std_logic_vector(3 downto 0);
+			db_maior11		  	: out std_logic;
+			db_maior21		  	: out std_logic;
+			db_maior31		  	: out std_logic;
+			db_maior12		  	: out std_logic;
+			db_maior22		  	: out std_logic;
+			db_maior32		  	: out std_logic
 		);
 	end component;
 
@@ -100,14 +101,15 @@ architecture structural of trincheira is
 			clock             : in  std_logic;
 			reset             : in  std_logic;
 			ligar             : in  std_logic;
-		   debug             : in  std_logic;
+			debug             : in  std_logic;
 			posiciona         : in  std_logic;
 			fim_medidas6      : in  std_logic;
 			valido            : in  std_logic;
 			acertou_tudo      : in  std_logic;
 			faz_jogada        : in  std_logic;
 			fim_atira         : in  std_logic;
-			pronto_tx         : in  std_logic;
+			fim_transmissao   : in  std_logic;
+			transmite         : out std_logic;
 			limpa_jogada      : out std_logic;
 			medir             : out std_logic;
 			atira             : out std_logic;
@@ -125,7 +127,7 @@ architecture structural of trincheira is
       );
     end component;
 
-	signal s_valido, s_limpa_jogada, s_posiciona, s_pronto_tx, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
+	signal s_valido, s_limpa_jogada, s_posiciona, s_transmite, s_fim_transmissao, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
 	signal s_db_estado, s_db_conta_medida, s_db_dado1, s_db_dado2: std_logic_vector(3 downto 0);
 begin
 
@@ -141,9 +143,10 @@ begin
 			acertou_tudo      => s_acertou_tudo,
 			faz_jogada        => s_faz_jogada,
 			fim_atira         => s_fim_atira,
-			pronto_tx         => s_pronto_tx,
+			fim_transmissao   => s_fim_transmissao,
+			transmite         => s_transmite,
 			limpa_jogada      => s_limpa_jogada,
-			medir 			  => s_medir,
+			medir 			      => s_medir,
 			atira             => s_atira,
 			troca             => s_troca,
 			limpa_sensor      => s_limpa_sensor,
@@ -157,8 +160,9 @@ begin
 			reset             => reset,
 			atira             => s_atira,
 			troca             => s_troca,
-			medir			  => s_medir,
-			limpa_sensor	  => s_limpa_sensor,
+			medir			        => s_medir,
+			transmite         => s_transmite,
+			limpa_sensor	    => s_limpa_sensor,
 			limpa_jogada      => s_limpa_jogada,
 			echo11			  => echo11,
 			echo21			  => echo21,
@@ -181,13 +185,13 @@ begin
 			trigger22		  => trigger22,
 			trigger32		  => trigger32,
 			fim_medidas6      => s_fim_medidas6,
+			fim_transmissao   => s_fim_transmissao,
 			acertou_tudo      => s_acertou_tudo,
 			posiciona         => s_posiciona,
 			valido 			  => s_valido,
 			vez				  => vez,
 			fim_atira         => s_fim_atira,
 			faz_jogada        => s_faz_jogada,
-			pronto_tx         => s_pronto_tx,
 			db_conta_medida   => s_db_conta_medida,
 			db_dado1          => s_db_dado1,
 			db_dado2          => s_db_dado2,
