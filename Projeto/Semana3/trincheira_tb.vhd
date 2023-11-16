@@ -82,7 +82,34 @@ architecture tb of trincheira_tb is
 
   -- Configurações do clock
   signal keep_simulating: std_logic := '0'; -- delimita o tempo de geração do clock
-  constant clockPeriod: time := 20 ns;
+  constant clockPeriod: time := 20 ns;  
+  -- Configuração para comunicação serial
+  signal serialData    : std_logic_vector(7 downto 0) := "00000000";
+  constant bitPeriod   : time := 434*clockPeriod;  -- 434 clocks por bit (115.200 bauds)
+  
+  ---- UART_WRITE_BYTE()
+  -- Procedimento para geracao da sequencia de comunicacao serial 8N2
+  -- adaptacao de codigo acessado de:
+  -- https://www.nandland.com/goboard/uart-go-board-project-part1.html
+  procedure UART_WRITE_BYTE (
+      Data_In : in  std_logic_vector(7 downto 0);
+      signal Serial_Out : out std_logic ) is
+  begin
+      -- envia Start Bit
+      Serial_Out <= '0';
+      wait for bitPeriod;
+
+      -- envia 8 bits seriais
+      for ii in 0 to 7 loop
+          Serial_Out <= Data_In(ii);
+          wait for bitPeriod;
+      end loop;  -- loop ii
+
+      -- envia 2 Stop Bits
+      Serial_Out <= '1';
+      wait for 2*bitPeriod;
+  end UART_WRITE_BYTE;
+  ---- fim procedure UART_WRITE_BYTE
   
 begin
   -- Gerador de clock: executa enquanto 'keep_simulating = 1', com o período
@@ -92,47 +119,46 @@ begin
  
   -- Conecta DUT (Device Under Test)
   dut: trincheira 
-
-	port map( 
-		clock             => clock_in,
-		reset             => reset_in,
-		ligar             => ligar_in,
-    debug             => debug_in,
-    entrada_serial    => entrada_serial_in,
-    echo11						=> echo11_in,
-    echo21						=> echo21_in,
-    echo31						=> echo31_in,
-    echo12						=> echo12_in,
-    echo22						=> echo22_in,
-    echo32						=> echo32_in,
-    atira             => atira_out,
-    saida_serial      => saida_serial_out,
-		atira1            => atira1_out,
-		atira2            => atira2_out,
-		horizontal1       => horizontal1_out,
-		horizontal2       => horizontal2_out,
-		vertical1         => vertical1_out,
-		vertical2         => vertical2_out,
-    vez				        => vez_out,
-    trigger11				  => trigger11_out,
-    trigger21				  => trigger21_out,
-    trigger31				  => trigger31_out,
-    trigger12				  => trigger12_out,
-    trigger22				  => trigger22_out,
-    trigger32				  => trigger32_out,
-    fim               => fim_out,
-    db_fim_atira      => open,
-		db_estado         => open,
-    db_conta_medida   => open,
-    db_dado1          => open,
-    db_dado2          => open,
-    db_maior11		    => open,
-    db_maior21		    => open,
-    db_maior31		    => open,
-    db_maior12		    => open,
-    db_maior22		    => open,
-    db_maior32		    => open
-    );
+    port map( 
+      clock             => clock_in,
+      reset             => reset_in,
+      ligar             => ligar_in,
+      debug             => debug_in,
+      entrada_serial    => entrada_serial_in,
+      echo11						=> echo11_in,
+      echo21						=> echo21_in,
+      echo31						=> echo31_in,
+      echo12						=> echo12_in,
+      echo22						=> echo22_in,
+      echo32						=> echo32_in,
+      atira             => atira_out,
+      saida_serial      => saida_serial_out,
+      atira1            => atira1_out,
+      atira2            => atira2_out,
+      horizontal1       => horizontal1_out,
+      horizontal2       => horizontal2_out,
+      vertical1         => vertical1_out,
+      vertical2         => vertical2_out,
+      vez				        => vez_out,
+      trigger11				  => trigger11_out,
+      trigger21				  => trigger21_out,
+      trigger31				  => trigger31_out,
+      trigger12				  => trigger12_out,
+      trigger22				  => trigger22_out,
+      trigger32				  => trigger32_out,
+      fim               => fim_out,
+      db_fim_atira      => open,
+      db_estado         => open,
+      db_conta_medida   => open,
+      db_dado1          => open,
+      db_dado2          => open,
+      db_maior11		    => open,
+      db_maior21		    => open,
+      db_maior31		    => open,
+      db_maior12		    => open,
+      db_maior22		    => open,
+      db_maior32		    => open
+      );
 
   -- geracao dos sinais de entrada (estimulos)
   stimulus: process is
@@ -157,6 +183,14 @@ begin
     -- posicionamento invalido: alguma das medidas maior que 20cm (1176.4us) de echo
     -- 5 sensores com aproximadamente 10cm (588us) e 1 sensor com 21 cm (1235us)
 
+    serialData <= "01110000"; -- circuito recebe caractere p, (dado=70H + paridade=0)
+    -- aguarda 2 periodos de bit antes de enviar bits
+    wait for 2*bitPeriod;
+
+    --envia bits seriais para circuito de recepcao
+    UART_WRITE_BYTE ( Data_In=>serialData, Serial_Out=>entrada_serial_in );
+    entrada_serial_in <= '1'; -- repouso
+    wait for bitPeriod;
 
     echo11_in <= '1';
     echo21_in <= '1';
@@ -181,6 +215,15 @@ begin
     -- posicionamento valido: todas as medidas menores que 20cm (1176.4us) de echo
     -- 6 sensores com aproximadamente 10cm (588us)
 
+    serialData <= "01110000"; -- circuito recebe caractere p, (dado=70H + paridade=0)
+    -- aguarda 2 periodos de bit antes de enviar bits
+    wait for 2*bitPeriod;
+
+    --envia bits seriais para circuito de recepcao
+    UART_WRITE_BYTE ( Data_In=>serialData, Serial_Out=>entrada_serial_in );
+    entrada_serial_in <= '1'; -- repouso
+    wait for bitPeriod;
+
     echo11_in <= '1';
     echo21_in <= '1';
     echo31_in <= '1';
@@ -202,6 +245,14 @@ begin
     wait for 10*clockPeriod;
     
     -- jogador 1 faz jogada e nao derruba todos - derruba terceiro soldado do oponente
+    serialData <= "10100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
+    -- aguarda 2 periodos de bit antes de enviar bits
+    wait for 2*bitPeriod;
+
+    --envia bits seriais para circuito de recepcao
+    UART_WRITE_BYTE ( Data_In=>serialData, Serial_Out=>entrada_serial_in );
+    entrada_serial_in <= '1'; -- repouso
+    wait for bitPeriod;
 
     echo11_in <= '1';
     echo21_in <= '1';
@@ -224,6 +275,14 @@ begin
     wait for 10*clockPeriod;
 
     -- jogador 2 faz jogada e derruba todos
+    serialData <= "10100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
+    -- aguarda 2 periodos de bit antes de enviar bits
+    wait for 2*bitPeriod;
+
+    --envia bits seriais para circuito de recepcao
+    UART_WRITE_BYTE ( Data_In=>serialData, Serial_Out=>entrada_serial_in );
+    entrada_serial_in <= '1'; -- repouso
+    wait for bitPeriod;
 
     echo11_in <= '1';
     echo21_in <= '1';
