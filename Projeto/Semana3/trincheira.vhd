@@ -7,6 +7,7 @@ entity trincheira is
         clock             : in  std_logic;
         reset             : in  std_logic;
         ligar             : in  std_logic;
+		  debug             : in  std_logic;
 		entrada_serial    : in  std_logic;
 		echo11			  : in  std_logic;
 		echo21			  : in  std_logic;
@@ -33,6 +34,8 @@ entity trincheira is
 		db_fim_atira	  : out std_logic;
         db_estado         : out std_logic_vector(6 downto 0);
 				db_conta_medida   : out std_logic_vector(6 downto 0);
+			db_dado1   : out std_logic_vector(6 downto 0);
+			db_dado2   : out std_logic_vector(6 downto 0);
 				db_maior11		  : out std_logic;
 				db_maior21		  : out std_logic;
 				db_maior31		  : out std_logic;
@@ -80,7 +83,9 @@ architecture structural of trincheira is
 			fim_atira         : out std_logic;
 			faz_jogada        : out std_logic;
 			pronto_tx					: out std_logic;
-			db_conta_medida   : out std_logic_vector(3 downto 0);
+			db_conta_medida   : out std_logic_vector(3 downto 0);		
+			db_dado1   : out std_logic_vector(3 downto 0);
+			db_dado2   : out std_logic_vector(3 downto 0);
 			db_maior11		  : out std_logic;
 			db_maior21		  : out std_logic;
 			db_maior31		  : out std_logic;
@@ -95,6 +100,7 @@ architecture structural of trincheira is
 			clock             : in  std_logic;
 			reset             : in  std_logic;
 			ligar             : in  std_logic;
+		   debug             : in  std_logic;
 			posiciona         : in  std_logic;
 			fim_medidas6      : in  std_logic;
 			valido            : in  std_logic;
@@ -120,7 +126,7 @@ architecture structural of trincheira is
     end component;
 
 	signal s_valido, s_limpa_jogada, s_posiciona, s_pronto_tx, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
-	signal s_db_estado, s_db_conta_medida: std_logic_vector(3 downto 0);
+	signal s_db_estado, s_db_conta_medida, s_db_dado1, s_db_dado2: std_logic_vector(3 downto 0);
 begin
 
 	UC: trincheira_uc
@@ -128,6 +134,7 @@ begin
 			clock             => clock,
 			reset             => reset,
 			ligar             => ligar,
+			debug             => debug,
 			posiciona         => s_posiciona,
 			fim_medidas6      => s_fim_medidas6,
 			valido            => s_valido,
@@ -182,6 +189,8 @@ begin
 			faz_jogada        => s_faz_jogada,
 			pronto_tx         => s_pronto_tx,
 			db_conta_medida   => s_db_conta_medida,
+			db_dado1          => s_db_dado1,
+			db_dado2          => s_db_dado2,
 			db_maior11		   => db_maior11,
 			db_maior21		   => db_maior21,
 			db_maior31		   => db_maior31,
@@ -200,6 +209,18 @@ begin
 		port map (
 			hexa => s_db_conta_medida,
 			sseg => db_conta_medida
+		);
+		
+	HEX2: hexa7seg
+		port map (
+			hexa => s_db_dado1,
+			sseg => db_dado1
+		);
+
+	HEX3: hexa7seg
+		port map (
+			hexa => s_db_dado2,
+			sseg => db_dado2
 		);
 	
 	db_fim_atira <= s_fim_atira;

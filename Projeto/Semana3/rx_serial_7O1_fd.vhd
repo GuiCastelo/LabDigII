@@ -122,4 +122,3 @@ begin
     
     paridade_recebida <= s_paridade_recebida(0);
 end architecture;
-

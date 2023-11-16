@@ -41,6 +41,8 @@ entity trincheira_fd is
         faz_jogada        : out std_logic;
 				pronto_tx					: out std_logic;
 				db_conta_medida   : out std_logic_vector(3 downto 0);
+				db_dado1   : out std_logic_vector(3 downto 0);
+				db_dado2   : out std_logic_vector(3 downto 0);
 				db_maior11		  : out std_logic;
 				db_maior21		  : out std_logic;
 				db_maior31		  : out std_logic;
@@ -723,6 +725,8 @@ begin
 	db_maior12 <= s_maior12;
 	db_maior22 <= s_maior22;
 	db_maior32 <= s_maior32;
+	db_dado1 <= s_dado_recebido(3 downto 0);
+	db_dado2 <= '0' & s_dado_recebido(6 downto 4);
 	-- Output
 	valido <= s_menor11 and s_menor21 and s_menor31 and s_menor12 and s_menor22 and s_menor32;
 	acertou_tudo <= (s_maior11 and s_maior21 and s_maior31) or (s_maior12 and s_maior22 and s_maior32);

@@ -77,7 +77,7 @@ begin
       zera <= '1' when preparacao, '0' when others;
 
   with Eatual select
-      limpa <= '1' when preparacao, '0' when others;
+      limpa <= '1' when inicial, '0' when others;
 
   with Eatual select
       desloca <= '1' when recepcao, '0' when others;

@@ -7,6 +7,7 @@ entity trincheira_uc is
         clock             : in  std_logic;
         reset             : in  std_logic;
         ligar             : in  std_logic;
+		debug             : in  std_logic;
         posiciona         : in  std_logic;
         fim_medidas6      : in  std_logic;
         valido            : in  std_logic;
@@ -26,7 +27,7 @@ end entity;
 
 architecture trincheira_uc_arch of trincheira_uc is
 
-    type tipo_estado is (inicial, esperaPosiciona, medePosiciona, 
+    type tipo_estado is (inicial, medeDebug, esperaDebug, esperaPosiciona, medePosiciona, 
     aguardaFimPosiciona, validaPosiciona, esperaAcao, fazJogada, medeJogada, 
     aguardaJogada, checaFim, trocaVez, final);
     signal Eatual: tipo_estado;  -- estado atual
@@ -45,13 +46,20 @@ begin
   end process;
 
   -- logica de proximo estado
-  process (ligar, fim_atira, faz_jogada, posiciona, valido, fim_medidas6, Eatual) 
+  process (ligar, debug, fim_atira, faz_jogada, posiciona, valido, fim_medidas6, Eatual) 
   begin
 
     case Eatual is
 
         when inicial =>     if ligar='1' then Eprox <= esperaPosiciona;
+						    elsif debug='1' then Eprox <= medeDebug;
                             else              Eprox <= inicial;
+                            end if;
+									 
+		when medeDebug => Eprox <= esperaDebug;
+
+        when esperaDebug => if fim_medidas6='1' then Eprox <= inicial;
+                            else Eprox <= esperaDebug;
                             end if;
 
         when esperaPosiciona =>     if posiciona='1' then Eprox <= medePosiciona;
@@ -109,6 +117,7 @@ begin
   with Eatual select
 	  medir <=  '1' when medeJogada, 
                 '1' when medePosiciona,
+                '1' when medeDebug,
                 '0' when others;
 
   with Eatual select
@@ -118,8 +127,8 @@ begin
                        '0' when others;
 
   with Eatual select
-      limpa_jogada <=  '0' when fazJogada,
-                       '1' when others;
+      limpa_jogada <=  '1' when esperaAcao,
+                       '0' when others;
 
   with Eatual select
 	  fim <= '1' when final, '0' when others;
@@ -128,7 +137,12 @@ begin
        db_estado <= "0000" when inicial,
                     "0001" when esperaAcao, 
                     "0010" when fazJogada,
-					"0011" when trocaVez,
-                    "1110" when others;   -- Erro
+                    "0011" when trocaVez,
+                    "0100" when esperaPosiciona,
+                    "0101" when medePosiciona,
+                    "0110" when aguardaFimPosiciona,
+                    "0111" when aguardaJogada,
+                    "1111" when final,
+                     "1110" when others;   -- Erro
 
 end architecture;
