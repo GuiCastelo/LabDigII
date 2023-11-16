@@ -159,7 +159,6 @@ architecture structural of trincheira_fd is
 		port (
 			clock             : in std_logic;
 			reset             : in std_logic;
-			reset_s           : in std_logic;
 			dado_serial       : in std_logic;
 			dado_recebido    : out std_logic_vector(6 downto 0);
 			paridade_recebida : out std_logic;
@@ -609,11 +608,10 @@ begin
 		port map (
 			clock             => clock,
 			reset             => reset,
-			reset_s           => s_pronto_rx,
 			dado_serial       => entrada_serial,
 			dado_recebido     => s_dado_recebido,
 			paridade_recebida => open,
-			pronto_rx         => s_pronto_rx,
+			pronto_rx         => open,
 			db_estado         => open,
 			db_tick           => open,
 			db_clock          => open
