@@ -6,7 +6,6 @@ entity rx_serial_7O1 is
     port (
         clock             : in std_logic;
         reset             : in std_logic;
-        reset_s           : in std_logic;
         dado_serial       : in std_logic;
         dado_recebido    : out std_logic_vector(6 downto 0);
         paridade_recebida : out std_logic;
@@ -23,7 +22,6 @@ architecture rx_serial_7O1_arch of rx_serial_7O1 is
     port ( 
         clock         : in  std_logic;
         reset         : in  std_logic;
-        reset_s       : in  std_logic;
         dado_serial   : in  std_logic;
         tick          : in  std_logic;
         fim           : in  std_logic;
@@ -100,7 +98,6 @@ begin
            port map (
                clock       => clock, 
                reset       => s_reset,
-               reset_s     => reset_s, 
                dado_serial => dado_serial, 
                tick        => s_tick, 
                fim         => s_fim,

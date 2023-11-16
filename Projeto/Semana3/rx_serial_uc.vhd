@@ -5,7 +5,6 @@ entity rx_serial_uc is
     port ( 
         clock         : in  std_logic;
         reset         : in  std_logic;
-        reset_s       : in  std_logic;
         dado_serial   : in  std_logic;
         tick          : in  std_logic;
         fim           : in  std_logic;
@@ -29,14 +28,10 @@ architecture rx_serial_uc_arch of rx_serial_uc is
 begin
 
   -- memoria de estado
-  process (reset, reset_s, clock)
+  process (reset, clock)
   begin
       if reset = '1' then
           Eatual <= inicial;
-      elsif clock'event and clock = '1' then
-          if reset_s = '1' then Eatual <= inicial;
-          else Eatual <= Eprox;
-          end if; 
       end if;
   end process;
 
