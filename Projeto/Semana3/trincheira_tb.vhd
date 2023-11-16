@@ -8,49 +8,54 @@ architecture tb of trincheira_tb is
   -- Componente a ser testado (Device Under Test -- DUT)
   component trincheira is
     port (
-        clock             : in  std_logic;
-        reset             : in  std_logic;
-        ligar             : in  std_logic;
-        entrada_serial    : in  std_logic;
-        echo11			      : in  std_logic;
-        echo21			      : in  std_logic;
-        echo31			      : in  std_logic;
-        echo12			      : in  std_logic;
-        echo22			      : in  std_logic;
-        echo32			      : in  std_logic;
-        atira		          : out std_logic;
-        saida_serial  	  : out std_logic;
-        atira1            : out std_logic;
-        atira2            : out std_logic;
-        horizontal1       : out std_logic;
-        horizontal2       : out std_logic;
-        vertical1         : out std_logic;
-        vertical2         : out std_logic;
-        vez				        : out std_logic;
-        trigger11		      : out std_logic;
-        trigger21		      : out std_logic;
-        trigger31		      : out std_logic;
-        trigger12		      : out std_logic;
-        trigger22		      : out std_logic;
-        trigger32		      : out std_logic;
-        fim               : out std_logic;
-        db_atira1         : out std_logic;
-        db_atira2         : out std_logic;
-        db_horizontal1    : out std_logic;
-        db_horizontal2    : out std_logic;
-        db_vertical1      : out std_logic;
-        db_vertical2      : out std_logic;
-		    db_fim_atira	    : out std_logic;
-        db_estado         : out std_logic_vector(6 downto 0)
+      clock             : in  std_logic;
+      reset             : in  std_logic;
+      ligar             : in  std_logic;
+      debug             : in  std_logic;
+      entrada_serial    : in  std_logic;
+      echo11			      : in  std_logic;
+      echo21			      : in  std_logic;
+      echo31			      : in  std_logic;
+      echo12			      : in  std_logic;
+      echo22			      : in  std_logic;
+      echo32			      : in  std_logic;
+      atira		          : out std_logic;
+      saida_serial  	  : out std_logic;
+      atira1            : out std_logic;
+      atira2            : out std_logic;
+      horizontal1       : out std_logic;
+      horizontal2       : out std_logic;
+      vertical1         : out std_logic;
+      vertical2         : out std_logic;
+      vez				        : out std_logic;
+      trigger11		      : out std_logic;
+      trigger21		      : out std_logic;
+      trigger31		      : out std_logic;
+      trigger12		      : out std_logic;
+      trigger22		      : out std_logic;
+      trigger32		      : out std_logic;
+      fim               : out std_logic;
+      db_fim_atira	    : out std_logic;
+      db_estado         : out std_logic_vector(6 downto 0);
+      db_conta_medida   : out std_logic_vector(6 downto 0);
+      db_dado1          : out std_logic_vector(6 downto 0);
+      db_dado2          : out std_logic_vector(6 downto 0);
+      db_maior11		    : out std_logic;
+      db_maior21		    : out std_logic;
+      db_maior31		    : out std_logic;
+      db_maior12		    : out std_logic;
+      db_maior22		    : out std_logic;
+      db_maior32		    : out std_logic
     );
   end component;
-  
+
   -- Declaração de sinais para conectar o componente a ser testado (DUT)
   --   valores iniciais para fins de simulacao (GHDL ou ModelSim)
   signal clock_in              : std_logic := '0';
   signal reset_in              : std_logic := '0';
   signal ligar_in              : std_logic := '0';
-  signal entrada_serial        : std_logic := '1';
+  signal debug_in              : std_logic := '0';
+  signal entrada_serial_in     : std_logic := '1';
   signal echo11_in             : std_logic := '0';
   signal echo21_in             : std_logic := '0';
   signal echo31_in             : std_logic := '0';
@@ -58,7 +63,7 @@ architecture tb of trincheira_tb is
   signal echo22_in             : std_logic := '0';
   signal echo32_in             : std_logic := '0';
   signal atira_out             : std_logic := '0';
-  signal saida_serial          : std_logic := '1';
+  signal saida_serial_out      : std_logic := '1';
   signal atira1_out            : std_logic := '0';
   signal atira2_out            : std_logic := '0';
   signal horizontal1_out       : std_logic := '0';
@@ -73,7 +78,6 @@ architecture tb of trincheira_tb is
   signal trigger22_out         : std_logic := '0';
   signal trigger32_out         : std_logic := '0';
   signal fim_out               : std_logic := '0';
-  signal db_fim_atira_out      : std_logic := '0';
 
 
   -- Configurações do clock
@@ -93,16 +97,16 @@ begin
 		clock             => clock_in,
 		reset             => reset_in,
 		ligar             => ligar_in,
-		detona            => detona_in,
-    posiciona         => posiciona_in,
+    debug             => debug_in,
+    entrada_serial    => entrada_serial_in,
     echo11						=> echo11_in,
     echo21						=> echo21_in,
     echo31						=> echo31_in,
     echo12						=> echo12_in,
     echo22						=> echo22_in,
     echo32						=> echo32_in,
-		cursores          => cursores_in,
     atira             => atira_out,
+    saida_serial      => saida_serial_out,
 		atira1            => atira1_out,
 		atira2            => atira2_out,
 		horizontal1       => horizontal1_out,
@@ -117,14 +121,17 @@ begin
     trigger22				  => trigger22_out,
     trigger32				  => trigger32_out,
     fim               => fim_out,
-		db_atira1         => open,
-		db_atira2         => open,
-		db_horizontal1    => open,
-		db_horizontal2    => open,
-		db_vertical1      => open,
-		db_vertical2      => open,
-    db_fim_atira      => db_fim_atira_out,
-		db_estado         => open
+    db_fim_atira      => open,
+		db_estado         => open,
+    db_conta_medida   => open,
+    db_dado1          => open,
+    db_dado2          => open,
+    db_maior11		    => open,
+    db_maior21		    => open,
+    db_maior31		    => open,
+    db_maior12		    => open,
+    db_maior22		    => open,
+    db_maior32		    => open
     );
 
   -- geracao dos sinais de entrada (estimulos)
@@ -149,11 +156,7 @@ begin
     ---- casos de teste
     -- posicionamento invalido: alguma das medidas maior que 20cm (1176.4us) de echo
     -- 5 sensores com aproximadamente 10cm (588us) e 1 sensor com 21 cm (1235us)
-    posiciona_in <= '1';
-    wait for 2*clockPeriod;
-    posiciona_in <= '0';
-    wait for 2*clockPeriod;
-    wait for 50 us;
+
 
     echo11_in <= '1';
     echo21_in <= '1';
@@ -177,11 +180,6 @@ begin
 
     -- posicionamento valido: todas as medidas menores que 20cm (1176.4us) de echo
     -- 6 sensores com aproximadamente 10cm (588us)
-    posiciona_in <= '1';
-    wait for 2*clockPeriod;
-    posiciona_in <= '0';
-    wait for 2*clockPeriod;
-    wait for 50 us;
 
     echo11_in <= '1';
     echo21_in <= '1';
@@ -204,10 +202,6 @@ begin
     wait for 10*clockPeriod;
     
     -- jogador 1 faz jogada e nao derruba todos - derruba terceiro soldado do oponente
-    detona_in <= '1';
-    wait for 2*clockPeriod;
-    detona_in <= '0';
-    wait for 1 ms; -- tempo de fazer a ação
 
     echo11_in <= '1';
     echo21_in <= '1';
@@ -230,10 +224,6 @@ begin
     wait for 10*clockPeriod;
 
     -- jogador 2 faz jogada e derruba todos
-    detona_in <= '1';
-    wait for 2*clockPeriod;
-    detona_in <= '0';
-    wait for 1 ms;
 
     echo11_in <= '1';
     echo21_in <= '1';
