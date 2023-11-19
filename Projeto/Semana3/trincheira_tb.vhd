@@ -249,7 +249,7 @@ begin
     wait for 100 us;
     
     -- jogador 1 faz jogada e nao derruba todos - derruba terceiro soldado do oponente
-    serialData <= "10100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
+    serialData <= "00100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
     -- aguarda 2 periodos de bit antes de enviar bits
     wait for 2*bitPeriod;
 
@@ -280,7 +280,7 @@ begin
     wait for 100 us;
 
     -- jogador 2 faz jogada e derruba todos
-    serialData <= "10100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
+    serialData <= "00100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
     -- aguarda 2 periodos de bit antes de enviar bits
     wait for 2*bitPeriod;
 
