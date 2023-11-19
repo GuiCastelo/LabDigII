@@ -705,7 +705,7 @@ begin
 			meio  => open
 		);
 
-	EDGE_TEST: edge_detector
+	EDGE_TRANSMISSAO: edge_detector
 			port map (  
 				clock     => clock,
 				signal_in => s_conta_soldados,
