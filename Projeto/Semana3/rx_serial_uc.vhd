@@ -32,6 +32,8 @@ begin
   begin
       if reset = '1' then
           Eatual <= inicial;
+      elsif clock'event and clock = '1' then
+        Eatual <= Eprox; 
       end if;
   end process;
 

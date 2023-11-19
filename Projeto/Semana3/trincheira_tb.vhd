@@ -252,7 +252,7 @@ begin
     --envia bits seriais para circuito de recepcao
     UART_WRITE_BYTE ( Data_In=>serialData, Serial_Out=>entrada_serial_in );
     entrada_serial_in <= '1'; -- repouso
-    wait for bitPeriod;
+    wait for 1010 us;
 
     echo11_in <= '1';
     echo21_in <= '1';
@@ -282,7 +282,7 @@ begin
     --envia bits seriais para circuito de recepcao
     UART_WRITE_BYTE ( Data_In=>serialData, Serial_Out=>entrada_serial_in );
     entrada_serial_in <= '1'; -- repouso
-    wait for bitPeriod;
+    wait for 1010 us;
 
     echo11_in <= '1';
     echo21_in <= '1';
