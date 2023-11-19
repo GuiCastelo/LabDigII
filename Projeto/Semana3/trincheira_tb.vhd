@@ -8,44 +8,45 @@ architecture tb of trincheira_tb is
   -- Componente a ser testado (Device Under Test -- DUT)
   component trincheira is
     port (
-      clock             : in  std_logic;
-      reset             : in  std_logic;
-      ligar             : in  std_logic;
-      debug             : in  std_logic;
-      entrada_serial    : in  std_logic;
-      echo11			      : in  std_logic;
-      echo21			      : in  std_logic;
-      echo31			      : in  std_logic;
-      echo12			      : in  std_logic;
-      echo22			      : in  std_logic;
-      echo32			      : in  std_logic;
-      atira		          : out std_logic;
-      saida_serial  	  : out std_logic;
-      atira1            : out std_logic;
-      atira2            : out std_logic;
-      horizontal1       : out std_logic;
-      horizontal2       : out std_logic;
-      vertical1         : out std_logic;
-      vertical2         : out std_logic;
-      vez				        : out std_logic;
-      trigger11		      : out std_logic;
-      trigger21		      : out std_logic;
-      trigger31		      : out std_logic;
-      trigger12		      : out std_logic;
-      trigger22		      : out std_logic;
-      trigger32		      : out std_logic;
-      fim               : out std_logic;
-      db_fim_atira	    : out std_logic;
-      db_estado         : out std_logic_vector(6 downto 0);
-      db_conta_medida   : out std_logic_vector(6 downto 0);
-      db_dado1          : out std_logic_vector(6 downto 0);
-      db_dado2          : out std_logic_vector(6 downto 0);
-      db_maior11		    : out std_logic;
-      db_maior21		    : out std_logic;
-      db_maior31		    : out std_logic;
-      db_maior12		    : out std_logic;
-      db_maior22		    : out std_logic;
-      db_maior32		    : out std_logic
+      clock              : in  std_logic;
+      reset              : in  std_logic;
+      ligar              : in  std_logic;
+       debug              : in  std_logic;
+      entrada_serial     : in  std_logic;
+      echo11			  		 : in  std_logic;
+      echo21			  		 : in  std_logic;
+      echo31			  		 : in  std_logic;
+      echo12			  		 : in  std_logic;
+      echo22			 		   : in  std_logic;
+      echo32			  		 : in  std_logic;
+      atira		      		 : out std_logic;
+      saida_serial  	   : out std_logic;
+      atira1             : out std_logic;
+      atira2             : out std_logic;
+      horizontal1        : out std_logic;
+      horizontal2        : out std_logic;
+      vertical1          : out std_logic;
+      vertical2          : out std_logic;
+      vez				  			 : out std_logic;
+      trigger11		  		 : out std_logic;
+      trigger21		  		 : out std_logic;
+      trigger31		  		 : out std_logic;
+      trigger12		  		 : out std_logic;
+      trigger22		  		 : out std_logic;
+      trigger32		  		 : out std_logic;
+      fim                : out std_logic;
+      db_fim_atira	  	 : out std_logic;
+      db_estado          : out std_logic_vector(6 downto 0);
+      db_conta_medida    : out std_logic_vector(6 downto 0);
+      db_dado1   				 : out std_logic_vector(6 downto 0);
+      db_dado2   				 : out std_logic_vector(6 downto 0);
+      db_maior11		  	 : out std_logic;
+      db_maior21		  	 : out std_logic;
+      db_maior31		  	 : out std_logic;
+      db_maior12		  	 : out std_logic;
+      db_maior22		  	 : out std_logic;
+      db_maior32		  	 : out std_logic;
+      db_fim_transmissao : out std_logic
     );
   end component;
 
@@ -78,7 +79,7 @@ architecture tb of trincheira_tb is
   signal trigger22_out         : std_logic := '0';
   signal trigger32_out         : std_logic := '0';
   signal fim_out               : std_logic := '0';
-
+  signal db_fim_transmissao    : std_logic := '0';
 
   -- Configurações do clock
   signal keep_simulating: std_logic := '0'; -- delimita o tempo de geração do clock
@@ -157,7 +158,8 @@ begin
       db_maior31		    => open,
       db_maior12		    => open,
       db_maior22		    => open,
-      db_maior32		    => open
+      db_maior32		    => open,
+      db_fim_transmissao => db_fim_transmissao
       );
 
   -- geracao dos sinais de entrada (estimulos)
@@ -210,7 +212,8 @@ begin
     echo22_in <= '0';
     wait for 651 us;
     echo32_in <= '0';
-    wait for 10*clockPeriod;
+    wait until db_fim_transmissao='1';
+    wait for 100 us;
 
     -- posicionamento valido: todas as medidas menores que 20cm (1176.4us) de echo
     -- 6 sensores com aproximadamente 10cm (588us)
@@ -242,7 +245,8 @@ begin
     echo22_in <= '0';
     wait for 1 us;
     echo32_in <= '0';
-    wait for 10*clockPeriod;
+    wait until db_fim_transmissao='1';
+    wait for 100 us;
     
     -- jogador 1 faz jogada e nao derruba todos - derruba terceiro soldado do oponente
     serialData <= "10100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
@@ -272,7 +276,8 @@ begin
     echo22_in <= '0';
     wait for 1000 us;
     echo32_in <= '0';
-    wait for 10*clockPeriod;
+    wait until db_fim_transmissao='1';
+    wait for 100 us;
 
     -- jogador 2 faz jogada e derruba todos
     serialData <= "10100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
@@ -302,7 +307,8 @@ begin
     echo31_in <= '0';
     wait for 1 us;
     echo32_in <= '0';
-    wait for 10*clockPeriod;
+    wait until db_fim_transmissao='1';
+    wait for 100 us;
 
     ---- final dos casos de teste  da simulacao
     assert false report "Fim da simulacao" severity note;
