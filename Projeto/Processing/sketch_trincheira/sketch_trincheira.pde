@@ -10,22 +10,18 @@ void setup() {
 }
 
 void draw() {
-  // BattleField
-  pushMatrix();
-  fill(150, 75, 0);
-  translate(width/2, height/2, 0);
-  rotateX(mouseX/float(width) * PI);
-  rotateY(mouseY/float(height) * PI);
-  box(400, 30, 600);
-  popMatrix();
+  background(204);
+  camera(200, -400 + mouseY, -1000 + 2*mouseX, width/2, height/2, 0, 0, 1, 0);
+  drawBattleField();
+  drawSoldiers();
+  drawGuns();
+  drawInvalidPositionText();
 }
 
 void drawBattleField() {
   pushMatrix();
   fill(150, 75, 0);
   translate(width/2, height/2, 0);
-  rotateX(mouseX/float(width) * PI);
-  rotateY(mouseY/float(height) * PI);
   box(400, 30, 600);
   popMatrix();
 }
@@ -33,71 +29,45 @@ void drawBattleField() {
 void drawSoldiers() {
   // Cabeça
   pushMatrix();
-  fill(255, 95, 31);
+  fill(29, 76, 184);
   translate(480, 100, 0);
-  rotateX(mouseX/float(width) * PI);
-  rotateY(mouseY/float(height) * PI);
   sphere(20);
   popMatrix();
   
   // Corpo
   pushMatrix();
-  fill(255, 95, 31);
-  translate(480, 100, 50);
-  rotateX(mouseX/float(width) * PI);
-  rotateY(mouseY/float(height) * PI);
-  drawCylinder(100, 20, 6);
+  fill(29, 76, 184);
+  translate(480, 140, 0);
+  box(20, 50, 20);
   popMatrix();
-}
-
-void drawCylinder(int sides, float r, float h)
-{
-    float angle = 360 / sides;
-    float halfHeight = h / 2;
-    // draw top shape
-    beginShape();
-    for (int i = 0; i < sides; i++) {
-        float x = cos( radians( i * angle ) ) * r;
-        float y = sin( radians( i * angle ) ) * r;
-        vertex( x, y, -halfHeight );    
-    }
-    endShape(CLOSE);
-    // draw bottom shape
-    beginShape();
-    for (int i = 0; i < sides; i++) {
-        float x = cos( radians( i * angle ) ) * r;
-        float y = sin( radians( i * angle ) ) * r;
-        vertex( x, y, halfHeight );    
-    }
-    endShape(CLOSE);
 }
 
 void drawGuns() {
   // Player 1's Gun
   pushMatrix();
   fill(255, 95, 31);
-  translate(width/2 + 200, height/2 - 200, 100);
-  rotateX(mouseX/float(width) * PI);
-  rotateY(mouseY/float(height) * PI);
-  box(50, 200, 50);
+  translate(width/2, height/2 - 60, 360);
+  box(50, 150, 50);
   popMatrix();
 
   pushMatrix();
   fill(255, 95, 31);
-  translate(width/2 + 300, height/2 - 200, 0);
-  rotateX(mouseX/float(width) * PI);
-  rotateY(mouseY/float(height) * PI);
-  box(50, -50, -200);
+  translate(width/2, height/2 - 160, 310);
+  box(50, -50, -150);
   popMatrix();
 
   // Player 2's Gun
-  // pushMatrix();
-  // fill(255, 95, 31);
-  // translate(width/2, height/2, 0);
-  // rotateX(-PI/6);
-  // rotateY(PI/3);
-  // box(50, 200, 50);
-  // popMatrix();
+  pushMatrix();
+  fill(255, 95, 31);
+  translate(width/2, height/2 - 60, -360);
+  box(50, 150, 50);
+  popMatrix();
+
+  pushMatrix();
+  fill(255, 95, 31);
+  translate(width/2, height/2 - 160, -310);
+  box(50, -50, 150);
+  popMatrix();
 }
 
 void drawInvalidPositionText() {
