@@ -56,7 +56,7 @@ void setup() {
 
 void draw() {
   background(204); 
-  camera(constrain(1.55*abs(mouseX - 500), 0, 750), constrain(-200 + mouseY, -100, 450), constrain(-1000 + 2*mouseX, -1200, 1200), width/2, height/2, 0, 0, 1, 0);
+  camera(constrain(1.55*abs(mouseX - 500), 0, 750), constrain(-250 + mouseY, -250, 450), constrain(-1000 + 2*mouseX, -1200, 1200), width/2, height/2, 0, 0, 1, 0);
   drawScore();
   drawBattleField();
   drawSoldiers();
@@ -65,6 +65,27 @@ void draw() {
 }
 
 void drawScore() {
+  pushMatrix();
+  fill(0);
+  translate(width/2, 0, -50);
+  box(150);
+  popMatrix();
+
+  // Placar Jogador 1
+  pushMatrix();
+  fill(29, 76, 184);
+  translate(width/2 - 10, 10, -130);
+  textSize(48);
+  text(placarJogador1, 0, 0, 0);
+  popMatrix();
+
+  // Placar Jogador 2
+  pushMatrix();
+  fill(254, 32, 32);
+  translate(width/2 - 10, 10, 30);
+  textSize(48);
+  text(placarJogador2, 0, 0, 0);
+  popMatrix();
 }
 
 void drawBattleField() {
@@ -315,17 +336,17 @@ void drawGuns() {
 void drawInvalidPositionText() {
   if(showInvalidPositionText) {
     fill(0);
-    text("Posicionamento inválido. Tente novamente", 480, 100, 180);
+    text("Posicionamento inválido", 500, 200, 380);
     pushMatrix();
-    translate(900, 100, -250);
+    translate(950, 200, -400);
     rotateY(PI);
-    text("Posicionamento inválido. Tente novamente", 0, 0, 0);
+    text("Posicionamento inválido", 0, 0, 0);
     popMatrix();
 
     pushMatrix();
-    translate(450, 100, -250);
+    translate(500, 200, -250);
     rotateY(-HALF_PI);
-    text("Posicionamento inválido. Tente novamente", 0, 0, 0);
+    text("Posicionamento inválido", 0, 0, 0);
     popMatrix();
   }
 }
