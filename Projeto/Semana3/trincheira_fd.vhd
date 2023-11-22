@@ -10,8 +10,10 @@ entity trincheira_fd is
         atira             : in  std_logic;
         troca             : in  std_logic;
 				medir							: in  std_logic;
+				transmite         : in  std_logic;
 				limpa_sensor			: in  std_logic;
         limpa_jogada      : in  std_logic;
+				limpa_transmissao : in  std_logic;
 				echo11						: in  std_logic;
 				echo21						: in  std_logic;
 				echo31						: in  std_logic;
@@ -33,13 +35,14 @@ entity trincheira_fd is
 				trigger22				  : out std_logic;
 				trigger32				  : out std_logic;
 				fim_medidas6      : out std_logic;
+				fim_transmissao   : out std_logic;
+				pronto_tx         : out std_logic;
 				acertou_tudo      : out std_logic;
 				posiciona         : out std_logic;
 				valido 						: out std_logic;
 		    vez					      : out std_logic;
         fim_atira         : out std_logic;
         faz_jogada        : out std_logic;
-				pronto_tx					: out std_logic;
 				db_conta_medida   : out std_logic_vector(3 downto 0);
 				db_dado1   : out std_logic_vector(3 downto 0);
 				db_dado2   : out std_logic_vector(3 downto 0);
@@ -138,6 +141,38 @@ architecture structural of trincheira_fd is
 		);
 	end component;
 
+	component mux4_n is
+    generic (
+        constant N: integer := 4
+    );
+    port ( 
+        D0 :     in  std_logic_vector (N-1 downto 0);
+        D1 :     in  std_logic_vector (N-1 downto 0);
+        D2 :     in  std_logic_vector (N-1 downto 0);
+        D3 :     in  std_logic_vector (N-1 downto 0);
+        SEL:     in  std_logic_vector (1 downto 0);
+        MUX_OUT: out std_logic_vector (N-1 downto 0)
+    );
+	end component;
+
+	component mux8_n is
+    generic (
+        constant N: integer := 4
+    );
+    port ( 
+        D0 :     in  std_logic_vector (N-1 downto 0);
+        D1 :     in  std_logic_vector (N-1 downto 0);
+        D2 :     in  std_logic_vector (N-1 downto 0);
+        D3 :     in  std_logic_vector (N-1 downto 0);
+        D4 :     in  std_logic_vector (N-1 downto 0);
+        D5 :     in  std_logic_vector (N-1 downto 0);
+        D6 :     in  std_logic_vector (N-1 downto 0);
+        D7 :     in  std_logic_vector (N-1 downto 0);
+        SEL:     in  std_logic_vector (2 downto 0);
+        MUX_OUT: out std_logic_vector (N-1 downto 0)
+    );
+	end component;
+
 	component contador_updown_m is
 		generic (
 			constant M: integer := 50 -- modulo do contador
@@ -199,8 +234,12 @@ architecture structural of trincheira_fd is
 	signal s_maior11, s_maior21, s_maior31, s_maior12, s_maior22, s_maior32: std_logic;
 	signal s_menor11, s_menor21, s_menor31, s_menor12, s_menor22, s_menor32: std_logic;
 	-- Sinais de comunicacao serial
-	signal s_pronto_rx: std_logic;
-	signal s_dado_recebido: std_logic_vector(6 downto 0);
+	signal s_pronto_tx, s_conta_soldados, s_conta_soldados_ed, s_fim_transmissao: std_logic;
+	signal s_seletor_transmissao: std_logic_vector(1 downto 0);
+	signal s_seletor_soldados: std_logic_vector(2 downto 0);
+	signal s_transmissao1, s_transmissao2, s_transmissao3, s_dado_transmissao: std_logic_vector(6 downto 0);
+	signal s_transmissao: std_logic_vector(11 downto 0);
+	signal s_dado_recebido, s_separador: std_logic_vector(6 downto 0);
 begin
 	REG_VEZ: registrador_n
 		generic map (
@@ -591,8 +630,8 @@ begin
 	s_conta_medida <= s_pronto11 or s_pronto21 or s_pronto31 or s_pronto12 or s_pronto22 or s_pronto32;
 	CONTA_MEDIDA: contador_m
 		generic map (
-			M => 6,
-			--M => 7, para simulacao
+			--M => 6,
+			M => 7, --para simulacao
 			N => 4
 		)
 		port map (
@@ -602,6 +641,100 @@ begin
 			Q     => db_conta_medida,
 			fim   => fim_medidas6,
 			meio  => open
+		);
+
+	MUX_SOLDADOS: mux8_n
+			generic map (
+					N => 12
+			)
+			port map ( 
+					D0       => s_compara11,
+					D1       => s_compara21,
+					D2       => s_compara31,
+					D3       => s_compara12,
+					D4       => s_compara22,
+					D5       => s_compara32,
+					D6       => "000000000000",
+					D7       => "000000000000",
+					SEL      => s_seletor_soldados,
+					MUX_OUT  => s_transmissao
+		);
+		s_transmissao1 <= "011" & s_transmissao(11 downto 8);
+		s_transmissao2 <= "011" & s_transmissao(7 downto 4);
+		s_transmissao3 <= "011" & s_transmissao(3 downto 0);
+
+	MUX_TRANSMISSAO: mux4_n
+			generic map (
+					N => 7
+			)
+			port map ( 
+					D0       => s_transmissao1,
+					D1       => s_transmissao2,
+					D2       => s_transmissao3,
+					D3       => s_separador,
+					SEL      => s_seletor_transmissao,
+					MUX_OUT  => s_dado_transmissao
+			);
+
+	TRANSMISSOR_SERIAL: tx_serial_7O1
+    port map (
+        clock           => clock,
+        reset           => reset,
+        partida         => transmite,
+        dados_ascii     => s_dado_transmissao,
+        saida_serial    => saida_serial,
+        pronto          => s_pronto_tx,
+        db_clock        => open,
+        db_tick         => open,
+        db_partida      => open,
+        db_saida_serial => open,
+        db_estado       => open
+    );
+
+	CONTA_TRANSMISSAO: contador_m
+		generic map (
+			M => 4,
+			N => 2
+		)
+		port map (
+			clock => clock,
+			zera  => limpa_transmissao,
+			conta => s_pronto_tx,
+			Q     => s_seletor_transmissao,
+			fim   => s_conta_soldados,
+			meio  => open
+		);
+
+	EDGE_TRANSMISSAO: edge_detector
+			port map (  
+				clock     => clock,
+				signal_in => s_conta_soldados,
+				output    => s_conta_soldados_ed
+			);
+
+	CONTA_SOLDADOS: contador_m
+		generic map (
+			M => 7,
+			N => 3
+		)
+		port map (
+			clock => clock,
+			zera  => limpa_transmissao,
+			conta => s_conta_soldados_ed,
+			Q     => s_seletor_soldados,
+			fim   => s_fim_transmissao,
+			meio  => open
+		);
+
+	MUX_SEPARADOR: mux2_n
+		generic map (
+			N => 7
+		)
+		port map (
+			A => "0101100",
+			B => "0100011",
+			seletor => s_fim_transmissao,
+			saida => s_separador
 		);
 
 	RECEPTOR_SERIAL: rx_serial_7O1
@@ -616,21 +749,6 @@ begin
 			db_tick           => open,
 			db_clock          => open
 		);
-
-	TRANSMISSOR_SERIAL: tx_serial_7O1
-    port map (
-        clock           => clock,
-        reset           => reset,
-        partida         => '0',
-        dados_ascii     => "0000000",
-        saida_serial    => saida_serial,
-        pronto          => pronto_tx,
-        db_clock        => open,
-        db_tick         => open,
-        db_partida      => open,
-        db_saida_serial => open,
-        db_estado       => open
-    );
 
 	COMP_FAZJOGADA: comparador_n
 		generic map (
@@ -729,5 +847,7 @@ begin
 	valido <= s_menor11 and s_menor21 and s_menor31 and s_menor12 and s_menor22 and s_menor32;
 	acertou_tudo <= (s_maior11 and s_maior21 and s_maior31) or (s_maior12 and s_maior22 and s_maior32);
 	vez <= s_vez;
+	pronto_tx <= s_pronto_tx;
+	fim_transmissao <= s_fim_transmissao;
 
 end architecture;
