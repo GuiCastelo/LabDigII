@@ -1,8 +1,10 @@
 // Variaveis de controle e configuracao
 PFont font;
 boolean preparacao = true;
-boolean vezJogadorUm = false;
+boolean vezJogadorUm = true;
 boolean showInvalidPositionText = false;
+int placarJogador1 = 0;
+int placarJogador2 = 0;
 
 // Variaveis de distancia e angulo dos soldados
 int posXCabecaSoldado1Jog1 = 888;  // width/2 + 188
@@ -55,10 +57,14 @@ void setup() {
 void draw() {
   background(204); 
   camera(constrain(1.55*abs(mouseX - 500), 0, 750), constrain(-200 + mouseY, -100, 450), constrain(-1000 + 2*mouseX, -1200, 1200), width/2, height/2, 0, 0, 1, 0);
+  drawScore();
   drawBattleField();
   drawSoldiers();
   drawGuns();
   drawInvalidPositionText();
+}
+
+void drawScore() {
 }
 
 void drawBattleField() {
@@ -309,7 +315,18 @@ void drawGuns() {
 void drawInvalidPositionText() {
   if(showInvalidPositionText) {
     fill(0);
-    text("Posicionamento inválido. Tente novamente", 480, 100);
+    text("Posicionamento inválido. Tente novamente", 480, 100, 180);
+    pushMatrix();
+    translate(900, 100, -250);
+    rotateY(PI);
+    text("Posicionamento inválido. Tente novamente", 0, 0, 0);
+    popMatrix();
+
+    pushMatrix();
+    translate(450, 100, -250);
+    rotateY(-HALF_PI);
+    text("Posicionamento inválido. Tente novamente", 0, 0, 0);
+    popMatrix();
   }
 }
 
