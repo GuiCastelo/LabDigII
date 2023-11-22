@@ -394,11 +394,11 @@ void serialEvent (Serial myPort) {
         int tempDistSoldado2Jog2 = int(data.substring(16, 19)); 
         int tempDistSoldado3Jog2 = int(data.substring(20, 23));
         println("tempDistSoldado1Jog1: "+tempDistSoldado1Jog1);
-        println("tempDistSoldado2Jog1: "+distSoldado2Jog1); 
-        println("tempDistSoldado3Jog1: "+distSoldado3Jog1);
-        println("tempDistSoldado1Jog2: "+distSoldado1Jog2); 
-        println("tempDistSoldado2Jog2: "+distSoldado2Jog2);
-        println("tempDistSoldado3Jog2: "+distSoldado3Jog2);  
+        println("tempDistSoldado2Jog1: "+tempDistSoldado2Jog1); 
+        println("tempDistSoldado3Jog1: "+tempDistSoldado3Jog1);
+        println("tempDistSoldado1Jog2: "+tempDistSoldado1Jog2); 
+        println("tempDistSoldado2Jog2: "+tempDistSoldado2Jog2);
+        println("tempDistSoldado3Jog2: "+tempDistSoldado3Jog2);  
 
         if(preparacao) {
           if(
