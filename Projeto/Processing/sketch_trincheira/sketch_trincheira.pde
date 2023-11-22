@@ -538,7 +538,7 @@ void keyPressed() {
     }
   }
 
-  if(preparacao && key == ' ') {
+  if(!preparacao && key == ' ') {
     vezJogadorUm = !vezJogadorUm;
   }
 }
