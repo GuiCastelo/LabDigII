@@ -1,4 +1,4 @@
-// Variaveis controle
+// Variaveis de controle e configuracao
 PFont font;
 boolean preparacao = true;
 boolean vezJogadorUm = true;
@@ -37,10 +37,10 @@ float rotateSoldado2Jog2 = 0;
 float rotateSoldado3Jog2 = 0;
 
 // Variaveis de angulo das armas
-float anguloYArmaJog1 = 0;
-float angulozArmaJog1 = 0;
-float anguloYArmaJog2 = 0;
-float angulozArmaJog2 = 0;
+float rotateYArmaJog1 = 0;
+float rotatezArmaJog1 = 0;
+float rotateYArmaJog2 = 0;
+float rotatezArmaJog2 = 0;
 
 void setup() {
   size(1400, 900, P3D);
@@ -49,8 +49,8 @@ void setup() {
 }
 
 void draw() {
-  background(204);
-  camera(200, -400 + mouseY, -1000 + 2*mouseX, width/2, height/2, 0, 0, 1, 0);
+  background(204); 
+  camera(constrain(1.55*abs(mouseX - 500), 0, 750), constrain(-200 + mouseY, 0, 400), constrain(-1000 + 2*mouseX, -800, 800), width/2, height/2, 0, 0, 1, 0);
   drawBattleField();
   drawSoldiers();
   drawGuns();
@@ -171,27 +171,143 @@ void drawGuns() {
   // Arma do Jogador 1
   pushMatrix();
   fill(255, 95, 31);
-  translate(width/2, height/2 - 60, -472);
-  box(50, 150, 50);
+  translate(width/2 - 25, height/2 + 15, -472);
+  rotateY(rotateYArmaJog1);
+  rotateZ(rotatezArmaJog1);
+  beginShape(QUADS);
+  // Base inferior
+  vertex(0, 0, 0);
+  vertex(50, 0, 0);
+  vertex(50, 0, 50);
+  vertex(0, 0, 50);
+
+  // Base
+  vertex(0, 0, 0);
+  vertex(0, -150, 0);
+  vertex(0, -150, 50);
+  vertex(0, 0, 50);
+
+  vertex(0, 0, 0);
+  vertex(0, -150, 0);
+  vertex(50, -150, 0);
+  vertex(50, 0, 0);
+
+  vertex(50, 0, 0);
+  vertex(50, -150, 0);
+  vertex(50, -150, 50);
+  vertex(50, 0, 50);
+
+  vertex(0, 0, 50);
+  vertex(0, -150, 50);
+  vertex(50, -150, 50);
+  vertex(50, 0, 50);
+  // Cano + Parte Superior
+  vertex(0, -150, 50);
+  vertex(0, -150, 150);
+  vertex(50, -150, 150);
+  vertex(50, -150, 50);
+
+  vertex(0, -150, 0);
+  vertex(0, -150, 150);
+  vertex(0, -200, 150);
+  vertex(0, -200, 0);
+
+  vertex(0, -150, 150);
+  vertex(0, -200, 150);
+  vertex(50, -200, 150);
+  vertex(50, -150, 150);
+
+  vertex(50, -150, 0);
+  vertex(50, -150, 150);
+  vertex(50, -200, 150);
+  vertex(50, -200, 0);
+
+  vertex(0, -150, 0);
+  vertex(0, -200, 0);
+  vertex(50, -200, 0);
+  vertex(50, -150, 0);
+
+  vertex(0, -200, 0);
+  vertex(0, -200, 150);
+  vertex(50, -200, 150);
+  vertex(50, -200, 0);
+  endShape();
   popMatrix();
 
-  pushMatrix();
-  fill(255, 95, 31);
-  translate(width/2, height/2 - 160, -423);
-  box(50, -50, 150);
-  popMatrix();
+  // Parte superior
+  // pushMatrix();
+  // fill(255, 95, 31);
+  // translate(width/2, height/2 - 160, -423);
+  // rotateY(rotateYArmaJog1);
+  // rotateZ(rotatezArmaJog1);
+  // box(50, 50, 150);
+  // popMatrix();
 
   // Arma do Jogador 2
+  // Cabo
   pushMatrix();
   fill(255, 95, 31);
-  translate(width/2, height/2 - 60, 472);
-  box(50, 150, 50);
-  popMatrix();
+  translate(width/2 - 25, height/2 + 15, 472);
+  rotateY(rotateYArmaJog2);
+  rotateZ(rotatezArmaJog2);
+  beginShape(QUADS);
+  // Base inferior
+  vertex(0, 0, 0);
+  vertex(50, 0, 0);
+  vertex(50, 0, -50);
+  vertex(0, 0, -50);
 
-  pushMatrix();
-  fill(255, 95, 31);
-  translate(width/2, height/2 - 160, 423);
-  box(50, -50, -150);
+  // Base
+  vertex(0, 0, 0);
+  vertex(0, -150, 0);
+  vertex(0, -150, -50);
+  vertex(0, 0, -50);
+
+  vertex(0, 0, 0);
+  vertex(0, -150, 0);
+  vertex(50, -150, 0);
+  vertex(50, 0, 0);
+
+  vertex(50, 0, 0);
+  vertex(50, -150, 0);
+  vertex(50, -150, -50);
+  vertex(50, 0, -50);
+
+  vertex(0, 0, -50);
+  vertex(0, -150, -50);
+  vertex(50, -150, -50);
+  vertex(50, 0, -50);
+  // Cano + Parte Superior
+  vertex(0, -150, -50);
+  vertex(0, -150, -150);
+  vertex(50, -150, -150);
+  vertex(50, -150, -50);
+
+  vertex(0, -150, 0);
+  vertex(0, -150, -150);
+  vertex(0, -200, -150);
+  vertex(0, -200, 0);
+
+  vertex(0, -150, -150);
+  vertex(0, -200, -150);
+  vertex(50, -200, -150);
+  vertex(50, -150, -150);
+
+  vertex(50, -150, 0);
+  vertex(50, -150, -150);
+  vertex(50, -200, -150);
+  vertex(50, -200, 0);
+
+  vertex(0, -150, 0);
+  vertex(0, -200, 0);
+  vertex(50, -200, 0);
+  vertex(50, -150, 0);
+
+  vertex(0, -200, 0);
+  vertex(0, -200, -150);
+  vertex(50, -200, -150);
+  vertex(50, -200, 0);
+  endShape();
   popMatrix();
 }
 
@@ -203,6 +319,7 @@ void drawInvalidPositionText() {
 }
 
 void keyPressed() {
+  println("mouseY: "+mouseY);
   // transmite key para circuito
   if(key == 'w') {
     // muda angulo rotate arma cima
