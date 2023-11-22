@@ -97,105 +97,107 @@ void drawBattleField() {
 }
 
 void drawSoldiers() {
-  // Soldados Jogador 1
+  if (!preparacao) {  
+    // Soldados Jogador 1
 
-  // Soldado 1
-  // Cabeça
-  pushMatrix();
-  fill(29, 76, 184);
-  translate(posXCabecaSoldado1Jog1, posYCabecaSoldado1Jog1, -290 + 15*distSoldado1Jog1);
-  sphere(20);
-  popMatrix();
-  
-  // Corpo
-  pushMatrix();
-  fill(29, 76, 184);
-  translate(width/2 + 188, posYCorpoSoldado1Jog1, -290 + 15*distSoldado1Jog1);
-  rotateZ(rotateSoldado1Jog1);
-  box(20, 50, 20);
-  popMatrix();
+    // Soldado 1
+    // Cabeça
+    pushMatrix();
+    fill(29, 76, 184);
+    translate(posXCabecaSoldado1Jog1, posYCabecaSoldado1Jog1, -290 + 15*distSoldado1Jog1);
+    sphere(20);
+    popMatrix();
+    
+    // Corpo
+    pushMatrix();
+    fill(29, 76, 184);
+    translate(width/2 + 188, posYCorpoSoldado1Jog1, -290 + 15*distSoldado1Jog1);
+    rotateZ(rotateSoldado1Jog1);
+    box(20, 50, 20);
+    popMatrix();
 
-  // Soldado 2
-  // Cabeça
-  pushMatrix();
-  fill(29, 76, 184);
-  translate(posXCabecaSoldado2Jog1, posYCabecaSoldado2Jog1, -290 + 15*distSoldado2Jog1);
-  sphere(20);
-  popMatrix();
-  
-  // Corpo
-  pushMatrix();
-  fill(29, 76, 184);
-  translate(width/2, posYCorpoSoldado2Jog1, -290 + 15*distSoldado2Jog1);
-  rotateZ(rotateSoldado2Jog1);
-  box(20, 50, 20);
-  popMatrix();
+    // Soldado 2
+    // Cabeça
+    pushMatrix();
+    fill(29, 76, 184);
+    translate(posXCabecaSoldado2Jog1, posYCabecaSoldado2Jog1, -290 + 15*distSoldado2Jog1);
+    sphere(20);
+    popMatrix();
+    
+    // Corpo
+    pushMatrix();
+    fill(29, 76, 184);
+    translate(width/2, posYCorpoSoldado2Jog1, -290 + 15*distSoldado2Jog1);
+    rotateZ(rotateSoldado2Jog1);
+    box(20, 50, 20);
+    popMatrix();
 
-  // Soldado 3
-  // Cabeça
-  pushMatrix();
-  fill(29, 76, 184);
-  translate(posXCabecaSoldado3Jog1, posYCabecaSoldado3Jog1, -290 + 15*distSoldado3Jog1);
-  sphere(20);
-  popMatrix();
-  
-  // Corpo
-  pushMatrix();
-  fill(29, 76, 184);
-  translate(width/2 - 188, posYCorpoSoldado3Jog1, -290 + 15*distSoldado3Jog1);
-  rotateZ(rotateSoldado3Jog1);
-  box(20, 50, 20);
-  popMatrix();
+    // Soldado 3
+    // Cabeça
+    pushMatrix();
+    fill(29, 76, 184);
+    translate(posXCabecaSoldado3Jog1, posYCabecaSoldado3Jog1, -290 + 15*distSoldado3Jog1);
+    sphere(20);
+    popMatrix();
+    
+    // Corpo
+    pushMatrix();
+    fill(29, 76, 184);
+    translate(width/2 - 188, posYCorpoSoldado3Jog1, -290 + 15*distSoldado3Jog1);
+    rotateZ(rotateSoldado3Jog1);
+    box(20, 50, 20);
+    popMatrix();
 
-  // Soldados Jogador 2
+    // Soldados Jogador 2
 
-  // Soldado 1
-  // Cabeça
-  pushMatrix();
-  fill(254, 32, 32);
-  translate(posXCabecaSoldado1Jog2, posYCabecaSoldado1Jog2, 290 - 15*distSoldado1Jog2);
-  sphere(20);
-  popMatrix();
-  
-  // Corpo
-  pushMatrix();
-  fill(254, 32, 32);
-  translate(width/2 + 188, posYCorpoSoldado1Jog2, 290 - 15*distSoldado1Jog2);
-  rotateZ(rotateSoldado1Jog2);
-  box(20, 50, 20);
-  popMatrix();
+    // Soldado 1
+    // Cabeça
+    pushMatrix();
+    fill(254, 32, 32);
+    translate(posXCabecaSoldado1Jog2, posYCabecaSoldado1Jog2, 290 - 15*distSoldado1Jog2);
+    sphere(20);
+    popMatrix();
+    
+    // Corpo
+    pushMatrix();
+    fill(254, 32, 32);
+    translate(width/2 + 188, posYCorpoSoldado1Jog2, 290 - 15*distSoldado1Jog2);
+    rotateZ(rotateSoldado1Jog2);
+    box(20, 50, 20);
+    popMatrix();
 
-  // Soldado 2
-  // Cabeça
-  pushMatrix();
-  fill(254, 32, 32);
-  translate(posXCabecaSoldado2Jog2, posYCabecaSoldado2Jog2, 290 - 15*distSoldado2Jog2);
-  sphere(20);
-  popMatrix();
-  
-  // Corpo
-  pushMatrix();
-  fill(254, 32, 32);
-  translate(width/2, posYCorpoSoldado2Jog2, 290 - 15*distSoldado2Jog2);
-  rotateZ(rotateSoldado2Jog2);
-  box(20, 50, 20);
-  popMatrix();
+    // Soldado 2
+    // Cabeça
+    pushMatrix();
+    fill(254, 32, 32);
+    translate(posXCabecaSoldado2Jog2, posYCabecaSoldado2Jog2, 290 - 15*distSoldado2Jog2);
+    sphere(20);
+    popMatrix();
+    
+    // Corpo
+    pushMatrix();
+    fill(254, 32, 32);
+    translate(width/2, posYCorpoSoldado2Jog2, 290 - 15*distSoldado2Jog2);
+    rotateZ(rotateSoldado2Jog2);
+    box(20, 50, 20);
+    popMatrix();
 
-  // Soldado 3
-  // Cabeça
-  pushMatrix();
-  fill(254, 32, 32);
-  translate(posXCabecaSoldado3Jog2, posYCabecaSoldado3Jog2, 290 - 15*distSoldado3Jog2);
-  sphere(20);
-  popMatrix();
-  
-  // Corpo
-  pushMatrix();
-  fill(254, 32, 32);
-  translate(width/2 - 188, posYCorpoSoldado3Jog2, 290 - 15*distSoldado3Jog2);
-  rotateZ(rotateSoldado3Jog2);
-  box(20, 50, 20);
-  popMatrix();
+    // Soldado 3
+    // Cabeça
+    pushMatrix();
+    fill(254, 32, 32);
+    translate(posXCabecaSoldado3Jog2, posYCabecaSoldado3Jog2, 290 - 15*distSoldado3Jog2);
+    sphere(20);
+    popMatrix();
+    
+    // Corpo
+    pushMatrix();
+    fill(254, 32, 32);
+    translate(width/2 - 188, posYCorpoSoldado3Jog2, 290 - 15*distSoldado3Jog2);
+    rotateZ(rotateSoldado3Jog2);
+    box(20, 50, 20);
+    popMatrix();
+  }
 }
 
 void drawGuns() {
