@@ -1,16 +1,16 @@
-// Variaveis de controle e configuracao
+  // Variaveis de controle e configuracao
 PFont font;
 boolean preparacao = true;
-boolean vezJogadorUm = false;
+boolean vezJogadorUm = true;
 boolean showInvalidPositionText = false;
 
 // Variaveis de distancia e angulo dos soldados
-int posXCabecaSoldado1Jog1 = 888;  // width/2 + 188
+int posXCabecaSoldado1Jog1 = 800;  // width/2 + 100
 int posXCabecaSoldado2Jog1 = 700; // width/2
-int posXCabecaSoldado3Jog1 = 512; // width/2 - 188
-int posXCabecaSoldado1Jog2 = 888; // width/2 + 188
+int posXCabecaSoldado3Jog1 = 600; // width/2 - 100
+int posXCabecaSoldado1Jog2 = 800; // width/2 + 100
 int posXCabecaSoldado2Jog2 = 700; // width/2
-int posXCabecaSoldado3Jog2 = 512; // width/2 - 188
+int posXCabecaSoldado3Jog2 = 600; // width/2 - 100
 int posYCabecaSoldado1Jog1 = 370; // height/2 - 80
 int posYCabecaSoldado2Jog1 = 370; // height/2 - 80
 int posYCabecaSoldado3Jog1 = 370; // height/2 - 80
@@ -37,14 +37,10 @@ float rotateSoldado2Jog2 = 0;
 float rotateSoldado3Jog2 = 0;
 
 // Variaveis de angulo das armas
-float rotateYArmaJog1 = radians(50);
-float rotateXArmaJog1 = -radians(60);
-float rotateYArmaJog2 = radians(50);
-float rotateXArmaJog2 = radians(60);
-int controleYArmaJog1 = 0;
-int controleXArmaJog1 = 0;
-int controleYArmaJog2 = 0;
-int controleXArmaJog2 = 0;
+float rotateYArmaJog1 = 0;
+float rotateXArmaJog1 = QUARTER_PI;
+float rotateYArmaJog2 = 0;
+float rotateXArmaJog2 = 0;
 
 void setup() {
   size(1400, 900, P3D);
@@ -54,7 +50,7 @@ void setup() {
 
 void draw() {
   background(204); 
-  camera(constrain(1.55*abs(mouseX - 500), 0, 750), constrain(-200 + mouseY, -100, 450), constrain(-1000 + 2*mouseX, -1200, 1200), width/2, height/2, 0, 0, 1, 0);
+  camera(constrain(1.55*abs(mouseX - 500), 0, 750), constrain(-200 + mouseY, 0, 400), constrain(-1000 + 2*mouseX, -800, 800), width/2, height/2, 0, 0, 1, 0);
   drawBattleField();
   drawSoldiers();
   drawGuns();
@@ -65,7 +61,7 @@ void drawBattleField() {
   pushMatrix();
   fill(150, 75, 0);
   translate(width/2, height/2, 0);
-  box(500, 30, 825);
+  box(400, 30, 825);
   popMatrix();
 }
 
@@ -83,7 +79,7 @@ void drawSoldiers() {
   // Corpo
   pushMatrix();
   fill(29, 76, 184);
-  translate(width/2 + 188, posYCorpoSoldado1Jog1, -290 + 15*distSoldado1Jog1);
+  translate(width/2 + 100, posYCorpoSoldado1Jog1, -290 + 15*distSoldado1Jog1);
   rotateZ(rotateSoldado1Jog1);
   box(20, 50, 20);
   popMatrix();
@@ -115,7 +111,7 @@ void drawSoldiers() {
   // Corpo
   pushMatrix();
   fill(29, 76, 184);
-  translate(width/2 - 188, posYCorpoSoldado3Jog1, -290 + 15*distSoldado3Jog1);
+  translate(width/2 - 100, posYCorpoSoldado3Jog1, -290 + 15*distSoldado3Jog1);
   rotateZ(rotateSoldado3Jog1);
   box(20, 50, 20);
   popMatrix();
@@ -133,7 +129,7 @@ void drawSoldiers() {
   // Corpo
   pushMatrix();
   fill(254, 32, 32);
-  translate(width/2 + 188, posYCorpoSoldado1Jog2, 290 - 15*distSoldado1Jog2);
+  translate(width/2 + 100, posYCorpoSoldado1Jog2, 290 - 15*distSoldado1Jog2);
   rotateZ(rotateSoldado1Jog2);
   box(20, 50, 20);
   popMatrix();
@@ -165,7 +161,7 @@ void drawSoldiers() {
   // Corpo
   pushMatrix();
   fill(254, 32, 32);
-  translate(width/2 - 188, posYCorpoSoldado3Jog2, 290 - 15*distSoldado3Jog2);
+  translate(width/2 - 100, posYCorpoSoldado3Jog2, 290 - 15*distSoldado3Jog2);
   rotateZ(rotateSoldado3Jog2);
   box(20, 50, 20);
   popMatrix();
@@ -175,7 +171,7 @@ void drawGuns() {
   // Arma do Jogador 1
   pushMatrix();
   fill(255, 95, 31);
-  translate(width/2 - 25, height/2 - 150, -700);
+  translate(width/2 - 25, height/2 + 15, -500);
   rotateY(rotateYArmaJog1);
   rotateX(rotateXArmaJog1);
   beginShape(QUADS);
@@ -242,7 +238,7 @@ void drawGuns() {
   // Cabo
   pushMatrix();
   fill(255, 95, 31);
-  translate(width/2 - 25, height/2 - 150, 700);
+  translate(width/2 - 25, height/2 + 15, 500);
   rotateY(rotateYArmaJog2);
   rotateX(rotateXArmaJog2);
   beginShape(QUADS);
@@ -314,65 +310,22 @@ void drawInvalidPositionText() {
 }
 
 void keyPressed() {
+  println("mouseY: "+mouseY);
   // transmite key para circuito
   if(key == 'w') {
     // muda angulo rotate arma cima
-    if(vezJogadorUm) {
-      if(controleXArmaJog1 < 7) {
-        rotateXArmaJog1 += radians(20);
-        controleXArmaJog1 ++;
-      }
-    } else {
-      if(controleXArmaJog2 < 7) {
-        rotateXArmaJog2 -= radians(20);
-        controleXArmaJog2 ++;
-      }
-    }
   }
 
   if(key == 's') {
     // muda angulo rotate arma baixo
-    if(vezJogadorUm) {
-      if(controleXArmaJog1 > 0) {
-        rotateXArmaJog1 -= radians(20);
-        controleXArmaJog1 --;
-      }
-    } else {
-      if(controleXArmaJog2 > 0) {
-        rotateXArmaJog2 += radians(20);
-        controleXArmaJog2 --;
-      }
-    }
   }
 
   if(key == 'a') {
     // muda angulo rotate arma esquerda
-    if(vezJogadorUm) {
-      if(controleYArmaJog1 > 0) {
-        rotateYArmaJog1 += radians(20);
-        controleYArmaJog1 --;
-      }
-    } else {
-      if(controleYArmaJog2 > 0) {
-        rotateYArmaJog2 += radians(20);
-        controleYArmaJog2 --;
-      }
-    }
   }
 
   if(key == 'd') {
     // muda angulo rotate arma direita
-    if(vezJogadorUm) {
-      if(controleYArmaJog1 < 7) {
-        rotateYArmaJog1 -= radians(20);
-        controleYArmaJog1 ++;
-      }
-    } else {
-      if(controleYArmaJog2 < 7) {
-        rotateYArmaJog2 -= radians(20);
-        controleYArmaJog2 ++;
-      }
-    }
   }
 
   if(preparacao && key == ' ') {
