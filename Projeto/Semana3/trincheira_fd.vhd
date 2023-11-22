@@ -659,9 +659,9 @@ begin
 					SEL      => s_seletor_soldados,
 					MUX_OUT  => s_transmissao
 		);
-		s_transmissao1 <= "011" & s_transmissao(3 downto 0);
+		s_transmissao1 <= "011" & s_transmissao(11 downto 8);
 		s_transmissao2 <= "011" & s_transmissao(7 downto 4);
-		s_transmissao3 <= "011" & s_transmissao(11 downto 8);
+		s_transmissao3 <= "011" & s_transmissao(3 downto 0);
 
 	MUX_TRANSMISSAO: mux4_n
 			generic map (
