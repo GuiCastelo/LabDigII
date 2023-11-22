@@ -1,3 +1,18 @@
+// bibliotecas
+import processing.serial.*;      // importa biblioteca de comunicacao serial
+import java.awt.event.KeyEvent;
+
+// interface serial
+Serial myPort; // definicao do objeto serial
+
+//  ======= CONFIGURACAO SERIAL ==================
+
+    String   porta= "COM3";  // <== acertar valor ***
+    int   baudrate= 115200;  // 115200 bauds
+    char    parity= 'O';     // E=even/par, O=odd/impar
+    int   databits= 7;       // 7 bits de dados
+    float stopbits= 2.0;     // 2 stop bits
+
 // Variaveis de controle e configuracao
 PFont font;
 boolean preparacao = true;
@@ -31,6 +46,12 @@ int distSoldado3Jog1 = 0;
 int distSoldado1Jog2 = 0;
 int distSoldado2Jog2 = 0;
 int distSoldado3Jog2 = 0;
+boolean soldado1Jog1Derrubado = false;
+boolean soldado2Jog1Derrubado = false;
+boolean soldado3Jog1Derrubado = false;
+boolean soldado1Jog2Derrubado = false;
+boolean soldado2Jog2Derrubado = false;
+boolean soldado3Jog2Derrubado = false;
 float rotateSoldado1Jog1 = 0;
 float rotateSoldado2Jog1 = 0;
 float rotateSoldado3Jog1 = 0;
@@ -52,6 +73,10 @@ void setup() {
   size(1400, 900, P3D);
   font = createFont("Calibri", 24);
   textFont(font);
+
+    myPort = new Serial(this, porta, baudrate, parity, databits, stopbits);  // inicia comunicacao serial 
+    // leitura de dados da porta serial até o caractere '#' (para leitura de "angulo,distancia#"
+    myPort.bufferUntil('#'); 
 }
 
 void draw() {
@@ -353,8 +378,106 @@ void drawInvalidPositionText() {
   }
 }
 
+void serialEvent (Serial myPort) { 
+    // inicia leitura da porta serial
+    try {
+        // leitura de dados da porta serial ate o caractere '#' na variavel data
+        String data = myPort.readStringUntil('#');
+        // remove caractere final '#'
+        data = data.substring(0,data.length()-1);
+        println(data);
+        // pega distancias
+        int tempDistSoldado1Jog1 = int(data.substring(0, 3));
+        int tempDistSoldado2Jog1 = int(data.substring(4, 7)); 
+        int tempDistSoldado3Jog1 = int(data.substring(8, 11)); 
+        int tempDistSoldado1Jog2 = int(data.substring(12, 15)); 
+        int tempDistSoldado2Jog2 = int(data.substring(16, 19)); 
+        int tempDistSoldado3Jog2 = int(data.substring(20, 23));
+        println("tempDistSoldado1Jog1: "+tempDistSoldado1Jog1);
+        println("tempDistSoldado2Jog1: "+distSoldado2Jog1); 
+        println("tempDistSoldado3Jog1: "+distSoldado3Jog1);
+        println("tempDistSoldado1Jog2: "+distSoldado1Jog2); 
+        println("tempDistSoldado2Jog2: "+distSoldado2Jog2);
+        println("tempDistSoldado3Jog2: "+distSoldado3Jog2);  
+
+        if(preparacao) {
+          if(
+            tempDistSoldado1Jog1 < 20 && 
+            tempDistSoldado2Jog1 < 20 &&
+            tempDistSoldado3Jog1 < 20 &&
+            tempDistSoldado1Jog2 < 20 &&
+            tempDistSoldado2Jog2 < 20 &&
+            tempDistSoldado3Jog2 < 20
+          ) {
+            distSoldado1Jog1 = tempDistSoldado1Jog1;
+            distSoldado2Jog1 = tempDistSoldado2Jog1;
+            distSoldado3Jog1 = tempDistSoldado3Jog1;
+            distSoldado1Jog2 = tempDistSoldado1Jog2;
+            distSoldado2Jog2 = tempDistSoldado2Jog2;
+            distSoldado3Jog2 = tempDistSoldado3Jog2;
+            preparacao = false;
+            showInvalidPositionText = false;
+          } else {
+            showInvalidPositionText = true;
+          }
+        } else {
+          if(!soldado1Jog1Derrubado && tempDistSoldado1Jog1 > 20) {
+            soldado1Jog1Derrubado = true;
+            posYCorpoSoldado1Jog1 += 10;
+            posXCabecaSoldado1Jog1 -= 35;
+            posYCabecaSoldado1Jog1 += 45;
+            rotateSoldado1Jog1 = HALF_PI + (QUARTER_PI/4);
+          }
+
+          if(!soldado2Jog1Derrubado && tempDistSoldado2Jog1 > 20) {
+            soldado2Jog1Derrubado = true;
+            posYCorpoSoldado2Jog1 += 10;
+            posXCabecaSoldado2Jog1 -= 35;
+            posYCabecaSoldado2Jog1 += 45;
+            rotateSoldado2Jog1 = HALF_PI + (QUARTER_PI/4);
+          }
+
+          if(!soldado3Jog1Derrubado && tempDistSoldado3Jog1 > 20) {
+            soldado3Jog1Derrubado = true;
+            posYCorpoSoldado3Jog1 += 10;
+            posXCabecaSoldado3Jog1 -= 35;
+            posYCabecaSoldado3Jog1 += 45;
+            rotateSoldado3Jog1 = HALF_PI + (QUARTER_PI/4);
+          }
+
+          if(!soldado1Jog2Derrubado && tempDistSoldado1Jog2 > 20) {
+            soldado1Jog2Derrubado = true;
+            posYCorpoSoldado1Jog2 += 10;
+            posXCabecaSoldado1Jog2 -= 35;
+            posYCabecaSoldado1Jog2 += 45;
+            rotateSoldado1Jog2 = HALF_PI + (QUARTER_PI/4);
+          }
+
+          if(!soldado2Jog2Derrubado && tempDistSoldado2Jog2 > 20) {
+            soldado2Jog2Derrubado = true;
+            posYCorpoSoldado2Jog2 += 10;
+            posXCabecaSoldado2Jog2 -= 35;
+            posYCabecaSoldado2Jog2 += 45;
+            rotateSoldado2Jog2 = HALF_PI + (QUARTER_PI/4);
+          }
+
+          if(!soldado3Jog2Derrubado && tempDistSoldado3Jog2 > 20) {
+            soldado3Jog2Derrubado = true;
+            posYCorpoSoldado3Jog2 += 10;
+            posXCabecaSoldado3Jog2 -= 35;
+            posYCabecaSoldado3Jog2 += 45;
+            rotateSoldado3Jog2 = HALF_PI + (QUARTER_PI/4);
+          }
+        }
+    }
+    catch(RuntimeException e) {
+        e.printStackTrace();
+    }
+}
+
 void keyPressed() {
-  // transmite key para circuito
+  myPort.write(key);
+  println("key: "+key);
   if(key == 'w') {
     // muda angulo rotate arma cima
     if(vezJogadorUm) {
