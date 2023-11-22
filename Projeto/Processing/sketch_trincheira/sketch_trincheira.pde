@@ -422,6 +422,7 @@ void serialEvent (Serial myPort) {
           }
         } else {
           if(!soldado1Jog1Derrubado && tempDistSoldado1Jog1 > 20) {
+            placarJogador2 ++;
             soldado1Jog1Derrubado = true;
             posYCorpoSoldado1Jog1 += 10;
             posXCabecaSoldado1Jog1 -= 35;
@@ -430,6 +431,7 @@ void serialEvent (Serial myPort) {
           }
 
           if(!soldado2Jog1Derrubado && tempDistSoldado2Jog1 > 20) {
+            placarJogador2 ++;
             soldado2Jog1Derrubado = true;
             posYCorpoSoldado2Jog1 += 10;
             posXCabecaSoldado2Jog1 -= 35;
@@ -438,6 +440,7 @@ void serialEvent (Serial myPort) {
           }
 
           if(!soldado3Jog1Derrubado && tempDistSoldado3Jog1 > 20) {
+            placarJogador2 ++;
             soldado3Jog1Derrubado = true;
             posYCorpoSoldado3Jog1 += 10;
             posXCabecaSoldado3Jog1 -= 35;
@@ -446,6 +449,7 @@ void serialEvent (Serial myPort) {
           }
 
           if(!soldado1Jog2Derrubado && tempDistSoldado1Jog2 > 20) {
+            placarJogador1 ++;
             soldado1Jog2Derrubado = true;
             posYCorpoSoldado1Jog2 += 10;
             posXCabecaSoldado1Jog2 -= 35;
@@ -454,6 +458,7 @@ void serialEvent (Serial myPort) {
           }
 
           if(!soldado2Jog2Derrubado && tempDistSoldado2Jog2 > 20) {
+            placarJogador1 ++;
             soldado2Jog2Derrubado = true;
             posYCorpoSoldado2Jog2 += 10;
             posXCabecaSoldado2Jog2 -= 35;
@@ -462,6 +467,7 @@ void serialEvent (Serial myPort) {
           }
 
           if(!soldado3Jog2Derrubado && tempDistSoldado3Jog2 > 20) {
+            placarJogador1 ++;
             soldado3Jog2Derrubado = true;
             posYCorpoSoldado3Jog2 += 10;
             posXCabecaSoldado3Jog2 -= 35;

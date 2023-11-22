@@ -450,7 +450,7 @@ begin
         N => 12
     )
     port map (
-        A      => "000000100000",
+        A      => "000000010101",
         B      => s_compara11,
         Bmaior => s_maior11,
         igual  => open,
@@ -484,7 +484,7 @@ begin
         N => 12
     )
     port map (
-        A      => "000000100000",
+        A      => "000000010101",
         B      => s_compara21,
         Bmaior => s_maior21,
         igual  => open,
@@ -518,7 +518,7 @@ begin
         N => 12
     )
     port map (
-        A      => "000000100000",
+        A      => "000000010101",
         B      => s_compara31,
         Bmaior => s_maior31,
         igual  => open,
@@ -552,7 +552,7 @@ begin
         N => 12
     )
     port map (
-        A      => "000000100000",
+        A      => "000000010101",
         B      => s_compara12,
         Bmaior => s_maior12,
         igual  => open,
@@ -586,7 +586,7 @@ begin
         N => 12
     )
     port map (
-        A      => "000000100000",
+        A      => "000000010101",
         B      => s_compara22,
         Bmaior => s_maior22,
         igual  => open,
@@ -620,7 +620,7 @@ begin
         N => 12
     )
     port map (
-        A      => "000000100000",
+        A      => "000000010101",
         B      => s_compara32,
         Bmaior => s_maior32,
         igual  => open,
