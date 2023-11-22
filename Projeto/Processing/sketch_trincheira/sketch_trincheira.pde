@@ -402,12 +402,12 @@ void serialEvent (Serial myPort) {
 
         if(preparacao) {
           if(
-            tempDistSoldado1Jog1 < 20 && 
-            tempDistSoldado2Jog1 < 20 &&
-            tempDistSoldado3Jog1 < 20 &&
-            tempDistSoldado1Jog2 < 20 &&
-            tempDistSoldado2Jog2 < 20 &&
-            tempDistSoldado3Jog2 < 20
+            tempDistSoldado1Jog1 < 15 && 
+            tempDistSoldado2Jog1 < 15 &&
+            tempDistSoldado3Jog1 < 15 &&
+            tempDistSoldado1Jog2 < 15 &&
+            tempDistSoldado2Jog2 < 15 &&
+            tempDistSoldado3Jog2 < 15
           ) {
             distSoldado1Jog1 = tempDistSoldado1Jog1;
             distSoldado2Jog1 = tempDistSoldado2Jog1;
@@ -421,7 +421,7 @@ void serialEvent (Serial myPort) {
             showInvalidPositionText = true;
           }
         } else {
-          if(!soldado1Jog1Derrubado && tempDistSoldado1Jog1 > 20) {
+          if(!soldado1Jog1Derrubado && tempDistSoldado1Jog1 > 15) {
             placarJogador2 ++;
             soldado1Jog1Derrubado = true;
             posYCorpoSoldado1Jog1 += 10;
@@ -430,7 +430,7 @@ void serialEvent (Serial myPort) {
             rotateSoldado1Jog1 = HALF_PI + (QUARTER_PI/4);
           }
 
-          if(!soldado2Jog1Derrubado && tempDistSoldado2Jog1 > 20) {
+          if(!soldado2Jog1Derrubado && tempDistSoldado2Jog1 > 15) {
             placarJogador2 ++;
             soldado2Jog1Derrubado = true;
             posYCorpoSoldado2Jog1 += 10;
@@ -439,7 +439,7 @@ void serialEvent (Serial myPort) {
             rotateSoldado2Jog1 = HALF_PI + (QUARTER_PI/4);
           }
 
-          if(!soldado3Jog1Derrubado && tempDistSoldado3Jog1 > 20) {
+          if(!soldado3Jog1Derrubado && tempDistSoldado3Jog1 > 15) {
             placarJogador2 ++;
             soldado3Jog1Derrubado = true;
             posYCorpoSoldado3Jog1 += 10;
@@ -448,7 +448,7 @@ void serialEvent (Serial myPort) {
             rotateSoldado3Jog1 = HALF_PI + (QUARTER_PI/4);
           }
 
-          if(!soldado1Jog2Derrubado && tempDistSoldado1Jog2 > 20) {
+          if(!soldado1Jog2Derrubado && tempDistSoldado1Jog2 > 15) {
             placarJogador1 ++;
             soldado1Jog2Derrubado = true;
             posYCorpoSoldado1Jog2 += 10;
@@ -457,7 +457,7 @@ void serialEvent (Serial myPort) {
             rotateSoldado1Jog2 = HALF_PI + (QUARTER_PI/4);
           }
 
-          if(!soldado2Jog2Derrubado && tempDistSoldado2Jog2 > 20) {
+          if(!soldado2Jog2Derrubado && tempDistSoldado2Jog2 > 15) {
             placarJogador1 ++;
             soldado2Jog2Derrubado = true;
             posYCorpoSoldado2Jog2 += 10;
@@ -466,7 +466,7 @@ void serialEvent (Serial myPort) {
             rotateSoldado2Jog2 = HALF_PI + (QUARTER_PI/4);
           }
 
-          if(!soldado3Jog2Derrubado && tempDistSoldado3Jog2 > 20) {
+          if(!soldado3Jog2Derrubado && tempDistSoldado3Jog2 > 15) {
             placarJogador1 ++;
             soldado3Jog2Derrubado = true;
             posYCorpoSoldado3Jog2 += 10;
