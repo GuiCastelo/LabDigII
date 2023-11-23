@@ -1,0 +1,41 @@
+-----------------Laboratorio Digital-------------------------------------
+-- Arquivo   : mux_8x1_n.vhd
+-- Projeto   : Experiencia 5 - Sistema de Sonar
+-------------------------------------------------------------------------
+-- Descricao : 
+--             multiplexador 8x1 com entradas de BITS bits (generic)
+--
+-- adaptado a partir do codigo my_4t1_mux.vhd do livro "Free Range VHDL" 
+-------------------------------------------------------------------------
+-- Revisoes  :
+--     Data        Versao  Autor             Descricao
+--     26/09/2021  1.0     Edson Midorikawa  criacao
+--     24/09/2022  1.1     Edson Midorikawa  revisao
+--     24/09/2023  1.1.1   Edson Midorikawa  revisao
+-------------------------------------------------------------------------
+--
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity mux4_n is
+    generic (
+        constant N: integer := 4
+    );
+    port ( 
+        D0 :     in  std_logic_vector (N-1 downto 0);
+        D1 :     in  std_logic_vector (N-1 downto 0);
+        D2 :     in  std_logic_vector (N-1 downto 0);
+        D3 :     in  std_logic_vector (N-1 downto 0);
+        SEL:     in  std_logic_vector (1 downto 0);
+        MUX_OUT: out std_logic_vector (N-1 downto 0)
+    );
+end entity;
+
+architecture behav of mux4_n is
+begin
+    MUX_OUT <= D3 when (SEL = "11") else
+               D2 when (SEL = "10") else
+               D1 when (SEL = "01") else
+               D0 when (SEL = "00") else
+               (others => '1');
+end architecture behav;
