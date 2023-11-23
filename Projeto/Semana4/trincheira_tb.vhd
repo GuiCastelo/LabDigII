@@ -296,7 +296,7 @@ begin
     echo22_in <= '1';
     echo32_in <= '1';
     wait for 580 us;
-    echo12_in <= '0';
+    echo32_in <= '0';
     wait for 1 us;
     echo22_in <= '0';
     wait for 1000 us;
@@ -306,7 +306,7 @@ begin
     wait for 1 us;
     echo31_in <= '0';
     wait for 1 us;
-    echo32_in <= '0';
+    echo12_in <= '0';
     wait until db_fim_transmissao='1';
     wait for 100 us;
 
