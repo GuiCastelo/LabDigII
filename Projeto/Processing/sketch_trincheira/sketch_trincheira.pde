@@ -17,7 +17,8 @@ Serial myPort; // definicao do objeto serial
 PFont font;
 boolean preparacao = true;
 boolean vezJogadorUm = true;
-boolean showInvalidPositionText = false;
+boolean showText = false;
+String textToShow = "Posicionamento invalido";
 int placarJogador1 = 0;
 int placarJogador2 = 0;
 
@@ -74,9 +75,9 @@ void setup() {
   font = createFont("Calibri", 24);
   textFont(font);
 
-    myPort = new Serial(this, porta, baudrate, parity, databits, stopbits);  // inicia comunicacao serial 
-    // leitura de dados da porta serial até o caractere '#' (para leitura de "angulo,distancia#"
-    myPort.bufferUntil('#'); 
+  myPort = new Serial(this, porta, baudrate, parity, databits, stopbits);  // inicia comunicacao serial 
+  // leitura de dados da porta serial até o caractere '#' (para leitura de "angulo,distancia#"
+  myPort.bufferUntil('#'); 
 }
 
 void draw() {
@@ -86,7 +87,7 @@ void draw() {
   drawBattleField();
   drawSoldiers();
   drawGuns();
-  drawInvalidPositionText();
+  drawText();
 }
 
 void drawScore() {
@@ -99,7 +100,8 @@ void drawScore() {
   // Placar Jogador 1
   pushMatrix();
   fill(29, 76, 184);
-  translate(width/2 - 10, 10, -130);
+  translate(width/2 + 15, 10, -127);
+  rotateY(PI);
   textSize(48);
   text(placarJogador1, 0, 0, 0);
   popMatrix();
@@ -360,125 +362,151 @@ void drawGuns() {
   popMatrix();
 }
 
-void drawInvalidPositionText() {
-  if(showInvalidPositionText) {
+void drawText() {
+  if(showText) {
     fill(0);
-    text("Posicionamento inválido", 500, 200, 380);
+    text(textToShow, 500, 200, 380);
     pushMatrix();
     translate(950, 200, -400);
     rotateY(PI);
-    text("Posicionamento inválido", 0, 0, 0);
+    text(textToShow, 0, 0, 0);
     popMatrix();
 
     pushMatrix();
     translate(500, 200, -250);
     rotateY(-HALF_PI);
-    text("Posicionamento inválido", 0, 0, 0);
+    text(textToShow, 0, 0, 0);
     popMatrix();
   }
 }
 
 void serialEvent (Serial myPort) { 
-    // inicia leitura da porta serial
-    try {
-        // leitura de dados da porta serial ate o caractere '#' na variavel data
-        String data = myPort.readStringUntil('#');
-        // remove caractere final '#'
-        data = data.substring(0,data.length()-1);
-        println(data);
-        // pega distancias
-        int tempDistSoldado1Jog1 = int(data.substring(0, 3));
-        int tempDistSoldado2Jog1 = int(data.substring(4, 7)); 
-        int tempDistSoldado3Jog1 = int(data.substring(8, 11)); 
-        int tempDistSoldado1Jog2 = int(data.substring(12, 15)); 
-        int tempDistSoldado2Jog2 = int(data.substring(16, 19)); 
-        int tempDistSoldado3Jog2 = int(data.substring(20, 23));
-        println("tempDistSoldado1Jog1: "+tempDistSoldado1Jog1);
-        println("tempDistSoldado2Jog1: "+tempDistSoldado2Jog1); 
-        println("tempDistSoldado3Jog1: "+tempDistSoldado3Jog1);
-        println("tempDistSoldado1Jog2: "+tempDistSoldado1Jog2); 
-        println("tempDistSoldado2Jog2: "+tempDistSoldado2Jog2);
-        println("tempDistSoldado3Jog2: "+tempDistSoldado3Jog2);  
+  // inicia leitura da porta serial
+  try {
+      // leitura de dados da porta serial ate o caractere '#' na variavel data
+      String data = myPort.readStringUntil('#');
+      // remove caractere final '#'
+      data = data.substring(0,data.length()-1);
+      println(data);
+      // pega distancias
+      int tempDistSoldado1Jog1 = int(data.substring(0, 3));
+      int tempDistSoldado2Jog1 = int(data.substring(4, 7)); 
+      int tempDistSoldado3Jog1 = int(data.substring(8, 11)); 
+      int tempDistSoldado1Jog2 = int(data.substring(12, 15)); 
+      int tempDistSoldado2Jog2 = int(data.substring(16, 19)); 
+      int tempDistSoldado3Jog2 = int(data.substring(20, 23));
+      println("tempDistSoldado1Jog1: "+tempDistSoldado1Jog1);
+      println("tempDistSoldado2Jog1: "+tempDistSoldado2Jog1); 
+      println("tempDistSoldado3Jog1: "+tempDistSoldado3Jog1);
+      println("tempDistSoldado1Jog2: "+tempDistSoldado1Jog2); 
+      println("tempDistSoldado2Jog2: "+tempDistSoldado2Jog2);
+      println("tempDistSoldado3Jog2: "+tempDistSoldado3Jog2);  
 
-        if(preparacao) {
-          if(
-            tempDistSoldado1Jog1 < 15 && 
-            tempDistSoldado2Jog1 < 15 &&
-            tempDistSoldado3Jog1 < 15 &&
-            tempDistSoldado1Jog2 < 15 &&
-            tempDistSoldado2Jog2 < 15 &&
-            tempDistSoldado3Jog2 < 15
-          ) {
-            distSoldado1Jog1 = tempDistSoldado1Jog1;
-            distSoldado2Jog1 = tempDistSoldado2Jog1;
-            distSoldado3Jog1 = tempDistSoldado3Jog1;
-            distSoldado1Jog2 = tempDistSoldado1Jog2;
-            distSoldado2Jog2 = tempDistSoldado2Jog2;
-            distSoldado3Jog2 = tempDistSoldado3Jog2;
-            preparacao = false;
-            showInvalidPositionText = false;
-          } else {
-            showInvalidPositionText = true;
-          }
+      if(preparacao) {
+        if(
+          tempDistSoldado1Jog1 < 15 && 
+          tempDistSoldado2Jog1 < 15 &&
+          tempDistSoldado3Jog1 < 15 &&
+          tempDistSoldado1Jog2 < 15 &&
+          tempDistSoldado2Jog2 < 15 &&
+          tempDistSoldado3Jog2 < 15
+        ) {
+          distSoldado1Jog1 = tempDistSoldado1Jog1;
+          distSoldado2Jog1 = tempDistSoldado2Jog1;
+          distSoldado3Jog1 = tempDistSoldado3Jog1;
+          distSoldado1Jog2 = tempDistSoldado1Jog2;
+          distSoldado2Jog2 = tempDistSoldado2Jog2;
+          distSoldado3Jog2 = tempDistSoldado3Jog2;
+          preparacao = false;
+          showText = false;
+          textToShow = "";
         } else {
-          if(!soldado1Jog1Derrubado && tempDistSoldado1Jog1 > 15) {
-            placarJogador2 ++;
-            soldado1Jog1Derrubado = true;
-            posYCorpoSoldado1Jog1 += 10;
-            posXCabecaSoldado1Jog1 -= 35;
-            posYCabecaSoldado1Jog1 += 45;
-            rotateSoldado1Jog1 = HALF_PI + (QUARTER_PI/4);
-          }
-
-          if(!soldado2Jog1Derrubado && tempDistSoldado2Jog1 > 15) {
-            placarJogador2 ++;
-            soldado2Jog1Derrubado = true;
-            posYCorpoSoldado2Jog1 += 10;
-            posXCabecaSoldado2Jog1 -= 35;
-            posYCabecaSoldado2Jog1 += 45;
-            rotateSoldado2Jog1 = HALF_PI + (QUARTER_PI/4);
-          }
-
-          if(!soldado3Jog1Derrubado && tempDistSoldado3Jog1 > 15) {
-            placarJogador2 ++;
-            soldado3Jog1Derrubado = true;
-            posYCorpoSoldado3Jog1 += 10;
-            posXCabecaSoldado3Jog1 -= 35;
-            posYCabecaSoldado3Jog1 += 45;
-            rotateSoldado3Jog1 = HALF_PI + (QUARTER_PI/4);
-          }
-
-          if(!soldado1Jog2Derrubado && tempDistSoldado1Jog2 > 15) {
-            placarJogador1 ++;
-            soldado1Jog2Derrubado = true;
-            posYCorpoSoldado1Jog2 += 10;
-            posXCabecaSoldado1Jog2 -= 35;
-            posYCabecaSoldado1Jog2 += 45;
-            rotateSoldado1Jog2 = HALF_PI + (QUARTER_PI/4);
-          }
-
-          if(!soldado2Jog2Derrubado && tempDistSoldado2Jog2 > 15) {
-            placarJogador1 ++;
-            soldado2Jog2Derrubado = true;
-            posYCorpoSoldado2Jog2 += 10;
-            posXCabecaSoldado2Jog2 -= 35;
-            posYCabecaSoldado2Jog2 += 45;
-            rotateSoldado2Jog2 = HALF_PI + (QUARTER_PI/4);
-          }
-
-          if(!soldado3Jog2Derrubado && tempDistSoldado3Jog2 > 15) {
-            placarJogador1 ++;
-            soldado3Jog2Derrubado = true;
-            posYCorpoSoldado3Jog2 += 10;
-            posXCabecaSoldado3Jog2 -= 35;
-            posYCabecaSoldado3Jog2 += 45;
-            rotateSoldado3Jog2 = HALF_PI + (QUARTER_PI/4);
+          textToShow = "Posicionamento invalido";
+          showText = true;
+        }
+      } else {
+        if(!soldado1Jog1Derrubado && tempDistSoldado1Jog1 > 15) {
+          placarJogador2 ++;
+          soldado1Jog1Derrubado = true;
+          posYCorpoSoldado1Jog1 += 10;
+          posXCabecaSoldado1Jog1 -= 35;
+          posYCabecaSoldado1Jog1 += 45;
+          rotateSoldado1Jog1 = HALF_PI + (QUARTER_PI/4);
+          if(placarJogador2 == 3) {
+            textToShow = "Jogador 2 ganhou!";
+            showText = true;
           }
         }
-    }
-    catch(RuntimeException e) {
-        e.printStackTrace();
-    }
+
+        if(!soldado2Jog1Derrubado && tempDistSoldado2Jog1 > 15) {
+          placarJogador2 ++;
+          soldado2Jog1Derrubado = true;
+          posYCorpoSoldado2Jog1 += 10;
+          posXCabecaSoldado2Jog1 -= 35;
+          posYCabecaSoldado2Jog1 += 45;
+          rotateSoldado2Jog1 = HALF_PI + (QUARTER_PI/4);
+          if(placarJogador2 == 3) {
+            textToShow = "Jogador 2 ganhou!";
+            showText = true;
+          }
+        }
+
+        if(!soldado3Jog1Derrubado && tempDistSoldado3Jog1 > 15) {
+          placarJogador2 ++;
+          soldado3Jog1Derrubado = true;
+          posYCorpoSoldado3Jog1 += 10;
+          posXCabecaSoldado3Jog1 -= 35;
+          posYCabecaSoldado3Jog1 += 45;
+          rotateSoldado3Jog1 = HALF_PI + (QUARTER_PI/4);
+          if(placarJogador2 == 3) {
+            textToShow = "Jogador 2 ganhou!";
+            showText = true;
+          }
+        }
+
+        if(!soldado1Jog2Derrubado && tempDistSoldado1Jog2 > 15) {
+          placarJogador1 ++;
+          soldado1Jog2Derrubado = true;
+          posYCorpoSoldado1Jog2 += 10;
+          posXCabecaSoldado1Jog2 -= 35;
+          posYCabecaSoldado1Jog2 += 45;
+          rotateSoldado1Jog2 = HALF_PI + (QUARTER_PI/4);
+          if(placarJogador1 == 3) {
+            textToShow = "Jogador 1 ganhou!";
+            showText = true;
+          }
+        }
+
+        if(!soldado2Jog2Derrubado && tempDistSoldado2Jog2 > 15) {
+          placarJogador1 ++;
+          soldado2Jog2Derrubado = true;
+          posYCorpoSoldado2Jog2 += 10;
+          posXCabecaSoldado2Jog2 -= 35;
+          posYCabecaSoldado2Jog2 += 45;
+          rotateSoldado2Jog2 = HALF_PI + (QUARTER_PI/4);
+          if(placarJogador1 == 3) {
+            textToShow = "Jogador 1 ganhou!";
+            showText = true;
+          }
+        }
+
+        if(!soldado3Jog2Derrubado && tempDistSoldado3Jog2 > 15) {
+          placarJogador1 ++;
+          soldado3Jog2Derrubado = true;
+          posYCorpoSoldado3Jog2 += 10;
+          posXCabecaSoldado3Jog2 -= 35;
+          posYCabecaSoldado3Jog2 += 45;
+          rotateSoldado3Jog2 = HALF_PI + (QUARTER_PI/4);
+          if(placarJogador1 == 3) {
+            textToShow = "Jogador 1 ganhou!";
+            showText = true;
+          }
+        }
+      }
+  }
+  catch(RuntimeException e) {
+      e.printStackTrace();
+  }
 }
 
 void keyPressed() {
@@ -544,7 +572,67 @@ void keyPressed() {
     }
   }
 
+  if(key == 'r') {
+    reset();
+  }
+
   if(!preparacao && key == ' ') {
     vezJogadorUm = !vezJogadorUm;
   }
+}
+
+void reset() {
+  // Reseta o circuito
+  preparacao = true;
+  vezJogadorUm = true;
+  showText = false;
+  textToShow = "Posicionamento invalido";
+  placarJogador1 = 0;
+  placarJogador2 = 0;
+  // Variaveis de distancia e angulo dos soldados
+  posXCabecaSoldado1Jog1 = 888;  // width/2 + 188
+  posXCabecaSoldado2Jog1 = 700; // width/2
+  posXCabecaSoldado3Jog1 = 512; // width/2 - 188
+  posXCabecaSoldado1Jog2 = 888; // width/2 + 188
+  posXCabecaSoldado2Jog2 = 700; // width/2
+  posXCabecaSoldado3Jog2 = 512; // width/2 - 188
+  posYCabecaSoldado1Jog1 = 370; // height/2 - 80
+  posYCabecaSoldado2Jog1 = 370; // height/2 - 80
+  posYCabecaSoldado3Jog1 = 370; // height/2 - 80
+  posYCabecaSoldado1Jog2 = 370; // height/2 - 80
+  posYCabecaSoldado2Jog2 = 370; // height/2 - 80
+  posYCabecaSoldado3Jog2 = 370; // height/2 - 80
+  posYCorpoSoldado1Jog1 = 410; // height/2 - 40
+  posYCorpoSoldado2Jog1 = 410; // height/2 - 40
+  posYCorpoSoldado3Jog1 = 410; // height/2 - 40
+  posYCorpoSoldado1Jog2 = 410; // height/2 - 40
+  posYCorpoSoldado2Jog2 = 410; // height/2 - 40
+  posYCorpoSoldado3Jog2 = 410; // height/2 - 40
+  distSoldado1Jog1 = 0;
+  distSoldado2Jog1 = 0;
+  distSoldado3Jog1 = 0;
+  distSoldado1Jog2 = 0;
+  distSoldado2Jog2 = 0;
+  distSoldado3Jog2 = 0;
+  soldado1Jog1Derrubado = false;
+  soldado2Jog1Derrubado = false;
+  soldado3Jog1Derrubado = false;
+  soldado1Jog2Derrubado = false;
+  soldado2Jog2Derrubado = false;
+  soldado3Jog2Derrubado = false;
+  rotateSoldado1Jog1 = 0;
+  rotateSoldado2Jog1 = 0;
+  rotateSoldado3Jog1 = 0;
+  rotateSoldado1Jog2 = 0;
+  rotateSoldado2Jog2 = 0;
+  rotateSoldado3Jog2 = 0;
+  // Variaveis de angulo das armas
+  rotateYArmaJog1 = radians(50);
+  rotateXArmaJog1 = -radians(60);
+  rotateYArmaJog2 = radians(50);
+  rotateXArmaJog2 = radians(60);
+  controleYArmaJog1 = 0;
+  controleXArmaJog1 = 0;
+  controleYArmaJog2 = 0;
+  controleXArmaJog2 = 0;
 }
