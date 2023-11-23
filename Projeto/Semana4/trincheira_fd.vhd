@@ -444,7 +444,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
+			clear  => reset,
 			enable => s_enable_reg11,
 			D      => s_medida11,
 			Q      => s_compara11
@@ -480,7 +480,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
+			clear  => reset,
 			enable => s_enable_reg21,
 			D      => s_medida21,
 			Q      => s_compara21
@@ -516,7 +516,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
+			clear  => reset,
 			enable => s_enable_reg31,
 			D      => s_medida31,
 			Q      => s_compara31
@@ -552,7 +552,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
+			clear  => reset,
 			enable => s_enable_reg12,
 			D      => s_medida12,
 			Q      => s_compara12
@@ -588,7 +588,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
+			clear  => reset,
 			enable => s_enable_reg22,
 			D      => s_medida22,
 			Q      => s_compara22
@@ -624,7 +624,7 @@ begin
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
+			clear  => reset,
 			enable => s_enable_reg32,
 			D      => s_medida32,
 			Q      => s_compara32
