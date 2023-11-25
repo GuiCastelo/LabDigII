@@ -231,7 +231,7 @@ void drawGuns() {
   // Arma do Jogador 1
   pushMatrix();
   fill(255, 95, 31);
-  translate(width/2 - 25, height/2 - 150, -700);
+  translate(width/2 - 25, height/2 - 135, -675);
   rotateY(rotateYArmaJog1);
   rotateX(rotateXArmaJog1);
   beginShape(QUADS);
@@ -298,7 +298,7 @@ void drawGuns() {
   // Cabo
   pushMatrix();
   fill(255, 95, 31);
-  translate(width/2 - 25, height/2 - 150, 700);
+  translate(width/2 - 25, height/2 - 135, 675);
   rotateY(rotateYArmaJog2);
   rotateX(rotateXArmaJog2);
   beginShape(QUADS);
