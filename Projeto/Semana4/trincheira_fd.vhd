@@ -9,6 +9,7 @@ entity trincheira_fd is
         reset             : in  std_logic;
         atira             : in  std_logic;
         troca             : in  std_logic;
+				acao							: in  std_logic;
 				medir							: in  std_logic;
 				transmite         : in  std_logic;
 				limpa_sensor			: in  std_logic;
@@ -229,6 +230,7 @@ architecture structural of trincheira_fd is
 	-- Sinais da medicao de distancia
 	signal s_conta_medida: std_logic;
 	signal s_pronto11, s_pronto21, s_pronto31, s_pronto12, s_pronto22, s_pronto32: std_logic;
+	signal s_enable_reg11, s_enable_reg21, s_enable_reg31, s_enable_reg12, s_enable_reg22, s_enable_reg32: std_logic;
 	signal s_medida11, s_medida21, s_medida31, s_medida12, s_medida22, s_medida32: std_logic_vector(11 downto 0);
 	signal s_compara11, s_compara21, s_compara31, s_compara12, s_compara22, s_compara32: std_logic_vector(11 downto 0);
 	signal s_maior11, s_maior21, s_maior31, s_maior12, s_maior22, s_maior32: std_logic;
@@ -434,14 +436,16 @@ begin
 				pronto    => s_pronto11,
 				db_estado => open
 		);
+
+	s_enable_reg11 <= s_pronto11 and not(acao and s_maior11);
 	REG_SOLDADO1JOG1: registrador_n
 		generic map (
 			N => 12 
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
-			enable => s_pronto11,
+			clear  => reset,
+			enable => s_enable_reg11,
 			D      => s_medida11,
 			Q      => s_compara11
 		);
@@ -468,14 +472,16 @@ begin
 				pronto    => s_pronto21,
 				db_estado => open
 		);
+
+	s_enable_reg21 <= s_pronto21 and not(acao and s_maior21);
 	REG_SOLDADO2JOG1: registrador_n
 		generic map (
 			N => 12 
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
-			enable => s_pronto21,
+			clear  => reset,
+			enable => s_enable_reg21,
 			D      => s_medida21,
 			Q      => s_compara21
 		);
@@ -502,14 +508,16 @@ begin
 				pronto    => s_pronto31,
 				db_estado => open
 		);
+
+	s_enable_reg31 <= s_pronto31 and not(acao and s_maior31);
 	REG_SOLDADO3JOG1: registrador_n
 		generic map (
 			N => 12 
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
-			enable => s_pronto31,
+			clear  => reset,
+			enable => s_enable_reg31,
 			D      => s_medida31,
 			Q      => s_compara31
 		);
@@ -536,14 +544,16 @@ begin
 				pronto    => s_pronto12,
 				db_estado => open
 		);
+
+	s_enable_reg12 <= s_pronto12 and not(acao and s_maior12);
 	REG_SOLDADO1JOG2: registrador_n
 		generic map (
 			N => 12 
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
-			enable => s_pronto12,
+			clear  => reset,
+			enable => s_enable_reg12,
 			D      => s_medida12,
 			Q      => s_compara12
 		);
@@ -570,14 +580,16 @@ begin
 				pronto    => s_pronto22,
 				db_estado => open
 		);
+
+	s_enable_reg22 <= s_pronto22 and not(acao and s_maior22);
 	REG_SOLDADO2JOG2: registrador_n
 		generic map (
 			N => 12 
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
-			enable => s_pronto22,
+			clear  => reset,
+			enable => s_enable_reg22,
 			D      => s_medida22,
 			Q      => s_compara22
 		);
@@ -604,14 +616,16 @@ begin
 				pronto    => s_pronto32,
 				db_estado => open
 		);
+
+	s_enable_reg32 <= s_pronto32 and not(acao and s_maior32);
 	REG_SOLDADO3JOG2: registrador_n
 		generic map (
 			N => 12 
 		)
 		port map (
 			clock  => clock,
-			clear  => limpa_sensor,
-			enable => s_pronto32,
+			clear  => reset,
+			enable => s_enable_reg32,
 			D      => s_medida32,
 			Q      => s_compara32
 		);

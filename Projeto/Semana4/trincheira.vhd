@@ -53,6 +53,7 @@ architecture structural of trincheira is
 			reset             : in  std_logic;
 			atira             : in  std_logic;
 			troca             : in  std_logic;
+			acao 							: in  std_logic;
 			medir							: in  std_logic;
 			transmite         : in  std_logic;
 			limpa_sensor			: in  std_logic;
@@ -116,6 +117,7 @@ architecture structural of trincheira is
 			transmite         : out std_logic;
 			limpa_jogada      : out std_logic;
 			limpa_transmissao : out std_logic;
+			acao 							: out std_logic;
 			medir             : out std_logic;
 			atira             : out std_logic;
 			troca             : out std_logic;
@@ -132,7 +134,7 @@ architecture structural of trincheira is
       );
     end component;
 
-	signal s_valido, s_limpa_jogada, s_limpa_transmissao, s_pronto_tx, s_posiciona, s_transmite, s_fim_transmissao, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
+	signal s_valido, s_acao, s_limpa_jogada, s_limpa_transmissao, s_pronto_tx, s_posiciona, s_transmite, s_fim_transmissao, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
 	signal s_db_estado, s_db_conta_medida, s_db_dado1, s_db_dado2: std_logic_vector(3 downto 0);
 begin
 
@@ -153,6 +155,7 @@ begin
 			transmite         => s_transmite,
 			limpa_jogada      => s_limpa_jogada,
 			limpa_transmissao => s_limpa_transmissao,
+			acao              => s_acao,
 			medir 			      => s_medir,
 			atira             => s_atira,
 			troca             => s_troca,
@@ -167,6 +170,7 @@ begin
 			reset             => reset,
 			atira             => s_atira,
 			troca             => s_troca,
+			acao              => s_acao,
 			medir			        => s_medir,
 			transmite         => s_transmite,
 			limpa_sensor	    => s_limpa_sensor,

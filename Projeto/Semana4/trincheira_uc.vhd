@@ -19,6 +19,7 @@ entity trincheira_uc is
         transmite         : out std_logic;
         limpa_jogada      : out std_logic;
         limpa_transmissao : out std_logic;
+        acao              : out std_logic;
         medir             : out std_logic;
         atira             : out std_logic;
         troca             : out std_logic;
@@ -148,6 +149,18 @@ begin
   with Eatual select
       limpa_jogada <=  '1' when esperaAcao,
                        '0' when others;
+
+  with Eatual select
+      acao <=  '0' when inicial,
+               '0' when medeDebug,
+               '0' when esperaDebug,
+               '0' when esperaPosiciona,
+               '0' when medePosiciona,
+               '0' when aguardaFimPosiciona,
+               '0' when transmitePosiciona,
+               '0' when fimTransmitePosiciona,
+               '0' when validaPosiciona,
+               '1' when others;
 
   with Eatual select
       limpa_transmissao <=  '1' when validaPosiciona,
