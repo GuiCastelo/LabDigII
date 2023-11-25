@@ -9,6 +9,17 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity controle_servo is
+    generic (
+        conf_periodo  : integer := 1_000_000;  
+        largura_000   : integer := 35_000;
+        largura_001   : integer := 45_700;
+        largura_010   : integer := 56_450;  
+        largura_011   : integer := 67_150;
+        largura_100   : integer := 77_850;
+        largura_101   : integer := 88_550; 
+        largura_110   : integer := 99_300;
+        largura_111   : integer := 110_000 
+    );
     port (
         clock : in std_logic;
         reset : in std_logic;
@@ -32,7 +43,7 @@ architecture structural of controle_servo is
       largura_101   : integer :=  1000; 
       largura_110   : integer :=  1100;  
       largura_111   : integer := 1200   
-  );
+    );
     port (
       clock   : in  std_logic;
       reset   : in  std_logic;
@@ -45,25 +56,25 @@ architecture structural of controle_servo is
 begin
 CIRC_PWM: circuito_pwm
        generic map (
-          conf_periodo => 1_000_000,
-          largura_000  => 35_000,
-          largura_001  => 45_700, 
-          largura_010  => 56_450,  
-          largura_011  => 67_150,
-          largura_100  => 77_850,
-          largura_101  => 88_550, 
-          largura_110  => 99_300,
-          largura_111  => 110_000
+          conf_periodo => conf_periodo,
+          largura_000  => largura_000,
+          largura_001  => largura_001, 
+          largura_010  => largura_010,  
+          largura_011  => largura_011,
+          largura_100  => largura_100,
+          largura_101  => largura_101, 
+          largura_110  => largura_110,
+          largura_111  => largura_111
           -- CONFIGURAÇÃO PARA SIMULAÇÃO APENAS
-          -- conf_periodo => 1_000,
-          -- largura_000  => 35,
-          -- largura_001  => 46, 
-          -- largura_010  => 56,  
-          -- largura_011  => 67,
-          -- largura_100  => 78,
-          -- largura_101  => 89, 
-          -- largura_110  => 99,
-          -- largura_111  => 110
+          -- conf_periodo => conf_periodo/1_000,
+          -- largura_000  => largura_000/1_000,
+          -- largura_001  => largura_001/1_000, 
+          -- largura_010  => largura_010/1_000,  
+          -- largura_011  => largura_011/1_000,
+          -- largura_100  => largura_100/1_000,
+          -- largura_101  => largura_101/1_000, 
+          -- largura_110  => largura_110/1_000,
+          -- largura_111  => largura_111/1_000
        )
        port map( 
            clock   => clock,

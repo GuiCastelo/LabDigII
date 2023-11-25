@@ -120,15 +120,26 @@ architecture structural of trincheira_fd is
 	end component contador_m;
 
 	component controle_servo is
-		port (
-			clock : in std_logic;
-			reset : in std_logic;
-			posicao : in std_logic_vector(2 downto 0);
-			pwm : out std_logic;
-			db_reset : out std_logic;
-			db_pwm : out std_logic;
-			db_posicao : out std_logic_vector(2 downto 0)
-		);
+    generic (
+        conf_periodo  : integer := 1_000_000;  
+        largura_000   : integer := 35_000;
+        largura_001   : integer := 45_700;
+        largura_010   : integer := 56_450;  
+        largura_011   : integer := 67_150;
+        largura_100   : integer := 77_850;
+        largura_101   : integer := 88_550; 
+        largura_110   : integer := 99_300;
+        largura_111   : integer := 110_000 
+    );
+    port (
+        clock : in std_logic;
+        reset : in std_logic;
+        posicao : in std_logic_vector(2 downto 0);
+        pwm : out std_logic;
+        db_reset : out std_logic;
+        db_pwm : out std_logic;
+        db_posicao : out std_logic_vector(2 downto 0)
+    );
 	end component;
 
 	component mux2_n is
