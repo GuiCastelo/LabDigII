@@ -291,8 +291,8 @@ begin
 	
 	CONTA_ATIRA: contador_m
 		generic map (
-			--M => 50_000_000, -- 1s 
-			M => 50_000, -- 1ms para simulação
+			M => 50_000_000, -- 1s 
+			--M => 50_000, -- 1ms para simulação
 			N => 30
 		)
 		port map (
