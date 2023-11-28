@@ -276,8 +276,8 @@ begin
 
 	CONTADOR_TIMEOUT: contador_m
 		generic map (
-			--M => 3_000_000_000, -- 60s 
-			M => 3_000_000, -- 60ms para simulação
+			M => 3_000_000_000, -- 60s 
+			--M => 3_000, -- 60us para simulação
 			N => 30
 		)
 		port map (

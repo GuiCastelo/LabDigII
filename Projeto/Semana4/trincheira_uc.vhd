@@ -57,7 +57,7 @@ begin
   end process;
 
   -- logica de proximo estado
-  process (ligar, debug, fim_atira, faz_jogada, posiciona, valido, fim_medidas6, pronto_tx, fim_transmissao, Eatual) 
+  process (ligar, debug, fim_atira, faz_jogada, posiciona, valido, fim_medidas6, pronto_tx, fim_transmissao, timeout, fim_timeout, Eatual) 
   begin
 
     case Eatual is

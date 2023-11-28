@@ -248,65 +248,7 @@ begin
     wait until db_fim_transmissao='1';
     wait for 100 us;
     
-    -- jogador 1 faz jogada e nao derruba todos - derruba terceiro soldado do oponente
-    serialData <= "00100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
-    -- aguarda 2 periodos de bit antes de enviar bits
-    wait for 2*bitPeriod;
-
-    --envia bits seriais para circuito de recepcao
-    UART_WRITE_BYTE ( Data_In=>serialData, Serial_Out=>entrada_serial_in );
-    entrada_serial_in <= '1'; -- repouso
-    wait for 1010 us;
-
-    echo11_in <= '1';
-    echo21_in <= '1';
-    echo31_in <= '1';
-    echo12_in <= '1';
-    echo22_in <= '1';
-    echo32_in <= '1';
-    wait for 580 us;
-    echo11_in <= '0';
-    wait for 1 us;
-    echo21_in <= '0';
-    wait for 1 us;
-    echo31_in <= '0';
-    wait for 1 us;
-    echo12_in <= '0';
-    wait for 1 us;
-    echo22_in <= '0';
-    wait for 1000 us;
-    echo32_in <= '0';
-    wait until db_fim_transmissao='1';
-    wait for 100 us;
-
-    -- jogador 2 faz jogada e derruba todos
-    serialData <= "00100000"; -- circuito recebe caractere SPACE, (dado=20H + paridade=1)
-    -- aguarda 2 periodos de bit antes de enviar bits
-    wait for 2*bitPeriod;
-
-    --envia bits seriais para circuito de recepcao
-    UART_WRITE_BYTE ( Data_In=>serialData, Serial_Out=>entrada_serial_in );
-    entrada_serial_in <= '1'; -- repouso
-    wait for 1010 us;
-
-    echo11_in <= '1';
-    echo21_in <= '1';
-    echo31_in <= '1';
-    echo12_in <= '1';
-    echo22_in <= '1';
-    echo32_in <= '1';
-    wait for 580 us;
-    echo32_in <= '0';
-    wait for 1 us;
-    echo22_in <= '0';
-    wait for 1000 us;
-    echo11_in <= '0';
-    wait for 1 us;
-    echo21_in <= '0';
-    wait for 1 us;
-    echo31_in <= '0';
-    wait for 1 us;
-    echo12_in <= '0';
+    -- timeout
     wait until db_fim_transmissao='1';
     wait for 100 us;
 
