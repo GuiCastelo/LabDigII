@@ -7,7 +7,7 @@ Serial myPort; // definicao do objeto serial
 
 //  ======= CONFIGURACAO SERIAL ==================
 
-    String   porta= "COM3";  // <== acertar valor ***
+    String   porta= "COM5";  // <== acertar valor ***
     int   baudrate= 115200;  // 115200 bauds
     char    parity= 'O';     // E=even/par, O=odd/impar
     int   databits= 7;       // 7 bits de dados
@@ -61,10 +61,10 @@ float rotateSoldado2Jog2 = 0;
 float rotateSoldado3Jog2 = 0;
 
 // Variaveis de angulo das armas
-float rotateYArmaJog1 = radians(50);
-float rotateXArmaJog1 = -radians(60);
-float rotateYArmaJog2 = radians(50);
-float rotateXArmaJog2 = radians(60);
+float rotateYArmaJog1 = radians(30);
+float rotateXArmaJog1 = 0;
+float rotateYArmaJog2 = radians(30);
+float rotateXArmaJog2 = 0;
 int controleYArmaJog1 = 0;
 int controleXArmaJog1 = 0;
 int controleYArmaJog2 = 0;
@@ -385,6 +385,17 @@ void serialEvent (Serial myPort) {
   try {
       // leitura de dados da porta serial ate o caractere '#' na variavel data
       String data = myPort.readStringUntil('#');
+      
+      // Checa se ocorreu fim por timeout
+      if(data.length() == 4) {
+        if(vezJogadorUm) {
+          textToShow = "Timeout! Jogador 2 ganhou!"
+        } else {
+          textToShow = "Timeout! Jogador 1 ganhou!"
+        }
+        showText = true;
+        return;
+      }
       // remove caractere final '#'
       data = data.substring(0,data.length()-1);
       println(data);
@@ -515,14 +526,14 @@ void keyPressed() {
   if(key == 'w') {
     // muda angulo rotate arma cima
     if(vezJogadorUm) {
-      if(controleXArmaJog1 < 7) {
-        rotateXArmaJog1 += radians(20);
-        controleXArmaJog1 ++;
+      if(controleXArmaJog1 > 0) {
+        rotateXArmaJog1 += radians(5);
+        controleXArmaJog1 --;
       }
     } else {
-      if(controleXArmaJog2 < 7) {
-        rotateXArmaJog2 -= radians(20);
-        controleXArmaJog2 ++;
+      if(controleXArmaJog2 > 0) {
+        rotateXArmaJog2 -= radians(5);
+        controleXArmaJog2 --;
       }
     }
   }
@@ -530,14 +541,14 @@ void keyPressed() {
   if(key == 's') {
     // muda angulo rotate arma baixo
     if(vezJogadorUm) {
-      if(controleXArmaJog1 > 0) {
-        rotateXArmaJog1 -= radians(20);
-        controleXArmaJog1 --;
+      if(controleXArmaJog1 < 7) {
+        rotateXArmaJog1 -= radians(5);
+        controleXArmaJog1 ++;
       }
     } else {
-      if(controleXArmaJog2 > 0) {
-        rotateXArmaJog2 += radians(20);
-        controleXArmaJog2 --;
+      if(controleXArmaJog2 < 7) {
+        rotateXArmaJog2 += radians(5);
+        controleXArmaJog2 ++;
       }
     }
   }
@@ -546,12 +557,12 @@ void keyPressed() {
     // muda angulo rotate arma esquerda
     if(vezJogadorUm) {
       if(controleYArmaJog1 > 0) {
-        rotateYArmaJog1 += radians(20);
+        rotateYArmaJog1 += radians(8.5);
         controleYArmaJog1 --;
       }
     } else {
       if(controleYArmaJog2 > 0) {
-        rotateYArmaJog2 += radians(20);
+        rotateYArmaJog2 += radians(8.5);
         controleYArmaJog2 --;
       }
     }
@@ -561,12 +572,12 @@ void keyPressed() {
     // muda angulo rotate arma direita
     if(vezJogadorUm) {
       if(controleYArmaJog1 < 7) {
-        rotateYArmaJog1 -= radians(20);
+        rotateYArmaJog1 -= radians(8.5);
         controleYArmaJog1 ++;
       }
     } else {
       if(controleYArmaJog2 < 7) {
-        rotateYArmaJog2 -= radians(20);
+        rotateYArmaJog2 -= radians(8.5);
         controleYArmaJog2 ++;
       }
     }
@@ -627,10 +638,10 @@ void reset() {
   rotateSoldado2Jog2 = 0;
   rotateSoldado3Jog2 = 0;
   // Variaveis de angulo das armas
-  rotateYArmaJog1 = radians(50);
-  rotateXArmaJog1 = -radians(60);
-  rotateYArmaJog2 = radians(50);
-  rotateXArmaJog2 = radians(60);
+  rotateYArmaJog1 = radians(30);
+  rotateXArmaJog1 = 0;
+  rotateYArmaJog2 = radians(30);
+  rotateXArmaJog2 = 0;
   controleYArmaJog1 = 0;
   controleXArmaJog1 = 0;
   controleYArmaJog2 = 0;
