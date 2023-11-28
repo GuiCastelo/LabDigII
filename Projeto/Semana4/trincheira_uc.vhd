@@ -16,7 +16,14 @@ entity trincheira_uc is
         fim_atira         : in  std_logic;
         fim_transmissao   : in  std_logic;
         pronto_tx         : in  std_logic;
+        timeout           : in  std_logic;
+        fim_timeout       : in  std_logic;
         transmite         : out std_logic;
+        limpa_timeout     : out std_logic;
+        conta_timeout     : out std_logic;
+        conta_fim_timeout : out std_logic;
+        limpa_fim_timeout : out std_logic;
+        sel_timeout       : out std_logic;
         limpa_jogada      : out std_logic;
         limpa_transmissao : out std_logic;
         acao              : out std_logic;
@@ -33,7 +40,7 @@ architecture trincheira_uc_arch of trincheira_uc is
 
     type tipo_estado is (inicial, medeDebug, esperaDebug, esperaPosiciona, medePosiciona, 
     aguardaFimPosiciona, transmitePosiciona, fimTransmitePosiciona, validaPosiciona, esperaAcao, fazJogada, medeJogada, 
-    aguardaJogada, transmiteJogada, fimTransmiteJogada, checaFim, trocaVez, final);
+    aguardaJogada, transmiteJogada, fimTransmiteJogada, checaFim, trocaVez, transmiteTimeout, fimTransmiteTimeout, final);
     signal Eatual: tipo_estado;  -- estado atual
     signal Eprox:  tipo_estado;  -- proximo estado
 
@@ -90,8 +97,17 @@ begin
         end if;
 
         when esperaAcao =>  if faz_jogada='1' then Eprox <= fazJogada;
+                            elsif timeout='1' then Eprox <= transmiteTimeout;
                             else              Eprox <= esperaAcao;
                             end if;
+        
+        when transmiteTimeout =>   if pronto_tx='1' then Eprox <= fimTransmiteTimeout;
+                                   else                  Eprox <= transmiteTimeout;
+                                   end if;
+                    
+        when fimTransmiteTimeout =>  if fim_timeout='1' then Eprox <= final;
+                                     else                    Eprox <= transmiteTimeout;
+                                     end if;
 
         when fazJogada =>   if fim_atira='1' then Eprox <= medeJogada;
                             else             Eprox <= fazJogada;
@@ -167,9 +183,32 @@ begin
                             '1' when checaFim,
                             '0' when others;
 
+  with Eatual select
+      conta_timeout <=  '1' when esperaAcao,
+                        '0' when others;
+
+  with Eatual select
+      limpa_timeout <=  '0' when esperaAcao,
+                        '1' when others;
+
+  with Eatual select
+      conta_fim_timeout <=  '1' when fimTransmiteTimeout,
+                            '0' when others;
+
+  with Eatual select
+      limpa_fim_timeout <=  '0' when fimTransmiteTimeout,
+                            '0' when transmiteTimeout,
+                            '1' when others;
+
+  with Eatual select
+      sel_timeout       <=  '1' when fimTransmiteTimeout,
+                            '1' when transmiteTimeout,
+                            '0' when others;
+
   with Eatual select  
       transmite <=  '1' when transmitePosiciona,
                     '1' when transmiteJogada,
+                    '1' when transmiteTimeout,
                     '0' when others;
 
   with Eatual select

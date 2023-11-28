@@ -15,6 +15,11 @@ entity trincheira_fd is
 				limpa_sensor			: in  std_logic;
         limpa_jogada      : in  std_logic;
 				limpa_transmissao : in  std_logic;
+				limpa_timeout     : in  std_logic;
+        conta_timeout     : in  std_logic;
+        conta_fim_timeout : in  std_logic;
+        limpa_fim_timeout : in  std_logic;
+        sel_timeout       : in  std_logic;
 				echo11						: in  std_logic;
 				echo21						: in  std_logic;
 				echo31						: in  std_logic;
@@ -37,6 +42,8 @@ entity trincheira_fd is
 				trigger32				  : out std_logic;
 				fim_medidas6      : out std_logic;
 				fim_transmissao   : out std_logic;
+				timeout           : out std_logic;
+        fim_timeout       : out std_logic;
 				pronto_tx         : out std_logic;
 				acertou_tudo      : out std_logic;
 				posiciona         : out std_logic;
@@ -247,7 +254,7 @@ architecture structural of trincheira_fd is
 	signal s_maior11, s_maior21, s_maior31, s_maior12, s_maior22, s_maior32: std_logic;
 	signal s_menor11, s_menor21, s_menor31, s_menor12, s_menor22, s_menor32: std_logic;
 	-- Sinais de comunicacao serial
-	signal s_pronto_tx, s_conta_soldados, s_conta_soldados_ed, s_fim_transmissao: std_logic;
+	signal s_pronto_tx, s_conta_soldados, s_conta_soldados_ed, s_fim_transmissao, s_seletor_separador: std_logic;
 	signal s_seletor_transmissao: std_logic_vector(1 downto 0);
 	signal s_seletor_soldados: std_logic_vector(2 downto 0);
 	signal s_transmissao1, s_transmissao2, s_transmissao3, s_dado_transmissao: std_logic_vector(6 downto 0);
@@ -266,6 +273,21 @@ begin
 			Q      => s_vez_intermediario
 		);
 		s_vez <= s_vez_intermediario(0);
+
+	CONTADOR_TIMEOUT: contador_m
+		generic map (
+			--M => 3_000_000_000, -- 60s 
+			M => 3_000_000, -- 60ms para simulação
+			N => 30
+		)
+		port map (
+			clock => clock,
+			zera  => limpa_timeout,
+			conta => conta_timeout,
+			Q     => open,
+			fim   => timeout,
+			meio  => open
+		);
 	
 	CONTA_ATIRA: contador_m
 		generic map (
@@ -760,6 +782,20 @@ begin
         db_estado       => open
     );
 
+	CONTADOR_FIM_TIMEOUT: contador_m
+		generic map (
+			M => 4, 
+			N => 2
+		)
+		port map (
+			clock => clock,
+			zera  => limpa_fim_timeout,
+			conta => conta_fim_timeout,
+			Q     => open,
+			fim   => fim_timeout,
+			meio  => open
+		);
+
 	CONTA_TRANSMISSAO: contador_m
 		generic map (
 			M => 4,
@@ -795,6 +831,8 @@ begin
 			meio  => open
 		);
 
+	s_seletor_separador <= s_fim_transmissao or sel_timeout;
+
 	MUX_SEPARADOR: mux2_n
 		generic map (
 			N => 7
@@ -802,7 +840,7 @@ begin
 		port map (
 			A => "0101100",
 			B => "0100011",
-			seletor => s_fim_transmissao,
+			seletor => s_seletor_separador,
 			saida => s_separador
 		);
 
