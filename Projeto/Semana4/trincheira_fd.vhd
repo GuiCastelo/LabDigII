@@ -841,8 +841,8 @@ begin
         Bmenor => open
     );
 
-	s_conta_up_vertical1 <= s_cima and not(s_vez);
-	s_conta_up_vertical2 <= s_cima and s_vez;
+	s_conta_down_vertical1 <= s_cima and not(s_vez);
+	s_conta_down_vertical2 <= s_cima and s_vez;
 
 	COMP_BAIXO: comparador_n
     generic map (
@@ -856,8 +856,8 @@ begin
         Bmenor => open
     );
 
-	s_conta_down_vertical1 <= s_baixo and not(s_vez);
-	s_conta_down_vertical2 <= s_baixo and s_vez;
+	s_conta_up_vertical1 <= s_baixo and not(s_vez);
+	s_conta_up_vertical2 <= s_baixo and s_vez;
 
 	-- Debug
 	db_maior11 <= s_maior11;
