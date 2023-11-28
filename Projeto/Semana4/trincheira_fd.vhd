@@ -393,6 +393,17 @@ begin
 		);
 
 	HORIZONTAL_JOGADOR1: controle_servo
+		generic map (
+			conf_periodo  => 1_000_000,
+			largura_000   => 77_850, -- 100 graus
+			largura_001   => 82_398,-- 108,5 graus
+			largura_010   => 86.946,-- 117 graus
+			largura_011   => 91.494,-- 125,5 graus
+			largura_100   => 96.042,-- 134 graus
+			largura_101   => 100.590,-- 142,5 graus
+			largura_110   => 105.138,-- 151 graus
+			largura_111   => 110_000 -- 159,5 graus
+		)
 		port map (
 			clock => clock,
 			reset => reset,
@@ -404,6 +415,17 @@ begin
 		);
 
 	VERTICAL_JOGADOR1: controle_servo
+		generic map (
+			conf_periodo  => 1_000_000,
+			largura_000   => 45_700, -- 40 graus
+			largura_001   => 48.375, -- 45 graus
+			largura_010   => 51.050, -- 50 graus
+			largura_011   => 53.725, -- 55 graus
+			largura_100   => 56.400, -- 60 graus
+			largura_101   => 59.075, -- 65 graus
+			largura_110   => 61.750, -- 70 graus
+			largura_111   => 64.425 -- 75 graus
+		)
 		port map (
 			clock => clock,
 			reset => reset,
@@ -415,6 +437,17 @@ begin
 		);
 
 	HORIZONTAL_JOGADOR2: controle_servo
+		generic map (
+			conf_periodo  => 1_000_000,
+			largura_000   => 77_850, -- 100 graus
+			largura_001   => 82_398,-- 108,5 graus
+			largura_010   => 86.946,-- 117 graus
+			largura_011   => 91.494,-- 125,5 graus
+			largura_100   => 96.042,-- 134 graus
+			largura_101   => 100.590,-- 142,5 graus
+			largura_110   => 105.138,-- 151 graus
+			largura_111   => 110_000 -- 159,5 graus
+		)
 		port map (
 			clock => clock,
 			reset => reset,
@@ -426,6 +459,17 @@ begin
 		);
 
 	VERTICAL_JOGADOR2: controle_servo
+		generic map (
+			conf_periodo  => 1_000_000,
+			largura_000   => 45_700, -- 40 graus
+			largura_001   => 48.375, -- 45 graus
+			largura_010   => 51.050, -- 50 graus
+			largura_011   => 53.725, -- 55 graus
+			largura_100   => 56.400, -- 60 graus
+			largura_101   => 59.075, -- 65 graus
+			largura_110   => 61.750, -- 70 graus
+			largura_111   => 64.425 -- 75 graus
+		)
 		port map (
 			clock => clock,
 			reset => reset,
