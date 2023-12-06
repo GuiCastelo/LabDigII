@@ -63,7 +63,7 @@ float rotateSoldado3Jog2 = 0;
 // Variaveis de angulo das armas
 float rotateYArmaJog1 = radians(30);
 float rotateXArmaJog1 = 0;
-float rotateYArmaJog2 = radians(-30);
+float rotateYArmaJog2 = radians(30);
 float rotateXArmaJog2 = 0;
 int controleYArmaJog1 = 0;
 int controleXArmaJog1 = 0;
@@ -391,7 +391,7 @@ void serialEvent (Serial myPort) {
         if(vezJogadorUm) {
           textToShow = "Timeout! Jogador 2 ganhou!";
         } else {
-          textToShow = "Timeout! Jogador 1 ganhou!";
+          textToShow = "Timeout! Jogador 1 ganhou!";  
         }
         showText = true;
         return;

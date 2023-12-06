@@ -461,14 +461,15 @@ begin
 	HORIZONTAL_JOGADOR2: controle_servo
 		generic map (
 			conf_periodo  => 1_000_000,
-			largura_000   => 77_850, -- 100 graus
-			largura_001   => 82_398,-- 108,5 graus
-			largura_010   => 86_946,-- 117 graus
-			largura_011   => 91_494,-- 125,5 graus
-			largura_100   => 96_042,-- 134 graus
-			largura_101   => 100_590,-- 142,5 graus
-			largura_110   => 105_138,-- 151 graus
-			largura_111   => 110_000 -- 159,5 graus
+			largura_000   => 110_000,
+			largura_001   => 105_000,
+			largura_010   => 100_000,
+			largura_010   => 84_000,
+			largura_011   => 94_300,
+			largura_100   => 88_550,
+			largura_101   => 84_000,
+			largura_110   => 77_850,
+			largura_111   => 67_150
 		)
 		port map (
 			clock => clock,
@@ -483,14 +484,14 @@ begin
 	VERTICAL_JOGADOR2: controle_servo
 		generic map (
 			conf_periodo  => 1_000_000,
-			largura_000   => 45_700, -- 40 graus
-			largura_001   => 48_375, -- 45 graus
-			largura_010   => 51_050, -- 50 graus
-			largura_011   => 53_725, -- 55 graus
-			largura_100   => 56_400, -- 60 graus
-			largura_101   => 59_075, -- 65 graus
-			largura_110   => 61_750, -- 70 graus
-			largura_111   => 64_425 -- 75 graus
+			largura_000   => 65_000,
+			largura_001   => 60_300,
+			largura_010   => 55_550,
+			largura_011   => 50_850,
+			largura_100   => 45_150, 
+			largura_101   => 40_450, 
+			largura_110   => 35_700, 
+			largura_111   => 30_000
 		)
 		port map (
 			clock => clock,

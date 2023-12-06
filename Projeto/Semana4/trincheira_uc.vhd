@@ -181,6 +181,7 @@ begin
   with Eatual select
       limpa_transmissao <=  '1' when validaPosiciona,
                             '1' when checaFim,
+                            '1' when final,
                             '0' when others;
 
   with Eatual select
