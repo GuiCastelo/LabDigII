@@ -19,6 +19,7 @@ entity trincheira_uc is
         timeout           : in  std_logic;
         fim_timeout       : in  std_logic;
         erro_sensor       : in  std_logic;
+        reset_tx          : out std_logic;
         transmite         : out std_logic;
         limpa_timeout     : out std_logic;
         conta_timeout     : out std_logic;
@@ -84,19 +85,19 @@ begin
 
 
         when aguardaFimPosiciona =>     if fim_medidas6='1' then Eprox <= transmitePosiciona;
-        else              Eprox <= aguardaFimPosiciona;
-        end if;
+                                        elsif erro_sensor='1' then Eprox <= limpaPosiciona;
+                                        else              Eprox <= aguardaFimPosiciona;
+                                        end if;
+
+        when limpaPosiciona =>     Eprox <= medePosiciona;
 
         when transmitePosiciona =>     if pronto_tx='1' then Eprox <= fimTransmitePosiciona;
         else              Eprox <= transmitePosiciona;
         end if;
 
         when fimTransmitePosiciona =>     if fim_transmissao='1' then Eprox <= validaPosiciona;
-                                          elsif erro_sensor='1' then Eprox <= limpaPosiciona;
-                                          else Eprox <= transmitePosiciona;
-                                          end if;
-        
-        when limpaPosiciona =>     Eprox <= transmitePosiciona;
+        else Eprox <= transmitePosiciona;
+        end if;
 
         when validaPosiciona =>     if valido='0' then Eprox <= esperaPosiciona;
         else              Eprox <= esperaAcao;
@@ -121,20 +122,20 @@ begin
 
         when medeJogada =>   Eprox <= aguardaJogada;
 
-        when aguardaJogada =>   if fim_medidas6='1' then Eprox <= transmiteJogada;
-        else             Eprox <= aguardaJogada;
-        end if;
+        when aguardaJogada =>   if fim_medidas6='1' then Eprox <= transmiteJogada;   
+                                elsif erro_sensor='1' then Eprox <= limpaJogada;
+                                else             Eprox <= aguardaJogada;
+                                end if;
+    
+        when limpaJogada =>     Eprox <= medeJogada;
 
         when transmiteJogada =>   if pronto_tx='1' then Eprox <= fimTransmiteJogada;
         else             Eprox <= transmiteJogada;
         end if;
 
-        when fimTransmiteJogada =>     if fim_transmissao='1' then Eprox <= checaFim;    
-                                       elsif erro_sensor='1' then Eprox <= limpaJogada;
-                                       else  Eprox <= transmiteJogada;
-                                       end if;
-
-        when limpaJogada =>     Eprox <= transmiteJogada;
+        when fimTransmiteJogada =>     if fim_transmissao='1' then Eprox <= checaFim;
+        else  Eprox <= transmiteJogada;
+        end if;
 
         when checaFim =>   if acertou_tudo='1' then Eprox <= final;
         else             Eprox <= trocaVez;
@@ -174,14 +175,14 @@ begin
                        '0' when others;
 
   with Eatual select
-       limpa_erro_sensor <=  '0' when fimTransmitePosiciona, 
-                             '0' when esperaPosiciona,
+       limpa_erro_sensor <=  '0' when aguardaJogada, 
+                             '0' when aguardaFimPosiciona,
                              '1' when others;
 
 
   with Eatual select
-       conta_erro_sensor <=  '1' when fimTransmitePosiciona, 
-                             '1' when esperaPosiciona,
+       conta_erro_sensor <=  '1' when aguardaJogada, 
+                             '1' when aguardaFimPosiciona,
                              '0' when others;
 
   with Eatual select
@@ -195,6 +196,7 @@ begin
                '0' when esperaPosiciona,
                '0' when medePosiciona,
                '0' when aguardaFimPosiciona,
+               '0' when limpaPosiciona,
                '0' when transmitePosiciona,
                '0' when fimTransmitePosiciona,
                '0' when validaPosiciona,
@@ -203,7 +205,7 @@ begin
   with Eatual select
       limpa_transmissao <=  '1' when validaPosiciona,
                             '1' when checaFim,
-                            '1' when final,
+                            '1' when inicial,
                             '0' when others;
 
   with Eatual select
@@ -227,6 +229,12 @@ begin
       sel_timeout       <=  '1' when fimTransmiteTimeout,
                             '1' when transmiteTimeout,
                             '0' when others;
+
+  with Eatual select
+      reset_tx       <= '1' when validaPosiciona,
+                        '1' when checaFim,
+                        '1' when inicial,
+                        '0' when others;
 
   with Eatual select  
       transmite <=  '1' when transmitePosiciona,

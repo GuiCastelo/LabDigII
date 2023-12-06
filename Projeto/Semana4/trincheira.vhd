@@ -65,6 +65,7 @@ architecture structural of trincheira is
 			conta_timeout     : in  std_logic;
 			conta_fim_timeout : in  std_logic;
 			limpa_fim_timeout : in  std_logic;
+			reset_tx          : in  std_logic;
 			sel_timeout       : in  std_logic;
 			echo11						: in  std_logic;
 			echo21						: in  std_logic;
@@ -127,6 +128,7 @@ architecture structural of trincheira is
 			timeout           : in  std_logic;
 			fim_timeout       : in  std_logic;
 			erro_sensor       : in  std_logic;
+			reset_tx          : out std_logic;
 			transmite         : out std_logic;
 			limpa_timeout     : out std_logic;
 			conta_timeout     : out std_logic;
@@ -156,7 +158,7 @@ architecture structural of trincheira is
 
 	signal s_valido, s_acao, s_limpa_jogada, s_limpa_transmissao, s_pronto_tx, s_posiciona, s_transmite, s_fim_transmissao: std_logic; 
 	signal s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
-	signal s_erro_sensor, s_conta_erro_sensor, s_limpa_erro_sensor: std_logic;
+	signal s_erro_sensor, s_conta_erro_sensor, s_limpa_erro_sensor, s_reset_tx: std_logic;
 	signal s_limpa_timeout, s_limpa_fim_timeout, s_conta_timeout, s_conta_fim_timeout, s_sel_timeout, s_timeout, s_fim_timeout: std_logic;
 	signal s_db_estado, s_db_conta_medida, s_db_dado1, s_db_dado2: std_logic_vector(3 downto 0);
 begin
@@ -178,6 +180,7 @@ begin
 			timeout           => s_timeout,
 			fim_timeout       => s_fim_timeout,
 			erro_sensor       => s_erro_sensor,
+			reset_tx          => s_reset_tx,
 			transmite         => s_transmite,
 			limpa_timeout     => s_limpa_timeout,
 			conta_timeout     => s_conta_timeout,
@@ -215,6 +218,7 @@ begin
 			conta_timeout     => s_conta_timeout,
 			conta_fim_timeout => s_conta_fim_timeout,
 			limpa_fim_timeout => s_limpa_fim_timeout,
+			reset_tx          => s_reset_tx,
 			sel_timeout       => s_sel_timeout,
 			echo11			  => echo11,
 			echo21			  => echo21,

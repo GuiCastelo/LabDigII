@@ -21,6 +21,7 @@ entity trincheira_fd is
         conta_timeout     : in  std_logic;
         conta_fim_timeout : in  std_logic;
         limpa_fim_timeout : in  std_logic;
+				reset_tx          : in  std_logic;
         sel_timeout       : in  std_logic;
 				echo11						: in  std_logic;
 				echo21						: in  std_logic;
@@ -787,7 +788,7 @@ begin
 	TRANSMISSOR_SERIAL: tx_serial_7O1
     port map (
         clock           => clock,
-        reset           => reset,
+        reset           => reset_tx,
         partida         => transmite,
         dados_ascii     => s_dado_transmissao,
         saida_serial    => saida_serial,
