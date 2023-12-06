@@ -61,13 +61,13 @@ float rotateSoldado2Jog2 = 0;
 float rotateSoldado3Jog2 = 0;
 
 // Variaveis de angulo das armas
-float rotateYArmaJog1 = radians(30);
+float rotateYArmaJog1 = radians(-30);
 float rotateXArmaJog1 = 0;
 float rotateYArmaJog2 = radians(-30);
 float rotateXArmaJog2 = 0;
-int controleYArmaJog1 = 0;
+int controleYArmaJog1 = 7;
 int controleXArmaJog1 = 0;
-int controleYArmaJog2 = 0;
+int controleYArmaJog2 = 7;
 int controleXArmaJog2 = 0;
 
 void setup() {
@@ -638,12 +638,12 @@ void reset() {
   rotateSoldado2Jog2 = 0;
   rotateSoldado3Jog2 = 0;
   // Variaveis de angulo das armas
-  rotateYArmaJog1 = radians(30);
+  rotateYArmaJog1 = radians(-30);
   rotateXArmaJog1 = 0;
-  rotateYArmaJog2 = radians(30);
+  rotateYArmaJog2 = radians(-30);
   rotateXArmaJog2 = 0;
-  controleYArmaJog1 = 0;
+  controleYArmaJog1 = 7;
   controleXArmaJog1 = 0;
-  controleYArmaJog2 = 0;
+  controleYArmaJog2 = 7;
   controleXArmaJog2 = 0;
 }
