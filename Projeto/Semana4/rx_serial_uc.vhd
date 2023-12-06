@@ -21,9 +21,10 @@ end entity;
 
 architecture rx_serial_uc_arch of rx_serial_uc is
 
-    type tipo_estado is (inicial, preparacao, espera, recepcao, armazena, final);
+    type tipo_estado is (inicial, preparacao, espera, recepcao, armazena, final, resetState);
     signal Eatual: tipo_estado;  -- estado atual
     signal Eprox:  tipo_estado;  -- proximo estado
+    signal s_reset: std_logic;
 
 begin
 
@@ -58,7 +59,9 @@ begin
 
       when armazena =>     Eprox <= final;
 
-      when final =>        Eprox <= inicial;
+      when final =>        Eprox <= resetState;
+
+      when resetState =>   Eprox <= inicial;
 
       when others =>       Eprox <= inicial;
 
@@ -87,6 +90,9 @@ begin
 
   with Eatual select
       pronto_rx <= '1' when final, '0' when others;
+
+    with Eatual select
+      s_reset <= '1' when resetState, '0' when others;
 
   with Eatual select
       db_estado <= "0000" when inicial,

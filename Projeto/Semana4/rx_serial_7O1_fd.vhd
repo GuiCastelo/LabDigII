@@ -74,7 +74,7 @@ begin
         )  
         port map (
             clock          => clock, 
-            reset          => reset, 
+            reset          => limpa, 
             carrega        => carrega, 
             desloca        => desloca, 
             entrada_serial => dado_serial, 
@@ -89,7 +89,7 @@ begin
         ) 
         port map (
             clock => clock, 
-            zera  => zera, 
+            zera  => limpa, 
             conta => conta, 
             Q     => open, 
             fim   => fim, 
