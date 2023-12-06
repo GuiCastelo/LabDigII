@@ -13,6 +13,8 @@ entity trincheira_fd is
 				medir							: in  std_logic;
 				transmite         : in  std_logic;
 				limpa_sensor			: in  std_logic;
+				limpa_erro_sensor : in  std_logic;
+				conta_erro_sensor : in  std_logic;
         limpa_jogada      : in  std_logic;
 				limpa_transmissao : in  std_logic;
 				limpa_timeout     : in  std_logic;
@@ -44,6 +46,7 @@ entity trincheira_fd is
 				fim_transmissao   : out std_logic;
 				timeout           : out std_logic;
         fim_timeout       : out std_logic;
+				erro_sensor       : out std_logic;
 				pronto_tx         : out std_logic;
 				acertou_tudo      : out std_logic;
 				posiciona         : out std_logic;
@@ -464,7 +467,6 @@ begin
 			largura_000   => 110_000,
 			largura_001   => 105_000,
 			largura_010   => 100_000,
-			largura_010   => 84_000,
 			largura_011   => 94_300,
 			largura_100   => 88_550,
 			largura_101   => 84_000,
@@ -718,6 +720,20 @@ begin
         igual  => open,
         Bmenor => s_menor32
     );
+
+	CONTADOR_ERRO_SENSORES: contador_m
+		generic map (
+			M => 25_000_000, 
+			N => 15
+		)
+		port map (
+			clock => clock,
+			zera  => limpa_erro_sensor,
+			conta => conta_erro_sensor,
+			Q     => open,
+			fim   => erro_sensor,
+			meio  => open
+		);
 
 	s_conta_medida <= s_pronto11 or s_pronto21 or s_pronto31 or s_pronto12 or s_pronto22 or s_pronto32;
 	CONTA_MEDIDA: contador_m

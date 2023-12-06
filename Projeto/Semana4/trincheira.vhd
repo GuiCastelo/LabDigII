@@ -57,6 +57,8 @@ architecture structural of trincheira is
 			medir							: in  std_logic;
 			transmite         : in  std_logic;
 			limpa_sensor			: in  std_logic;
+			limpa_erro_sensor : in  std_logic;
+			conta_erro_sensor : in  std_logic;
 			limpa_jogada      : in  std_logic;
 			limpa_transmissao : in  std_logic;
 			limpa_timeout     : in  std_logic;
@@ -88,6 +90,7 @@ architecture structural of trincheira is
 			fim_transmissao   : out std_logic;
 			timeout           : out std_logic;
 			fim_timeout       : out std_logic;
+			erro_sensor       : out std_logic;
 			pronto_tx         : out std_logic;
 			acertou_tudo      : out std_logic;
 			posiciona         : out std_logic;
@@ -112,7 +115,7 @@ architecture structural of trincheira is
 			clock             : in  std_logic;
 			reset             : in  std_logic;
 			ligar             : in  std_logic;
-			debug             : in  std_logic;
+	debug             : in  std_logic;
 			posiciona         : in  std_logic;
 			fim_medidas6      : in  std_logic;
 			valido            : in  std_logic;
@@ -123,6 +126,7 @@ architecture structural of trincheira is
 			pronto_tx         : in  std_logic;
 			timeout           : in  std_logic;
 			fim_timeout       : in  std_logic;
+			erro_sensor       : in  std_logic;
 			transmite         : out std_logic;
 			limpa_timeout     : out std_logic;
 			conta_timeout     : out std_logic;
@@ -136,6 +140,8 @@ architecture structural of trincheira is
 			atira             : out std_logic;
 			troca             : out std_logic;
 			limpa_sensor      : out std_logic;
+			limpa_erro_sensor : out std_logic;
+			conta_erro_sensor : out std_logic;
 			fim               : out std_logic;
 			db_estado         : out std_logic_vector(3 downto 0)
 		);
@@ -148,7 +154,9 @@ architecture structural of trincheira is
       );
     end component;
 
-	signal s_valido, s_acao, s_limpa_jogada, s_limpa_transmissao, s_pronto_tx, s_posiciona, s_transmite, s_fim_transmissao, s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
+	signal s_valido, s_acao, s_limpa_jogada, s_limpa_transmissao, s_pronto_tx, s_posiciona, s_transmite, s_fim_transmissao: std_logic; 
+	signal s_fim_medidas6, s_acertou_tudo, s_faz_jogada, s_fim_atira, s_medir, s_atira, s_troca, s_limpa_sensor: std_logic;
+	signal s_erro_sensor, s_conta_erro_sensor, s_limpa_erro_sensor: std_logic;
 	signal s_limpa_timeout, s_limpa_fim_timeout, s_conta_timeout, s_conta_fim_timeout, s_sel_timeout, s_timeout, s_fim_timeout: std_logic;
 	signal s_db_estado, s_db_conta_medida, s_db_dado1, s_db_dado2: std_logic_vector(3 downto 0);
 begin
@@ -169,6 +177,7 @@ begin
 			pronto_tx         => s_pronto_tx,
 			timeout           => s_timeout,
 			fim_timeout       => s_fim_timeout,
+			erro_sensor       => s_erro_sensor,
 			transmite         => s_transmite,
 			limpa_timeout     => s_limpa_timeout,
 			conta_timeout     => s_conta_timeout,
@@ -182,6 +191,8 @@ begin
 			atira             => s_atira,
 			troca             => s_troca,
 			limpa_sensor      => s_limpa_sensor,
+			limpa_erro_sensor => s_limpa_erro_sensor,
+			conta_erro_sensor => s_conta_erro_sensor,
 			fim               => fim,
 			db_estado         => s_db_estado
 		);
@@ -196,6 +207,8 @@ begin
 			medir			        => s_medir,
 			transmite         => s_transmite,
 			limpa_sensor	    => s_limpa_sensor,
+			limpa_erro_sensor => s_limpa_erro_sensor,
+			conta_erro_sensor => s_conta_erro_sensor,
 			limpa_jogada      => s_limpa_jogada,
 			limpa_transmissao => s_limpa_transmissao,
 			limpa_timeout     => s_limpa_timeout,
@@ -227,11 +240,12 @@ begin
 			fim_transmissao   => s_fim_transmissao,
 			timeout           => s_timeout,
 			fim_timeout       => s_fim_timeout,
+			erro_sensor       => s_erro_sensor,
 			pronto_tx					=> s_pronto_tx,
 			acertou_tudo      => s_acertou_tudo,
 			posiciona         => s_posiciona,
-			valido 			  => s_valido,
-			vez				  => vez,
+			valido 			      => s_valido,
+			vez				        => vez,
 			fim_atira         => s_fim_atira,
 			faz_jogada        => s_faz_jogada,
 			db_conta_medida   => s_db_conta_medida,

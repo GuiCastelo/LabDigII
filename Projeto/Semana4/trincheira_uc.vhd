@@ -18,6 +18,7 @@ entity trincheira_uc is
         pronto_tx         : in  std_logic;
         timeout           : in  std_logic;
         fim_timeout       : in  std_logic;
+        erro_sensor       : in  std_logic;
         transmite         : out std_logic;
         limpa_timeout     : out std_logic;
         conta_timeout     : out std_logic;
@@ -31,6 +32,8 @@ entity trincheira_uc is
         atira             : out std_logic;
         troca             : out std_logic;
         limpa_sensor      : out std_logic;
+        limpa_erro_sensor : out std_logic;
+        conta_erro_sensor : out std_logic;
         fim               : out std_logic;
         db_estado         : out std_logic_vector(3 downto 0)
     );
@@ -38,7 +41,7 @@ end entity;
 
 architecture trincheira_uc_arch of trincheira_uc is
 
-    type tipo_estado is (inicial, medeDebug, esperaDebug, esperaPosiciona, medePosiciona, 
+    type tipo_estado is (inicial, medeDebug, esperaDebug, esperaPosiciona, medePosiciona, limpaPosiciona, limpaJogada,
     aguardaFimPosiciona, transmitePosiciona, fimTransmitePosiciona, validaPosiciona, esperaAcao, fazJogada, medeJogada, 
     aguardaJogada, transmiteJogada, fimTransmiteJogada, checaFim, trocaVez, transmiteTimeout, fimTransmiteTimeout, final);
     signal Eatual: tipo_estado;  -- estado atual
@@ -57,7 +60,7 @@ begin
   end process;
 
   -- logica de proximo estado
-  process (ligar, debug, fim_atira, faz_jogada, posiciona, valido, fim_medidas6, pronto_tx, fim_transmissao, timeout, fim_timeout, Eatual) 
+  process (ligar, debug, fim_atira, faz_jogada, posiciona, valido, fim_medidas6, pronto_tx, fim_transmissao, timeout, fim_timeout, erro_sensor, Eatual) 
   begin
 
     case Eatual is
@@ -89,8 +92,11 @@ begin
         end if;
 
         when fimTransmitePosiciona =>     if fim_transmissao='1' then Eprox <= validaPosiciona;
-        else              Eprox <= transmitePosiciona;
-        end if;
+                                          elsif erro_sensor='1' then Eprox <= limpaPosiciona;
+                                          else Eprox <= transmitePosiciona;
+                                          end if;
+        
+        when limpaPosiciona =>     Eprox <= transmitePosiciona;
 
         when validaPosiciona =>     if valido='0' then Eprox <= esperaPosiciona;
         else              Eprox <= esperaAcao;
@@ -123,9 +129,12 @@ begin
         else             Eprox <= transmiteJogada;
         end if;
 
-        when fimTransmiteJogada =>     if fim_transmissao='1' then Eprox <= checaFim;
-        else              Eprox <= transmiteJogada;
-        end if;
+        when fimTransmiteJogada =>     if fim_transmissao='1' then Eprox <= checaFim;    
+                                       elsif erro_sensor='1' then Eprox <= limpaJogada;
+                                       else  Eprox <= transmiteJogada;
+                                       end if;
+
+        when limpaJogada =>     Eprox <= transmiteJogada;
 
         when checaFim =>   if acertou_tudo='1' then Eprox <= final;
         else             Eprox <= trocaVez;
@@ -159,8 +168,21 @@ begin
   with Eatual select
       limpa_sensor <=  '1' when esperaAcao, 
                        '1' when esperaPosiciona,
+                       '1' when limpaPosiciona,
+                       '1' when limpaJogada,
                        '1' when inicial,
                        '0' when others;
+
+  with Eatual select
+       limpa_erro_sensor <=  '0' when fimTransmitePosiciona, 
+                             '0' when esperaPosiciona,
+                             '1' when others;
+
+
+  with Eatual select
+       conta_erro_sensor <=  '1' when fimTransmitePosiciona, 
+                             '1' when esperaPosiciona,
+                             '0' when others;
 
   with Eatual select
       limpa_jogada <=  '1' when esperaAcao,
