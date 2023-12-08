@@ -61,13 +61,13 @@ float rotateSoldado2Jog2 = 0;
 float rotateSoldado3Jog2 = 0;
 
 // Variaveis de angulo das armas
-float rotateYArmaJog1 = radians(-30);
-float rotateXArmaJog1 = 0;
-float rotateYArmaJog2 = radians(-30);
+float rotateYArmaJog1 = radians(20);
+float rotateXArmaJog1 = radians(-30);
+float rotateYArmaJog2 = radians(20);
 float rotateXArmaJog2 = 0;
-int controleYArmaJog1 = 7;
-int controleXArmaJog1 = 0;
-int controleYArmaJog2 = 7;
+int controleYArmaJog1 = 0;
+int controleXArmaJog1 = 7;
+int controleYArmaJog2 = 0;
 int controleXArmaJog2 = 0;
 
 void setup() {
@@ -527,12 +527,12 @@ void keyPressed() {
     // muda angulo rotate arma cima
     if(vezJogadorUm) {
       if(controleXArmaJog1 > 0) {
-        rotateXArmaJog1 += radians(5);
+        rotateXArmaJog1 += radians(4.2);
         controleXArmaJog1 --;
       }
     } else {
       if(controleXArmaJog2 > 0) {
-        rotateXArmaJog2 -= radians(5);
+        rotateXArmaJog2 -= radians(4.2);
         controleXArmaJog2 --;
       }
     }
@@ -542,12 +542,12 @@ void keyPressed() {
     // muda angulo rotate arma baixo
     if(vezJogadorUm) {
       if(controleXArmaJog1 < 7) {
-        rotateXArmaJog1 -= radians(5);
+        rotateXArmaJog1 -= radians(4.2);
         controleXArmaJog1 ++;
       }
     } else {
       if(controleXArmaJog2 < 7) {
-        rotateXArmaJog2 += radians(5);
+        rotateXArmaJog2 += radians(4.2);
         controleXArmaJog2 ++;
       }
     }
@@ -557,12 +557,12 @@ void keyPressed() {
     // muda angulo rotate arma esquerda
     if(vezJogadorUm) {
       if(controleYArmaJog1 > 0) {
-        rotateYArmaJog1 += radians(8.5);
+        rotateYArmaJog1 += radians(4.9);
         controleYArmaJog1 --;
       }
     } else {
       if(controleYArmaJog2 > 0) {
-        rotateYArmaJog2 += radians(8.5);
+        rotateYArmaJog2 += radians(4.9);
         controleYArmaJog2 --;
       }
     }
@@ -572,12 +572,12 @@ void keyPressed() {
     // muda angulo rotate arma direita
     if(vezJogadorUm) {
       if(controleYArmaJog1 < 7) {
-        rotateYArmaJog1 -= radians(8.5);
+        rotateYArmaJog1 -= radians(4.9);
         controleYArmaJog1 ++;
       }
     } else {
       if(controleYArmaJog2 < 7) {
-        rotateYArmaJog2 -= radians(8.5);
+        rotateYArmaJog2 -= radians(4.9);
         controleYArmaJog2 ++;
       }
     }
@@ -638,12 +638,12 @@ void reset() {
   rotateSoldado2Jog2 = 0;
   rotateSoldado3Jog2 = 0;
   // Variaveis de angulo das armas
-  rotateYArmaJog1 = radians(-30);
-  rotateXArmaJog1 = 0;
-  rotateYArmaJog2 = radians(-30);
+  rotateYArmaJog1 = radians(20);
+  rotateXArmaJog1 = radians(-30);
+  rotateYArmaJog2 = radians(20);
   rotateXArmaJog2 = 0;
-  controleYArmaJog1 = 7;
-  controleXArmaJog1 = 0;
-  controleYArmaJog2 = 7;
+  controleYArmaJog1 = 0;
+  controleXArmaJog1 = 7;
+  controleYArmaJog2 = 0;
   controleXArmaJog2 = 0;
 }
